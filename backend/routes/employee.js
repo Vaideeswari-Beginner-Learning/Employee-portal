@@ -1,0 +1,171 @@
+const express = require('express');
+const router = express.Router();
+const User = require('../models/User');
+const Attendance = require('../models/Attendance');
+const Leave = require('../models/Leave');
+const Report = require('../models/Report');
+const { auth } = require('../middleware/auth');
+const multer = require('multer');
+const path = require('path');
+
+// Multer Setup
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+const upload = multer({ storage });
+
+// Apply auth to all routes
+router.use(auth);
+
+// Attendance - Consolidated Logic
+const processAttendance = async (req, res, type) => {
+    console.log(`[Attendance] Operation: ${type} for ${req.user.email}`);
+    try {
+        const today = new Date().toISOString().split('T')[0];
+        const time = new Date().toLocaleTimeString();
+
+        let attendance = await Attendance.findOne({ employee: req.user._id, date: today });
+
+        if (type === 'check-in' || type === 'checkIn') {
+            if (attendance) return res.status(400).send({ message: 'Personnel node already active for today.' });
+            attendance = new Attendance({
+                employee: req.user._id,
+                date: today,
+                checkIn: time,
+                latitude: req.body.latitude,
+                longitude: req.body.longitude,
+                locationName: req.body.locationName,
+                biometricPhoto: req.body.biometricPhoto,
+                status: 'Present'
+            });
+        } else if (type === 'check-out' || type === 'checkOut') {
+            if (!attendance) return res.status(400).send({ message: 'Must initialize operational shift first.' });
+            if (attendance.checkOut) return res.status(400).send({ message: 'Operational shift already terminated.' });
+            attendance.checkOut = time;
+        }
+
+        await attendance.save();
+        res.send(attendance);
+    } catch (e) {
+        const errorMsg = `[Attendance] Error at ${new Date().toISOString()}: ${e.message} - Stack: ${e.stack}\n`;
+        require('fs').appendFileSync('server.log', errorMsg);
+        console.error('[Attendance] Error:', e);
+        res.status(400).send({ message: 'Registry update failed.', details: e.message });
+    }
+};
+
+router.post('/attendance', (req, res) => processAttendance(req, res, req.body.type));
+router.post('/check-in', (req, res) => processAttendance(req, res, 'check-in'));
+router.post('/check-out', (req, res) => processAttendance(req, res, 'check-out'));
+
+// Get Attendance History
+router.get('/attendance', async (req, res) => {
+    try {
+        const attendance = await Attendance.find({ employee: req.user._id }).sort({ createdAt: -1 });
+        res.send(attendance);
+    } catch (e) {
+        res.status(500).send(e);
+    }
+});
+
+// Leave Request
+router.post('/request-leave', async (req, res) => {
+    console.log('Leave request received:', req.body);
+    try {
+        const leave = new Leave({
+            ...req.body,
+            employee: req.user._id
+        });
+        await leave.save();
+        res.status(201).send(leave);
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
+
+// Get Leave History
+router.get('/leave', async (req, res) => {
+    try {
+        const leaves = await Leave.find({ employee: req.user._id }).sort({ createdAt: -1 });
+        res.send(leaves);
+    } catch (e) {
+        res.status(500).send(e);
+    }
+});
+
+// Submit Report
+router.post('/submit-report', upload.single('image'), async (req, res) => {
+    console.log('[Report] Request body:', req.body);
+    console.log('[Report] File:', req.file);
+    try {
+        const reportData = { ...req.body };
+
+        // Remove 'image' if it was sent as a field in req.body (e.g. from FormData.append('image', null))
+        // Multer will populate req.file if a real image was uploaded.
+        if (req.file) {
+            reportData.image = req.file.filename;
+        } else {
+            delete reportData.image;
+        }
+
+        const report = new Report({
+            ...reportData,
+            employee: req.user._id
+        });
+        await report.save();
+        res.status(201).send(report);
+    } catch (e) {
+        console.error('[Report] Submission error:', e);
+        res.status(400).send({ error: e.message || 'Telemetry transmission failed.' });
+    }
+});
+
+// Update Profile
+router.patch('/profile', async (req, res) => {
+    const updates = Object.keys(req.body);
+    const allowedUpdates = ['phone', 'password'];
+    const isValidOperation = updates.every(update => allowedUpdates.includes(update));
+
+    if (!isValidOperation) return res.status(400).send({ error: 'Invalid updates' });
+
+    try {
+        updates.forEach(update => req.user[update] = req.body[update]);
+        await req.user.save();
+        res.send(req.user);
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
+
+// Change Password (Dedicated route for Settings.jsx)
+router.put('/change-password', async (req, res) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+        const isMatch = await req.user.comparePassword(currentPassword);
+        if (!isMatch) {
+            return res.status(401).send({ message: 'Current authorization key is invalid.' });
+        }
+        req.user.password = newPassword;
+        await req.user.save();
+        res.send({ message: 'Security Matrix Updated Successfully.' });
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
+
+// Get Employee Reports
+router.get('/reports', async (req, res) => {
+    try {
+        const reports = await Report.find({ employee: req.user._id }).sort({ createdAt: -1 });
+        res.send(reports);
+    } catch (e) {
+        res.status(500).send(e);
+    }
+});
+
+module.exports = router;
