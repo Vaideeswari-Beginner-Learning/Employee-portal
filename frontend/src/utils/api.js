@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: '/api'
+    baseURL: 'https://employee-portal-mk1n.onrender.com/api'
 });
 
 // Request interceptor for API calls
