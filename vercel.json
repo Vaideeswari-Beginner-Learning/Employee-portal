@@ -1,6 +1,10 @@
 {
     "rewrites": [
         {
+            "source": "/api/(.*)",
+            "destination": "https://employee-portal-mk1n.onrender.com/api/$1"
+        },
+        {
             "source": "/(.*)",
             "destination": "/frontend/dist/index.html"
         }
