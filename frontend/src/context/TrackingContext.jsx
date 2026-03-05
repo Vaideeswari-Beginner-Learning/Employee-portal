@@ -4,9 +4,9 @@ import toast from 'react-hot-toast';
 
 const TrackingContext = createContext();
 
-export const useTracking = () => useContext(TrackingContext);
+const useTracking = () => useContext(TrackingContext);
 
-export const TrackingProvider = ({ children }) => {
+const TrackingProvider = ({ children }) => {
     const [isTracking, setIsTracking] = useState(false);
     const [loading, setLoading] = useState(false);
     const [duration, setDuration] = useState(0);
@@ -187,3 +187,4 @@ export const TrackingProvider = ({ children }) => {
         </TrackingContext.Provider>
     );
 };
+export { TrackingProvider, useTracking };
