@@ -13,7 +13,7 @@ const MainLayout = () => {
 
     useEffect(() => {
         if (user) {
-            api.get('/announcements')
+            api.get('announcements')
                 .then(res => setAnnouncementsCount(res.data.length))
                 .catch(err => console.error('Error fetching announcements:', err));
         }

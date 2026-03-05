@@ -26,7 +26,7 @@ const EmployeeDashboard = () => {
     useEffect(() => {
         const fetchAnnouncements = async () => {
             try {
-                const res = await api.get('/announcements');
+                const res = await api.get('announcements');
                 setAnnouncements(res.data);
             } catch (err) {
                 console.error('Broadcast fetch error:', err);

@@ -18,7 +18,7 @@ const EmployeeMgmt = () => {
 
     const fetchEmployees = async () => {
         try {
-            const res = await api.get('/admin/employees');
+            const res = await api.get('admin/employees');
             setEmployees(res.data);
         } catch (err) {
             console.error('Employees fetch error:', err.response?.data || err.message);
@@ -29,9 +29,9 @@ const EmployeeMgmt = () => {
         e.preventDefault();
         try {
             if (editingId) {
-                await api.put(`/admin/employees/${editingId}`, formData);
+                await api.put(`admin/employees/${editingId}`, formData);
             } else {
-                await api.post('/admin/employees', formData);
+                await api.post('admin/employees', formData);
             }
             setShowModal(false);
             setEditingId(null);
@@ -58,7 +58,7 @@ const EmployeeMgmt = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('PERMANENT DELETION: Are you sure you want to delete this employee?')) return;
         try {
-            await api.delete(`/admin/employees/${id}`);
+            await api.delete(`admin/employees/${id}`);
             fetchEmployees();
         } catch (err) {
             const msg = err.response?.data?.error || err.response?.data?.message || err.message;

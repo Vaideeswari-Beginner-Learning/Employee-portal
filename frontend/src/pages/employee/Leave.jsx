@@ -26,7 +26,7 @@ const LeavePage = () => {
 
     const fetchLeaves = async () => {
         try {
-            const res = await api.get('/employee/leave');
+            const res = await api.get('employee/leave');
             setLeaves(res.data);
         } catch (err) {
             console.error('Fetch leaves error:', err.response?.data || err.message);
@@ -36,7 +36,7 @@ const LeavePage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await api.post('/employee/request-leave', formData);
+            await api.post('employee/request-leave', formData);
             setShowModal(false);
             setFormData({ leaveType: 'Annual', startDate: '', endDate: '', reason: '' });
             showNotification('success', 'Absence request initiated successfully.');

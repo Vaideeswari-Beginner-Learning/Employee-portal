@@ -73,7 +73,7 @@ export const TrackingProvider = ({ children }) => {
             }
 
             // Start backend tracking, let the name 'Acquire' in the background
-            const trackPromise = api.post('/tracking/start', {
+            const trackPromise = api.post('tracking/start', {
                 latitude: lat,
                 longitude: lng,
                 locationName: 'Acquiring...'
@@ -91,7 +91,7 @@ export const TrackingProvider = ({ children }) => {
 
             // Silently resolve real area name
             getAreaName(lat, lng).then(name => {
-                api.post('/tracking/update', { latitude: lat, longitude: lng, locationName: name }).catch(() => { });
+                api.post('tracking/update', { latitude: lat, longitude: lng, locationName: name }).catch(() => { });
             });
 
             // Start Timer
@@ -106,7 +106,7 @@ export const TrackingProvider = ({ children }) => {
                     setLastCoord({ lat: latitude, lng: longitude });
                     const currentName = await getAreaName(latitude, longitude);
                     try {
-                        await api.post('/tracking/update', {
+                        await api.post('tracking/update', {
                             latitude,
                             longitude,
                             locationName: currentName
@@ -151,7 +151,7 @@ export const TrackingProvider = ({ children }) => {
                 console.warn('Could not get instant final position:', e);
             }
 
-            await api.post('/tracking/end', {
+            await api.post('tracking/end', {
                 ...finalCoords,
                 locationName: finalName
             });

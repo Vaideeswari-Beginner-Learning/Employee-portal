@@ -22,7 +22,7 @@ const AdminDashboard = () => {
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const res = await api.get('/admin/dashboard-stats');
+                const res = await api.get('admin/dashboard-stats');
                 setStats(res.data);
             } catch (err) {
                 console.error(err);
@@ -55,8 +55,8 @@ const AdminDashboard = () => {
         try {
             // Fetch comprehensive data
             const [attendanceRes, employeesRes] = await Promise.all([
-                api.get('/admin/attendance'),
-                api.get('/admin/employees')
+                api.get('admin/attendance'),
+                api.get('admin/employees')
             ]);
 
             // Format Employee Data

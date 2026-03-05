@@ -26,7 +26,7 @@ const AttendancePage = () => {
 
     const fetchHistory = async () => {
         try {
-            const res = await api.get('/employee/attendance');
+            const res = await api.get('employee/attendance');
             setHistory(res.data);
             const latest = res.data[0];
             if (latest && !latest.checkOut) setStatus('checked-in');
@@ -117,7 +117,7 @@ const AttendancePage = () => {
                     console.error('Reverse geocoding failed:', geoErr);
                 }
 
-                await api.post('/employee/check-in', {
+                await api.post('employee/check-in', {
                     latitude: lastCoord.lat,
                     longitude: lastCoord.lng,
                     locationName,
@@ -140,7 +140,7 @@ const AttendancePage = () => {
         if (type === 'check-out') {
             setLoading(true);
             try {
-                await api.post('/employee/check-out', {});
+                await api.post('employee/check-out', {});
                 showNotification('success', 'Shift Terminated.');
                 fetchHistory();
             } catch (err) {

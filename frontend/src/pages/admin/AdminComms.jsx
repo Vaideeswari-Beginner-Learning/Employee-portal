@@ -16,7 +16,7 @@ const AdminComms = () => {
 
     const fetchEmployees = async () => {
         try {
-            const res = await api.get('/admin/employees');
+            const res = await api.get('admin/employees');
             setEmployees(res.data);
             setLoading(false);
         } catch (error) {

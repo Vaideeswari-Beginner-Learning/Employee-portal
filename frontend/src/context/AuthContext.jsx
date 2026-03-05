@@ -20,15 +20,15 @@ export const AuthProvider = ({ children }) => {
     const login = async (email, password) => {
         try {
             console.log('Attempting login to /auth/login');
-            const res = await api.post('/auth/login', { email, password });
+            const res = await api.post('auth/login', { email, password });
             console.log('Login response:', res.data);
             localStorage.setItem('token', res.data.token);
             localStorage.setItem('user', JSON.stringify(res.data.user));
             setUser(res.data.user);
             return res.data.user;
         } catch (err) {
-            const msg = err.response?.data?.error || err.message;
-            setError(msg);
+            const msg = err.response?.data?.error || err.response?.data?.message || err.message || 'Authentication failed';
+            setError(typeof msg === 'object' ? JSON.stringify(msg) : String(msg));
             throw err;
         }
     };

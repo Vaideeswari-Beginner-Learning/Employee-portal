@@ -35,8 +35,8 @@ const LoginPage = () => {
             }
         } catch (err) {
             console.error('LoginPage caught error:', err);
-            const rawError = err.response?.data?.error || err.response?.data?.message || err.message || 'The data frequency does not match. Please verify your credentials.';
-            setError(String(rawError));
+            const rawError = err.response?.data?.error || err.response?.data?.message || err.message || 'Authentication failed';
+            setError(typeof rawError === 'object' ? JSON.stringify(rawError) : String(rawError));
         } finally {
             setIsLoading(false);
         }

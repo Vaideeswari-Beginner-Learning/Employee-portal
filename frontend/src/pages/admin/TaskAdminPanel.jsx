@@ -31,7 +31,7 @@ const AdminTaskPanel = () => {
 
     const fetchTasks = async () => {
         try {
-            const res = await api.get('/tasks');
+            const res = await api.get('tasks');
             setTasks(res.data);
         } catch (err) {
             console.error('Error fetching tasks:', err);
@@ -41,7 +41,7 @@ const AdminTaskPanel = () => {
 
     const fetchEmployees = async () => {
         try {
-            const res = await api.get('/admin/employees');
+            const res = await api.get('admin/employees');
             setEmployees(res.data);
             if (res.data.length > 0) {
                 setNewTask(prev => ({ ...prev, assignedTo: res.data[0]._id }));
@@ -57,7 +57,7 @@ const AdminTaskPanel = () => {
         }
 
         try {
-            await api.post('/tasks', newTask);
+            await api.post('tasks', newTask);
             showNotification('Task Successfully Assigned!');
             setShowDispatchModal(false);
             setNewTask({ ...newTask, clientName: '', location: '' });

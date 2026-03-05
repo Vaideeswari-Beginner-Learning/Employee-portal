@@ -41,7 +41,7 @@ const ReportsPage = () => {
 
     const fetchReports = async () => {
         try {
-            const res = await api.get('/employee/reports');
+            const res = await api.get('employee/reports');
             setReports(res.data);
         } catch (err) {
             console.error('Fetch reports error:', err);
@@ -66,7 +66,7 @@ const ReportsPage = () => {
         });
 
         try {
-            await api.post('/employee/submit-report', data);
+            await api.post('employee/submit-report', data);
             setSubmitted(true);
             showNotification('success', 'Field Telemetry Transmitted Successfully.');
             setTimeout(() => {

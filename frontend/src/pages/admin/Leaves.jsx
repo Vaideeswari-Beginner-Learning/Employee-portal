@@ -35,7 +35,7 @@ const AdminLeaves = () => {
 
     const fetchLeaves = async () => {
         try {
-            const res = await api.get('/admin/leaves');
+            const res = await api.get('admin/leaves');
             setLeaves(res.data);
         } catch (err) {
             console.error('Admin leaves error:', err.response?.data || err.message);

@@ -91,7 +91,7 @@ const SettingsPage = () => {
         }
         setLoading(true);
         try {
-            await api.put('/employee/change-password', passwordData);
+            await api.put('employee/change-password', passwordData);
             showNotification('success', 'Security Matrix Updated Successfully.');
             setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
         } catch (err) {

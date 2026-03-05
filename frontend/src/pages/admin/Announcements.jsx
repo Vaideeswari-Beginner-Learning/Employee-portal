@@ -24,7 +24,7 @@ const Announcements = () => {
 
     const fetchAnnouncements = async () => {
         try {
-            const res = await api.get('/announcements');
+            const res = await api.get('announcements');
             setAnnouncements(res.data);
         } catch (err) {
             console.error(err);
@@ -37,7 +37,7 @@ const Announcements = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            await api.post('/announcements', formData);
+            await api.post('announcements', formData);
             showNotify('success', 'Announcement transmitted successfully.');
             setShowModal(false);
             setFormData({ title: '', content: '', priority: 'medium' });

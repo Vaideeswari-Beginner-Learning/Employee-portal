@@ -27,7 +27,7 @@ const AdminReports = () => {
     useEffect(() => {
         const fetchReports = async () => {
             try {
-                const res = await api.get('/admin/reports');
+                const res = await api.get('admin/reports');
                 setReports(res.data);
             } catch (err) {
                 console.error('Reports fetch error:', err.response?.data || err.message);

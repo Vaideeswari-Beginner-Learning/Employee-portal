@@ -19,7 +19,7 @@ const LiveTracker = () => {
     const fetchActiveSessions = useCallback(async (silent = false) => {
         if (!silent) setLoading(true);
         try {
-            const res = await api.get('/tracking/history');
+            const res = await api.get('tracking/history');
             setActiveSessions(res.data);
             setLastRefresh(new Date());
             setCountdown(POLL_INTERVAL);

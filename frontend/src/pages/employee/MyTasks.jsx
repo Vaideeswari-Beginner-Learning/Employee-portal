@@ -20,7 +20,7 @@ const MyTasks = () => {
 
     const fetchMyTasks = async () => {
         try {
-            const res = await api.get('/tasks');
+            const res = await api.get('tasks');
             setTasks(res.data);
         } catch (err) {
             console.error('Error fetching my tasks:', err);
@@ -159,7 +159,7 @@ const CreateSelfTaskModal = ({ isOpen, onClose, onSuccess }) => {
         try {
             let payload = { ...formData };
 
-            await api.post('/tasks', payload);
+            await api.post('tasks', payload);
             toast.success('Task created successfully');
             onSuccess();
             onClose();

@@ -26,7 +26,7 @@ const AdminAttendance = () => {
     useEffect(() => {
         const fetchAttendance = async () => {
             try {
-                const res = await api.get('/admin/attendance');
+                const res = await api.get('admin/attendance');
                 setAttendance(res.data);
             } catch (err) {
                 console.error('Attendance fetch error:', err.response?.data || err.message);
