@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+// PRODUCTION: Always call Render backend directly
+const BACKEND_URL = 'https://employee-portal-mk1n.onrender.com/api/';
+
 const api = axios.create({
-    baseURL: 'https://employee-portal-mk1n.onrender.com/api/'
+    baseURL: BACKEND_URL
 });
 
 // Request interceptor for API calls
