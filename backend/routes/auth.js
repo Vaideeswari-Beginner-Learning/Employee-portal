@@ -29,7 +29,8 @@ router.post('/login', async (req, res) => {
         const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET);
         res.send({ user, token });
     } catch (e) {
-        res.status(400).send(e);
+        console.error("Login route error:", e);
+        res.status(400).send({ error: e.message || 'An error occurred', stack: e.stack });
     }
 });
 
