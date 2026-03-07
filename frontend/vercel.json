@@ -1,11 +1,12 @@
 {
-    "routes": [
+    "rewrites": [
         {
-            "handle": "filesystem"
+            "source": "/api(.*)",
+            "destination": "https://employee-portal-mk1n.onrender.com"
         },
         {
-            "src": "/.*",
-            "dest": "/index.html"
+            "source": "/api(.*)",
+            "destination": "/"
         }
     ]
 }
