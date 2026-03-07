@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// IMPORTANT: Always call Render backend, never Vercel domain
-const BACKEND_BASE_URL = 'https://employee-portal-mk1n.onrender.com/api/';
+// IMPORTANT: Use the Vercel Environment Variable if set, otherwise fallback
+const BACKEND_BASE_URL = import.meta.env.VITE_API_URL || 'https://employee-portal-mk1n.onrender.com/api/';
 
 const api = axios.create({
     baseURL: BACKEND_BASE_URL
