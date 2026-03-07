@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+// IMPORTANT: Always call Render backend, never Vercel domain
+const BACKEND_BASE_URL = 'https://employee-portal-mk1n.onrender.com/api/';
+
 const api = axios.create({
-    baseURL: 'https://employee-portal-mk1n.onrender.com/api/'
+    baseURL: BACKEND_BASE_URL
 });
 
 // Request interceptor for API calls
