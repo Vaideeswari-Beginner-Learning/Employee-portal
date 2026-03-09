@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
-import { Users, Activity, CheckCircle, TrendingUp, Search, Plus, Filter, MoreVertical, ShieldCheck, MapPin } from 'lucide-react';
+import { useEffect, useState, useRef } from 'react';
+import { Users, Activity, CheckCircle, TrendingUp, Search, Plus, Filter, MoreVertical, ShieldCheck, MapPin, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import api from '../../utils/api';
 import toast from 'react-hot-toast';
-// Removed TaskChat
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 
 const AdminTaskPanel = () => {
     const [tasks, setTasks] = useState([]);
@@ -90,16 +91,49 @@ const AdminTaskPanel = () => {
         setShowReviewModal(true);
     };
 
+    // GSAP Animations
+    const containerRef = useRef();
+    const modalRef = useRef();
+
+    useGSAP(() => {
+        // Animate stat cards and sections on load
+        gsap.from('.stat-card', {
+            y: 30,
+            opacity: 0,
+            duration: 0.6,
+            stagger: 0.1,
+            ease: 'power3.out'
+        });
+
+        gsap.from('.stagger-item', {
+            y: 20,
+            opacity: 0,
+            duration: 0.5,
+            stagger: 0.05,
+            ease: 'power2.out',
+            delay: 0.3
+        });
+    }, { scope: containerRef });
+
+    useGSAP(() => {
+        if (showDispatchModal && modalRef.current) {
+            gsap.fromTo(modalRef.current,
+                { scale: 0.8, opacity: 0, y: 50 },
+                { scale: 1, opacity: 1, y: 0, duration: 0.5, ease: 'back.out(1.5)' }
+            );
+        }
+    }, [showDispatchModal]);
+
     return (
-        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-5 duration-700 pb-20">
+        <div ref={containerRef} className="space-y-8 pb-20 bg-slate-50/30 min-h-screen">
             {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100">
                 <div>
-                    <h1 className="text-4xl lg:text-5xl font-display font-black tracking-tight text-slate-900 mb-2 drop-shadow-sm">
-                        Command Overview
+                    <h1 className="text-4xl lg:text-5xl font-display font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600 mb-2">
+                        Command Center
                     </h1>
                     <p className="text-sm font-medium text-slate-500 max-w-xl">
-                        Monitor field employee dispatch, approve completed tasks, and track operational metrics.
+                        Monitor field employee dispatch, approve completed tasks, and track operational metrics in real-time.
                     </p>
                 </div>
 
@@ -109,11 +143,10 @@ const AdminTaskPanel = () => {
                             fetchEmployees(); // Ensure dropdown is synced with latest personnel
                             setShowDispatchModal(true);
                         }}
-                        className="px-6 py-3 rounded-2xl bg-blue-600 text-white font-bold text-sm shadow-md shadow-blue-500/20 hover:bg-blue-500 transition-all flex items-center gap-2 relative overflow-hidden group"
+                        className="px-8 py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold text-sm shadow-xl shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-1 transition-all flex items-center gap-3"
                     >
-                        <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                        <Plus size={18} className="relative z-10" />
-                        <span className="relative z-10">Assign Task</span>
+                        <Plus size={20} />
+                        <span>Assign Task</span>
                     </button>
                     <button
                         onClick={() => {
@@ -123,24 +156,23 @@ const AdminTaskPanel = () => {
                             }
                             window.open(url, "_blank", "noreferrer");
                         }}
-                        className="px-6 py-3 rounded-2xl bg-slate-900 text-white font-bold text-sm shadow-md shadow-slate-900/20 hover:bg-slate-800 transition-all flex items-center gap-2 relative overflow-hidden group"
+                        className="px-6 py-4 rounded-2xl bg-slate-900 text-white font-bold text-sm shadow-xl shadow-slate-900/20 hover:bg-slate-800 hover:-translate-y-1 transition-all flex items-center gap-3"
                     >
-                        <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                        <Activity size={18} className="relative z-10 text-blue-400" />
-                        <span className="relative z-10">Cx Platform</span>
+                        <Activity size={20} className="text-indigo-400" />
+                        <span>Cx Platform</span>
                     </button>
                 </div>
             </div>
 
             {/* Quick Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <StatCard title="Active Field Employees" value={employees.length || "0"} trend="Active" icon={<Users className="text-blue-500" />} linkTo="/admin/live-tracker" />
-                <StatCard title="Tasks In Progress" value={tasks.filter(t => t.status === 'In Progress').length || "0"} trend="Live" icon={<Activity className="text-rose-500" />} linkTo="/admin/tasks" />
-                <StatCard title="Tasks Completed" value={tasks.filter(t => t.status === 'Completed').length || "0"} trend="Done" icon={<CheckCircle className="text-emerald-500" />} linkTo="/admin/reports" />
-                <StatCard title="Awaiting Approval" value={tasks.filter(t => t.status === 'Awaiting Approval').length || "0"} trend="Pending" icon={<TrendingUp className="text-indigo-500" />} linkTo="/admin/tasks" />
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 px-2">
+                <StatCard className="stat-card" title="Active Field Employees" value={employees.length || "0"} trend="Active" icon={<Users className="text-indigo-500" />} linkTo="/admin/live-tracker" />
+                <StatCard className="stat-card" title="Tasks In Progress" value={tasks.filter(t => t.status === 'In Progress').length || "0"} trend="Live" icon={<Activity className="text-rose-500" />} linkTo="/admin/tasks" />
+                <StatCard className="stat-card" title="Tasks Completed" value={tasks.filter(t => t.status === 'Completed').length || "0"} trend="Done" icon={<CheckCircle className="text-emerald-500" />} linkTo="/admin/reports" />
+                <StatCard className="stat-card" title="Awaiting Approval" value={tasks.filter(t => t.status === 'Awaiting Approval').length || "0"} trend="Pending" icon={<TrendingUp className="text-amber-500" />} linkTo="/admin/tasks" />
             </div>
 
-            <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 px-2">
                 {/* Main Table Area */}
                 <div className="xl:col-span-2 space-y-8">
                     {/* Active Tasks List */}
@@ -171,23 +203,27 @@ const AdminTaskPanel = () => {
                                             <div
                                                 key={task._id}
                                                 onClick={() => handleReview(task)}
-                                                className="p-4 bg-slate-50 hover:bg-slate-100 border border-slate-100 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-2 cursor-pointer transition-colors group"
+                                                className="stagger-item p-5 bg-white border border-slate-100 shadow-sm hover:shadow-md rounded-[1.5rem] flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer transition-all hover:-translate-y-1 group"
                                             >
                                                 <div>
-                                                    <div className="flex items-center gap-2">
-                                                        <h4 className="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">{task.clientName}</h4>
+                                                    <div className="flex items-center gap-3 mb-1">
+                                                        <h4 className="text-base font-black text-slate-800 group-hover:text-indigo-600 transition-colors">{task.clientName}</h4>
                                                         {task.assignedBy?._id === task.assignedTo?._id && (
-                                                            <span className="px-1.5 py-0.5 rounded bg-blue-50 text-blue-500 text-[8px] font-black uppercase tracking-tighter border border-blue-100">Self-Task</span>
+                                                            <span className="px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-600 text-[9px] font-black uppercase tracking-widest border border-indigo-100">Self-Task</span>
                                                         )}
                                                     </div>
-                                                    <p className="text-xs text-slate-500 mt-1">{task.taskType} • {task.location}</p>
+                                                    <p className="text-xs font-medium text-slate-500 flex items-center gap-2">
+                                                        <span className="px-2 py-0.5 bg-slate-100 rounded text-slate-600 font-bold">{task.taskType}</span>
+                                                        <span>•</span>
+                                                        <span>{task.location}</span>
+                                                    </p>
                                                     {task.startLocation && (
-                                                        <span className="text-[9px] font-bold text-emerald-600 flex items-center gap-1 mt-1">
-                                                            <MapPin size={8} /> GPS Tracked
+                                                        <span className="text-[10px] font-bold text-emerald-600 flex items-center gap-1 mt-2 bg-emerald-50 w-max px-2 py-1 rounded-md">
+                                                            <MapPin size={10} /> Live GPS Tracked
                                                         </span>
                                                     )}
                                                 </div>
-                                                <span className={`px-2 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider self-start sm:self-auto ${task.status === 'In Progress' ? 'bg-blue-100 text-blue-600' : 'bg-slate-200 text-slate-600'}`}>
+                                                <span className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider self-start sm:self-auto ${task.status === 'In Progress' ? 'bg-indigo-50 text-indigo-600 border border-indigo-100/50' : 'bg-slate-100 text-slate-500'}`}>
                                                     {task.status}
                                                 </span>
                                             </div>
@@ -349,23 +385,35 @@ const AdminTaskPanel = () => {
                 </div>
             </div>
 
-            {/* Modals */}
+            {/* Dispatch Modal Redesign */}
             {showDispatchModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
-                    <div className="bg-white rounded-3xl shadow-xl border border-slate-100 w-full max-w-md p-8 animate-in zoom-in-95 duration-200">
-                        <h2 className="text-2xl font-black text-slate-900 mb-2">Assign Task</h2>
-                        <p className="text-sm text-slate-500 mb-6">Assign a new task to an available field employee.</p>
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
+                    <div ref={modalRef} className="bg-white rounded-[2.5rem] shadow-2xl border border-white/20 w-full max-w-lg overflow-hidden relative">
+                        {/* Decorative background blur */}
+                        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-transparent pointer-events-none" />
 
-                        <div className="space-y-4">
+                        <div className="px-8 mt-8 mb-2 flex justify-between items-start relative z-10">
                             <div>
-                                <label className="text-xs font-bold text-slate-700 uppercase mb-2 block">Task Type</label>
+                                <h2 className="text-3xl font-display font-black text-slate-900 tracking-tight">Assign Task 🚀</h2>
+                                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-2">Deploy Field Personnel</p>
+                            </div>
+                            <button
+                                onClick={() => setShowDispatchModal(false)}
+                                className="w-10 h-10 bg-slate-50 text-slate-400 hover:bg-rose-50 hover:text-rose-500 rounded-full flex items-center justify-center transition-colors"
+                            >
+                                <X size={20} />
+                            </button>
+                        </div>
+
+                        <div className="p-8 space-y-6 relative z-10">
+                            <div className="space-y-1.5">
+                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">Task Category</label>
                                 <select
-                                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-500"
+                                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 transition-all appearance-none cursor-pointer"
                                     value={newTask.taskType}
                                     onChange={(e) => {
                                         const type = e.target.value;
                                         setNewTask({ ...newTask, taskType: type });
-                                        // Auto-select first matching employee if current one doesn't match
                                         const eligible = employees.filter(emp =>
                                             emp.expertise && emp.expertise.some(exp =>
                                                 exp === type || (type === 'Service' && exp === 'Maintenance') || (type === 'Repair' && exp === 'Service')
@@ -376,16 +424,16 @@ const AdminTaskPanel = () => {
                                         }
                                     }}
                                 >
-                                    <option value="Installation">Installation</option>
-                                    <option value="Maintenance">Maintenance</option>
-                                    <option value="Repair">Repair</option>
-                                    <option value="Inspection">Inspection</option>
+                                    <option value="Installation">🔧 Installation</option>
+                                    <option value="Maintenance">🛠️ Maintenance</option>
+                                    <option value="Repair">⚡ Repair</option>
+                                    <option value="Inspection">🔍 Inspection</option>
                                 </select>
                             </div>
-                            <div>
-                                <label className="text-xs font-bold text-slate-700 uppercase mb-2 block">Select Employee</label>
+                            <div className="space-y-1.5">
+                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">Primary Assignee</label>
                                 <select
-                                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-500"
+                                    className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 transition-all appearance-none cursor-pointer"
                                     value={newTask.assignedTo}
                                     onChange={(e) => setNewTask({ ...newTask, assignedTo: e.target.value })}
                                 >
@@ -397,7 +445,7 @@ const AdminTaskPanel = () => {
                                         ))
                                         .map(emp => (
                                             <option key={emp._id} value={emp._id}>
-                                                🎯 {emp.name || emp.email?.split('@')[0] || 'Unknown'} (Perfect Match: {newTask.taskType})
+                                                🎯 {emp.name || emp.email?.split('@')[0] || 'Unknown'} (Perfect Match!)
                                             </option>
                                         ))
                                     }
@@ -408,7 +456,7 @@ const AdminTaskPanel = () => {
                                         ))
                                         .map(emp => (
                                             <option key={emp._id} value={emp._id}>
-                                                {emp.name || emp.email?.split('@')[0] || 'Unknown'}
+                                                👤 {emp.name || emp.email?.split('@')[0] || 'Unknown'}
                                                 {emp.expertise?.length > 0 ? ` (${emp.expertise.join(', ')})` : ' (No expertise set)'}
                                             </option>
                                         ))
@@ -420,47 +468,53 @@ const AdminTaskPanel = () => {
                                 {employees.filter(emp => emp.expertise?.some(exp =>
                                     exp === newTask.taskType || (newTask.taskType === 'Repair' && exp === 'Service')
                                 )).length === 0 && employees.length > 0 && (
-                                        <p className="text-[10px] text-amber-600 font-bold mt-1.5">⚠️ No employees with {newTask.taskType} expertise — all personnel shown below.</p>
+                                        <p className="text-[10px] text-amber-600 font-bold mt-2 ml-1 flex items-center gap-1">
+                                            <ShieldCheck size={12} /> No exact matches — assigning to general pool
+                                        </p>
                                     )}
                             </div>
-                            <div>
-                                <label className="text-xs font-bold text-slate-700 uppercase mb-2 block">Client name</label>
-                                <input
-                                    type="text"
-                                    placeholder="e.g. City Bank Main Branch"
-                                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-500"
-                                    value={newTask.clientName}
-                                    onChange={(e) => setNewTask({ ...newTask, clientName: e.target.value })}
-                                />
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">Target Client</label>
+                                    <input
+                                        type="text"
+                                        placeholder="e.g. City Bank Main"
+                                        className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 transition-all placeholder:text-slate-300 placeholder:font-medium"
+                                        value={newTask.clientName}
+                                        onChange={(e) => setNewTask({ ...newTask, clientName: e.target.value })}
+                                    />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">Deployment Zone</label>
+                                    <input
+                                        type="text"
+                                        placeholder="e.g. Westside Avenue"
+                                        className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 transition-all placeholder:text-slate-300 placeholder:font-medium"
+                                        value={newTask.location}
+                                        onChange={(e) => setNewTask({ ...newTask, location: e.target.value })}
+                                    />
+                                </div>
                             </div>
-                            <div>
-                                <label className="text-xs font-bold text-slate-700 uppercase mb-2 block">Specific Location Details</label>
-                                <input
-                                    type="text"
-                                    placeholder="e.g. Westside Avenue, Building C"
-                                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-500"
-                                    value={newTask.location}
-                                    onChange={(e) => setNewTask({ ...newTask, location: e.target.value })}
-                                />
-                            </div>
-                            <div className="flex gap-4">
-                                <div className="flex-1">
-                                    <label className="text-xs font-bold text-slate-700 uppercase mb-2 block">Priority</label>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">Priority Level</label>
                                     <select
-                                        className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-500"
+                                        className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 transition-all appearance-none cursor-pointer"
                                         value={newTask.priority}
                                         onChange={(e) => setNewTask({ ...newTask, priority: e.target.value })}
                                     >
-                                        <option value="Normal">Normal</option>
-                                        <option value="Medium">Medium</option>
-                                        <option value="High">High</option>
+                                        <option value="Normal">🟢 Routine (Normal)</option>
+                                        <option value="High">🟠 Priority (High)</option>
+                                        <option value="Urgent">🔴 Critical (Urgent)</option>
                                     </select>
                                 </div>
-                                <div className="flex-1">
-                                    <label className="text-xs font-bold text-slate-700 uppercase mb-2 block">Due Date</label>
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">Deadline Date</label>
                                     <input
                                         type="date"
-                                        className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-500"
+                                        className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-800 outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 transition-all"
                                         value={newTask.dueDate}
                                         onChange={(e) => setNewTask({ ...newTask, dueDate: e.target.value })}
                                     />
@@ -468,9 +522,19 @@ const AdminTaskPanel = () => {
                             </div>
                         </div>
 
-                        <div className="mt-8 flex gap-3">
-                            <button onClick={() => setShowDispatchModal(false)} className="flex-1 py-3 text-sm font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors">Cancel</button>
-                            <button onClick={handleAssignTask} className="flex-1 py-3 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-colors">Assign Task</button>
+                        <div className="bg-slate-50 p-6 flex items-center gap-3">
+                            <button
+                                onClick={() => setShowDispatchModal(false)}
+                                className="flex-1 py-4 text-xs font-black uppercase tracking-widest text-slate-400 bg-white border border-slate-200 rounded-2xl hover:bg-slate-50 hover:text-slate-600 transition-colors"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleAssignTask}
+                                className="flex-1 py-4 text-xs font-black uppercase tracking-widest text-white bg-gradient-to-r from-indigo-600 to-violet-600 rounded-2xl shadow-xl shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all"
+                            >
+                                Deploy Task
+                            </button>
                         </div>
                     </div>
                 </div>
