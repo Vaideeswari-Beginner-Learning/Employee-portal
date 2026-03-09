@@ -1,11 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import TaskCard from '../../components/TaskCard';
 import TaskDetailModal from '../../components/TaskDetailModal';
 import { LayoutGrid, List as ListIcon, Filter } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 
 import api from '../../utils/api';
 import toast from 'react-hot-toast';
+
+gsap.registerPlugin(useGSAP);
 
 const MyTasks = () => {
     const [tasks, setTasks] = useState([]);
@@ -13,6 +16,7 @@ const MyTasks = () => {
     const [filter, setFilter] = useState('All');
     const [selectedTask, setSelectedTask] = useState(null);
     const [showCreateModal, setShowCreateModal] = useState(false);
+    const containerRef = useRef();
 
     useEffect(() => {
         fetchMyTasks();
@@ -30,12 +34,19 @@ const MyTasks = () => {
 
     const filteredTasks = filter === 'All' ? tasks : tasks.filter(t => t.status === filter);
 
+    useGSAP(() => {
+        gsap.fromTo('.stagger-item',
+            { y: 20, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.5, stagger: 0.05, ease: 'power2.out' }
+        );
+    }, { scope: containerRef, dependencies: [filteredTasks.length, viewMode] });
+
     return (
-        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-5 duration-700">
+        <div ref={containerRef} className="space-y-8 pb-20 bg-slate-50/30 min-h-screen">
             {/* Header Area */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                <div>
-                    <h1 className="text-4xl lg:text-5xl font-display font-black tracking-tight text-slate-900 mb-2 drop-shadow-sm">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100">
+                <div className="stagger-item opacity-0">
+                    <h1 className="text-4xl lg:text-5xl font-display font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600 mb-2">
                         My Field Tasks
                     </h1>
                     <p className="text-sm font-medium text-slate-500 max-w-xl">
@@ -43,7 +54,7 @@ const MyTasks = () => {
                     </p>
                 </div>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 stagger-item opacity-0">
                     <div className="flex items-center p-1.5 bg-white border border-slate-200/60 rounded-2xl shadow-sm">
                         <button
                             onClick={() => setFilter('All')}
@@ -82,7 +93,7 @@ const MyTasks = () => {
 
                     <button
                         onClick={() => setShowCreateModal(true)}
-                        className="px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-all shadow-md active:scale-95"
+                        className="px-6 py-3 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold text-sm shadow-xl shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-1 transition-all active:scale-95"
                     >
                         + Self Task
                     </button>
@@ -90,28 +101,21 @@ const MyTasks = () => {
             </div>
 
             {/* Task Grid/List */}
-            <motion.div
-                layout
+            <div
                 className={`grid gap-6 ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}
             >
-                <AnimatePresence mode="popLayout">
-                    {filteredTasks.map((task) => (
-                        <motion.div
-                            key={task.id}
-                            layout
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.9 }}
-                            transition={{ duration: 0.2 }}
-                        >
-                            <TaskCard
-                                task={task}
-                                onClick={() => setSelectedTask(task)}
-                            />
-                        </motion.div>
-                    ))}
-                </AnimatePresence>
-            </motion.div>
+                {filteredTasks.map((task) => (
+                    <div
+                        key={task._id || task.id}
+                        className="stagger-item opacity-0"
+                    >
+                        <TaskCard
+                            task={task}
+                            onClick={() => setSelectedTask(task)}
+                        />
+                    </div>
+                ))}
+            </div>
 
             {filteredTasks.length === 0 && (
                 <div className="py-20 text-center flex flex-col items-center">
@@ -142,6 +146,7 @@ const MyTasks = () => {
 // Extracted internal component for the modal
 const CreateSelfTaskModal = ({ isOpen, onClose, onSuccess }) => {
     const [loading, setLoading] = useState(false);
+    const modalRef = useRef();
     const [formData, setFormData] = useState({
         clientName: '',
         location: '',
@@ -149,6 +154,15 @@ const CreateSelfTaskModal = ({ isOpen, onClose, onSuccess }) => {
         priority: 'Normal',
         dueDate: new Date().toISOString().split('T')[0]
     });
+
+    useGSAP(() => {
+        if (isOpen && modalRef.current) {
+            gsap.fromTo(modalRef.current,
+                { scale: 0.8, opacity: 0, y: 50 },
+                { scale: 1, opacity: 1, y: 0, duration: 0.5, ease: 'back.out(1.5)' }
+            );
+        }
+    }, [isOpen]);
 
     if (!isOpen) return null;
 
@@ -172,12 +186,10 @@ const CreateSelfTaskModal = ({ isOpen, onClose, onSuccess }) => {
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
-            <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                className="bg-white rounded-3xl shadow-xl w-full max-w-md p-8 relative"
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
+            <div
+                ref={modalRef}
+                className="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-md p-8 relative opacity-0 border border-slate-100"
             >
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-xl font-black text-slate-900">Create Self-Task</h2>
@@ -223,7 +235,7 @@ const CreateSelfTaskModal = ({ isOpen, onClose, onSuccess }) => {
                         {loading ? 'Creating...' : 'Submit Task'}
                     </button>
                 </form>
-            </motion.div>
+            </div>
         </div>
     );
 };
