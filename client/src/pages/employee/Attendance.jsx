@@ -105,16 +105,28 @@ const AttendancePage = () => {
             try {
                 let locationName = 'Unknown Location';
                 try {
+                    // Optimized geocoding with timeout to prevent "slow loading"
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
+
                     const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lastCoord.lat}&lon=${lastCoord.lng}&zoom=18&addressdetails=1`, {
-                        headers: { 'User-Agent': 'EmployeePortal/1.0' }
+                        headers: { 'User-Agent': 'EmployeePortal/1.0' },
+                        signal: controller.signal
                     });
-                    const geoData = await geoRes.json();
-                    if (geoData.address) {
-                        const { road, suburb, city, town, village } = geoData.address;
-                        locationName = [road, suburb, city || town || village].filter(Boolean).join(', ');
+
+                    clearTimeout(timeoutId);
+
+                    if (geoRes.ok) {
+                        const geoData = await geoRes.json();
+                        if (geoData.address) {
+                            const { road, suburb, city, town, village, state, country } = geoData.address;
+                            locationName = [road, suburb, city || town || village].filter(Boolean).join(', ');
+                        }
                     }
                 } catch (geoErr) {
-                    console.error('Reverse geocoding failed:', geoErr);
+                    console.warn('Geocoding bypass: Service unreachable or timed out.', geoErr);
+                    // Fallback to coordinates if address lookup is too slow
+                    locationName = `Manual GPS: ${lastCoord.lat.toFixed(4)}, ${lastCoord.lng.toFixed(4)}`;
                 }
 
                 await api.post('employee/check-in', {

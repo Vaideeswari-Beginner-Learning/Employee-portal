@@ -26,8 +26,14 @@ router.use(auth);
 const processAttendance = async (req, res, type) => {
     console.log(`[Attendance] Operation: ${type} for ${req.user.email}`);
     try {
-        const today = new Date().toISOString().split('T')[0];
-        const time = new Date().toLocaleTimeString();
+        // Use local date for better alignment with user expectations
+        const now = new Date();
+        const istOffset = 5.5 * 60 * 60 * 1000;
+        const istDate = new Date(now.getTime() + istOffset);
+        const today = istDate.toISOString().split('T')[0];
+        const time = istDate.toLocaleTimeString();
+
+        console.log(`[Attendance] Calculated Date: ${today}, Time: ${time}`);
 
         let attendance = await Attendance.findOne({ employee: req.user._id, date: today });
 
@@ -49,13 +55,22 @@ const processAttendance = async (req, res, type) => {
             attendance.checkOut = time;
         }
 
+        if (attendance.isNew) {
+            console.log(`[Attendance] Creating new record for ${req.user.email}`);
+        } else {
+            console.log(`[Attendance] Updating existing record for ${req.user.email}`);
+        }
+
         await attendance.save();
+        console.log(`[Attendance] Success: ${type} logged at ${today} ${time}`);
         res.send(attendance);
     } catch (e) {
-        const errorMsg = `[Attendance] Error at ${new Date().toISOString()}: ${e.message} - Stack: ${e.stack}\n`;
-        require('fs').appendFileSync('server.log', errorMsg);
-        console.error('[Attendance] Error:', e);
-        res.status(400).send({ message: 'Registry update failed.', details: e.message });
+        console.error('[Attendance] CRITICAL FAILURE:', e);
+        res.status(400).send({
+            message: 'Registry update failed.',
+            details: e.message,
+            stack: process.env.NODE_ENV === 'development' ? e.stack : undefined
+        });
     }
 };
 
