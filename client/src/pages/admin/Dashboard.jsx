@@ -1,14 +1,17 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
 import {
     Users, CalendarCheck, FileText,
     AlertCircle, TrendingUp, Clock,
     Search, Download, ChevronRight,
     Activity, Megaphone
 } from 'lucide-react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import api from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+
+gsap.registerPlugin(useGSAP);
 
 const AdminDashboard = () => {
     const { user } = useAuth();
@@ -20,6 +23,19 @@ const AdminDashboard = () => {
         todayReports: 0
     });
     const [isExporting, setIsExporting] = useState(false);
+    const containerRef = useRef();
+
+    useGSAP(() => {
+        gsap.fromTo('.stat-card',
+            { y: 30, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: 'power3.out' }
+        );
+
+        gsap.fromTo('.stagger-item',
+            { y: 20, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.5, stagger: 0.05, ease: 'power2.out', delay: 0.2 }
+        );
+    }, { scope: containerRef });
 
     useEffect(() => {
         const fetchStats = async () => {
@@ -127,8 +143,8 @@ const AdminDashboard = () => {
     };
 
     return (
-        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div ref={containerRef} className="space-y-10 pb-20 min-h-screen">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 stagger-item opacity-0">
                 <div>
                     <h1 className="text-3xl font-display font-black text-slate-800 tracking-tight leading-none">Global<span className="text-primary-500 italic">.Control</span></h1>
                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mt-3">Enterprise Infrastructure Oversight</p>
@@ -161,14 +177,14 @@ const AdminDashboard = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                <AdminStat label="Total Personnel" value={stats.totalEmployees} icon={<Users size={20} />} color="text-primary-500" bgColor="bg-primary-50" onClick={() => navigate('/admin/employees')} />
-                <AdminStat label="Duty Status" value={`${stats.todayAttendance}%`} icon={<CalendarCheck size={20} />} color="text-emerald-500" bgColor="bg-emerald-50" onClick={() => navigate('/admin/attendance')} />
-                <AdminStat label="Pending Auth" value={stats.pendingLeaves} icon={<AlertCircle size={20} />} color="text-orange-500" bgColor="bg-orange-50" onClick={() => navigate('/admin/leaves')} />
-                <AdminStat label="Telemetry In" value={stats.todayReports} icon={<Activity size={20} />} color="text-indigo-500" bgColor="bg-indigo-50" onClick={() => navigate('/admin/reports')} />
+                <div className="stat-card opacity-0"><AdminStat label="Total Personnel" value={stats.totalEmployees} icon={<Users size={20} />} color="text-primary-500" bgColor="bg-primary-50" onClick={() => navigate('/admin/employees')} /></div>
+                <div className="stat-card opacity-0"><AdminStat label="Duty Status" value={`${stats.todayAttendance}%`} icon={<CalendarCheck size={20} />} color="text-emerald-500" bgColor="bg-emerald-50" onClick={() => navigate('/admin/attendance')} /></div>
+                <div className="stat-card opacity-0"><AdminStat label="Pending Auth" value={stats.pendingLeaves} icon={<AlertCircle size={20} />} color="text-orange-500" bgColor="bg-orange-50" onClick={() => navigate('/admin/leaves')} /></div>
+                <div className="stat-card opacity-0"><AdminStat label="Telemetry In" value={stats.todayReports} icon={<Activity size={20} />} color="text-indigo-500" bgColor="bg-indigo-50" onClick={() => navigate('/admin/reports')} /></div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-                <div className="lg:col-span-8 card-premium flex flex-col overflow-hidden bg-white/50 backdrop-blur-sm">
+                <div className="lg:col-span-8 card-premium flex flex-col overflow-hidden bg-white/50 backdrop-blur-sm stagger-item opacity-0">
                     <div className="p-8 border-b border-slate-100/50 flex items-center justify-between">
                         <div>
                             <h2 className="font-display font-black text-slate-800 tracking-tight">Operation <span className="text-primary-500">Stream</span></h2>
@@ -190,7 +206,7 @@ const AdminDashboard = () => {
                 </div>
 
                 <div className="lg:col-span-4 space-y-10">
-                    <div className="card-premium p-8 gradient-mesh-bg border-white/40">
+                    <div className="card-premium p-8 gradient-mesh-bg border-white/40 stagger-item opacity-0">
                         <h2 className="font-display font-black text-slate-800 mb-8 flex items-center gap-3">
                             <TrendingUp size={20} className="text-primary-500" />
                             Infrastructure
@@ -202,7 +218,7 @@ const AdminDashboard = () => {
                         </div>
                     </div>
 
-                    <div className="card-premium p-8 bg-slate-900 border-slate-800 shadow-2xl overflow-hidden relative group">
+                    <div className="card-premium p-8 bg-slate-900 border-slate-800 shadow-2xl overflow-hidden relative group stagger-item opacity-0">
                         <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform">
                             <AlertCircle size={80} className="text-white" />
                         </div>
@@ -236,7 +252,7 @@ const AdminDashboard = () => {
                         </div>
                     </div>
 
-                    <div className="card-premium p-8 bg-primary-600 border-primary-500 shadow-xl overflow-hidden relative group cursor-pointer" onClick={() => navigate('/admin/announcements')}>
+                    <div className="card-premium p-8 bg-primary-600 border-primary-500 shadow-xl overflow-hidden relative group cursor-pointer stagger-item opacity-0" onClick={() => navigate('/admin/announcements')}>
                         <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform">
                             <Megaphone size={60} className="text-white" />
                         </div>
@@ -300,23 +316,32 @@ const ActivityItem = ({ name, action, time, status, onClick }) => (
     </div>
 );
 
-const HealthBar = ({ label, percentage, color }) => (
-    <div className="space-y-3">
-        <div className="flex justify-between items-end">
-            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{label}</span>
-            <span className="text-sm font-black text-slate-800 tabular-nums">{percentage}%</span>
+const HealthBar = ({ label, percentage, color }) => {
+    const barRef = useRef();
+
+    useGSAP(() => {
+        gsap.fromTo(barRef.current,
+            { width: '0%' },
+            { width: `${percentage}%`, duration: 1.5, ease: 'power3.out', delay: 0.5 }
+        );
+    }, [percentage]);
+
+    return (
+        <div className="space-y-3">
+            <div className="flex justify-between items-end">
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{label}</span>
+                <span className="text-sm font-black text-slate-800 tabular-nums">{percentage}%</span>
+            </div>
+            <div className="h-3 bg-slate-100 rounded-lg overflow-hidden border border-slate-200/50 p-[2px]">
+                <div
+                    ref={barRef}
+                    className={`h-full ${color} rounded-md shadow-sm relative overflow-hidden`}
+                >
+                    <div className="absolute inset-0 bg-white/20 animate-pulse" />
+                </div>
+            </div>
         </div>
-        <div className="h-3 bg-slate-100 rounded-lg overflow-hidden border border-slate-200/50 p-[2px]">
-            <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${percentage}%` }}
-                transition={{ duration: 1, ease: "easeOut" }}
-                className={`h-full ${color} rounded-md shadow-sm relative overflow-hidden`}
-            >
-                <div className="absolute inset-0 bg-white/20 animate-pulse" />
-            </motion.div>
-        </div>
-    </div>
-);
+    );
+};
 
 export default AdminDashboard;
