@@ -31,7 +31,7 @@ const adminAuth = async (req, res, next) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findOne({ _id: decoded._id });
 
-        if (!user || user.role !== 'admin') {
+        if (!user || user.role.toLowerCase() !== 'admin') {
             return res.status(403).send({ error: 'Administrative clearance required.' });
         }
 
@@ -51,7 +51,12 @@ const managerAuth = async (req, res, next) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findOne({ _id: decoded._id });
 
-        if (!user || (user.role !== 'admin' && user.role !== 'manager')) {
+        if (!user) {
+            return res.status(403).send({ error: 'User not found.' });
+        }
+
+        const role = user.role.toLowerCase();
+        if (role !== 'admin' && role !== 'manager') {
             return res.status(403).send({ error: 'Managerial or Administrative clearance required.' });
         }
 
