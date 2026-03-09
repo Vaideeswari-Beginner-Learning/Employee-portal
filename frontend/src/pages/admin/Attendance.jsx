@@ -45,10 +45,12 @@ const AdminAttendance = () => {
 
     const [selectedPhoto, setSelectedPhoto] = useState(null);
 
-    const filtered = attendance.filter(record =>
-        record.employee?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        record.employee?.employeeId?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filtered = attendance.filter(record => {
+        const empName = record.employee?.name || '';
+        const empId = record.employee?.employeeId || '';
+        return empName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            empId.toLowerCase().includes(searchTerm.toLowerCase());
+    });
 
     return (
         <motion.div

@@ -54,7 +54,8 @@ const ResetPasswordPage = () => {
             }
 
         } catch (err) {
-            setStatus({ type: 'error', message: err.response?.data?.error || err.response?.data?.message || 'An error occurred. Please try again.' });
+            const rawError = err.response?.data?.error || err.response?.data?.message || err.message || 'An error occurred. Please try again.';
+            setStatus({ type: 'error', message: typeof rawError === 'object' ? JSON.stringify(rawError) : String(rawError) });
         } finally {
             setIsLoading(false);
         }
