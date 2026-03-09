@@ -8,8 +8,10 @@ import {
 } from 'lucide-react';
 import api from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const AdminDashboard = () => {
+    const { user } = useAuth();
     const navigate = useNavigate();
     const [stats, setStats] = useState({
         totalEmployees: 0,
@@ -134,25 +136,27 @@ const AdminDashboard = () => {
                 <div className="flex items-center gap-4">
                     <div className="flex -space-x-3">
                         {[1, 2, 3, 4].map(i => (
-                            <div key={i} className="w-10 h-10 rounded-xl border-4 border-[#f8fafb] bg-slate-200 overflow-hidden shadow-sm">
-                                <div className="w-full h-full flex items-center justify-center text-[10px] font-black text-slate-400">U{i}</div>
+                            <div key={i} className="w-10 h-10 rounded-xl border-4 border-[#f8fafb] bg-slate-200 overflow-hidden shadow-sm" title="Active Monitoring Node">
+                                <div className="w-full h-full flex items-center justify-center text-[10px] font-black text-slate-400 uppercase">U{i}</div>
                             </div>
                         ))}
                     </div>
-                    <button
-                        onClick={handleSystemAudit}
-                        disabled={isExporting}
-                        className={`btn-teal px-6 py-3 flex items-center gap-3 transition-opacity ${isExporting ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    >
-                        {isExporting ? (
-                            <div className="w-4 h-4 rounded-full border-2 border-white/20 border-t-white animate-spin" />
-                        ) : (
-                            <Download size={18} />
-                        )}
-                        <span className="text-xs font-black uppercase tracking-widest">
-                            {isExporting ? 'Compiling...' : 'System Audit'}
-                        </span>
-                    </button>
+                    {user?.role === 'admin' && (
+                        <button
+                            onClick={handleSystemAudit}
+                            disabled={isExporting}
+                            className={`btn-teal px-6 py-3 flex items-center gap-3 transition-opacity ${isExporting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        >
+                            {isExporting ? (
+                                <div className="w-4 h-4 rounded-full border-2 border-white/20 border-t-white animate-spin" />
+                            ) : (
+                                <Download size={18} />
+                            )}
+                            <span className="text-xs font-black uppercase tracking-widest">
+                                {isExporting ? 'Compiling...' : 'System Audit'}
+                            </span>
+                        </button>
+                    )}
                 </div>
             </div>
 

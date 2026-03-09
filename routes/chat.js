@@ -4,12 +4,13 @@ const multer = require('multer');
 const path = require('path');
 const Message = require('../models/Message');
 const Task = require('../models/Task');
-const { auth, adminAuth } = require('../middleware/auth'); // Both roles can access their chats
+const mongoose = require('mongoose');
+const { auth, adminAuth } = require('../middleware/auth');
 
 // Multer setup for chat attachments
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/');
+        cb(null, path.join(process.cwd(), 'uploads/'));
     },
     filename: (req, file, cb) => {
         // e.g. chat-1623490234-file.png
@@ -18,45 +19,66 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Helper to check if user has access to employee chat
 const canAccessChat = (employeeId, user) => {
-    if (user.email === 'admin@cctv.com' || user.role === 'admin' || user.role === 'Admin') return true;
+    // Standardized admin check
+    const isAdmin = user.email === 'admin@cctv.com' || user.role === 'admin' || user.role === 'Admin';
+    if (isAdmin) return true;
+
+    // Employee can only access their own room
     return employeeId?.toString() === user._id?.toString();
 };
 
 
 
+const TEAM_ID = '000000000000000000000000'; // Special ID for Team Group Chat
+
 // @route   GET /api/chat/:employeeId
-// @desc    Get all messages for a specific employee
+// @desc    Get chat history for a specific employee room
 // @access  Private
 router.get('/:employeeId', auth, async (req, res) => {
     try {
-        const targetId = req.params.employeeId === 'me' ? req.user._id.toString() : req.params.employeeId;
+        let targetId = req.params.employeeId === 'team' ? TEAM_ID : req.params.employeeId;
+        if (targetId === 'me') targetId = req.user._id.toString();
 
-        if (!canAccessChat(targetId, req.user)) {
-            return res.status(403).json({ message: 'Access denied to this chat room' });
+        if (targetId !== TEAM_ID && !mongoose.Types.ObjectId.isValid(targetId)) {
+            return res.status(400).json({ error: 'Invalid room identification node' });
         }
 
-        const messages = await Message.find({ employeeId: targetId }).sort({ createdAt: 1 });
+        // Access Control
+        if (targetId !== TEAM_ID && req.user.role !== 'admin' && req.user.role !== 'manager' && req.user._id.toString() !== targetId) {
+            console.warn(`[ChatAccess] Denied: User ${req.user.email} attempted access to room ${targetId}`);
+            return res.status(403).json({ error: 'Direct communication restricted to authorized personnel.' });
+        }
+
+        console.log(`[ChatFetch] Node ${req.user.name} accessing room ${targetId === TEAM_ID ? 'TEAM' : targetId}`);
+        const messages = await Message.find({ employeeId: targetId })
+            .sort({ createdAt: 1 })
+            .populate('sender', 'name role profilePhoto');
         res.json(messages);
-    } catch (err) {
-        console.error('Error fetching chat messages:', err);
-        res.status(500).json({ message: 'Server error fetching messages' });
+    } catch (e) {
+        console.error('Chat GET error:', e);
+        res.status(500).send({ error: 'Comms sequence interrupted' });
     }
 });
 
 // @route   POST /api/chat/:employeeId
-// @desc    Post a new message or upload an attachment to an employee chat
+// @desc    Post a message to a chat room
 // @access  Private
 router.post('/:employeeId', auth, upload.single('attachment'), async (req, res) => {
     try {
-        const targetId = req.params.employeeId === 'me' ? req.user._id.toString() : req.params.employeeId;
+        const { content, attachmentType } = req.body;
 
-        if (!canAccessChat(targetId, req.user)) {
-            return res.status(403).json({ message: 'Access denied to this chat room' });
+        let targetId = req.params.employeeId === 'team' ? TEAM_ID : req.params.employeeId;
+        if (targetId === 'me') targetId = req.user._id.toString();
+
+        if (targetId !== TEAM_ID && !mongoose.Types.ObjectId.isValid(targetId)) {
+            return res.status(400).json({ error: 'Invalid destination node' });
         }
 
-        const { content, attachmentType } = req.body;
+        // Access Control: Admin/Manager can message any room; Employee can message their own room or team
+        if (targetId !== TEAM_ID && req.user.role !== 'admin' && req.user.role !== 'manager' && req.user._id.toString() !== targetId) {
+            return res.status(403).json({ error: 'Direct transmission restricted.' });
+        }
 
         let attachmentUrl = null;
         let finalAttachmentType = attachmentType || 'none';
@@ -79,12 +101,13 @@ router.post('/:employeeId', auth, upload.single('attachment'), async (req, res) 
         const newMessage = new Message({
             employeeId: targetId,
             sender: req.user._id,
-            senderName: `${req.user.name || req.user.firstName + ' ' + req.user.lastName}`,
+            senderName: req.user.name || (req.user.role === 'admin' ? 'Admin Support' : 'Staff Member'),
             content: content || '',
             attachmentUrl,
             attachmentType: finalAttachmentType
         });
 
+        console.log(`[ChatPost] Creating message from ${req.user.name} (${req.user._id}) for room ${targetId}`);
         const savedMessage = await newMessage.save();
         res.status(201).json(savedMessage);
 

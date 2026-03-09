@@ -78,7 +78,7 @@ const MainLayout = () => {
                                 </div>
                                 <div className="hidden sm:block">
                                     <p className="text-sm font-bold text-slate-800 leading-tight">Workspace</p>
-                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{user?.email === 'admin@cctv.com' ? 'ADMIN' : 'EMPLOYEE'}</p>
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{user?.role}</p>
                                 </div>
                             </motion.div>
                             <button

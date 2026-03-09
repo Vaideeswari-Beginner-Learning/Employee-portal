@@ -10,17 +10,39 @@ const AuthProvider = ({ children }) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-        }
-        setLoading(false);
+        const checkAuth = async () => {
+            const token = localStorage.getItem('token');
+            const storedUser = localStorage.getItem('user');
+
+            if (token) {
+                try {
+                    console.log('[AuthDebug] Verifying session token...', token.substring(0, 10) + '...');
+                    // Verify the token with the backend - explicitly passing headers just in case interceptor isn't ready
+                    const res = await api.get('/auth/me', {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+                    console.log('[AuthDebug] Session verified for:', res.data.email);
+                    setUser(res.data);
+                    localStorage.setItem('user', JSON.stringify(res.data));
+                } catch (err) {
+                    console.error('[AuthDebug] Session verification failed. Redirecting to login.', err);
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    setUser(null);
+                }
+            } else if (storedUser) {
+                setUser(JSON.parse(storedUser));
+            }
+            setLoading(false);
+        };
+
+        checkAuth();
     }, []);
 
     const login = async (email, password) => {
         try {
             console.log('Attempting login to /auth/login');
-            const res = await api.post('auth/login', { email, password });
+            const res = await api.post('/auth/login', { email, password });
             console.log('Login response:', res.data);
             localStorage.setItem('token', res.data.token);
             localStorage.setItem('user', JSON.stringify(res.data.user));

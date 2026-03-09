@@ -9,7 +9,7 @@ const EmployeeMgmt = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [editingId, setEditingId] = useState(null);
     const [formData, setFormData] = useState({
-        name: '', email: '', password: '', phone: '', employeeId: ''
+        name: '', email: '', password: '', phone: '', employeeId: '', role: 'employee', expertise: []
     });
 
     useEffect(() => {
@@ -35,7 +35,7 @@ const EmployeeMgmt = () => {
             }
             setShowModal(false);
             setEditingId(null);
-            setFormData({ name: '', email: '', password: '', phone: '', employeeId: '' });
+            setFormData({ name: '', email: '', password: '', phone: '', employeeId: '', role: 'employee', expertise: [] });
             fetchEmployees();
         } catch (err) {
             const msg = err.response?.data?.error || err.response?.data?.message || err.message;
@@ -50,6 +50,8 @@ const EmployeeMgmt = () => {
             email: emp.email,
             phone: emp.phone || '',
             employeeId: emp.employeeId,
+            role: emp.role || 'employee',
+            expertise: emp.expertise || [],
             password: '' // Keep empty for security, only change if user types
         });
         setShowModal(true);
@@ -126,7 +128,7 @@ const EmployeeMgmt = () => {
                                     <td className="px-8 py-6">
                                         <div className="flex items-center gap-4">
                                             <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-slate-100 to-slate-50 border border-slate-200 flex items-center justify-center font-black text-slate-400 text-sm uppercase shadow-sm group-hover:scale-105 transition-transform">
-                                                {emp.name.charAt(0)}
+                                                {(emp.name || emp.email || '?').charAt(0).toUpperCase()}
                                             </div>
                                             <div>
                                                 <p className="text-sm font-black text-slate-800 leading-none mb-1.5">{emp.name}</p>
@@ -143,7 +145,7 @@ const EmployeeMgmt = () => {
                                         </span>
                                     </td>
                                     <td className="px-8 py-6">
-                                        <p className="text-xs font-black text-slate-700 uppercase tracking-widest">Field Ops Node Alpha</p>
+                                        <p className="text-xs font-black text-slate-700 uppercase tracking-widest">General Operations</p>
                                     </td>
                                     <td className="px-8 py-6 text-sm text-gray-500">
                                         <div className="flex items-center gap-2">
@@ -186,7 +188,7 @@ const EmployeeMgmt = () => {
                             <div className="px-10 py-8 border-b border-slate-50 flex justify-between items-center bg-gradient-to-r from-slate-50/50 to-white">
                                 <div>
                                     <h2 className="text-2xl font-display font-black text-slate-800 tracking-tight">
-                                        {editingId ? 'Update' : 'Onboard'}<span className="text-primary-500">.Node</span>
+                                        {editingId ? '🛠️ Update' : '🚀 Onboard'}<span className="text-primary-500">.Node</span>
                                     </h2>
                                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
                                         {editingId ? 'Personnel Identity Modification' : 'Personnel Registry Initialization'}
@@ -196,7 +198,7 @@ const EmployeeMgmt = () => {
                                     onClick={() => {
                                         setShowModal(false);
                                         setEditingId(null);
-                                        setFormData({ name: '', email: '', password: '', phone: '', employeeId: '' });
+                                        setFormData({ name: '', email: '', password: '', phone: '', employeeId: '', expertise: [] });
                                     }}
                                     className="w-12 h-12 rounded-2xl bg-slate-50 text-slate-300 hover:text-red-500 hover:bg-red-50 transition-all flex items-center justify-center group"
                                 >
@@ -205,20 +207,69 @@ const EmployeeMgmt = () => {
                             </div>
                             <form onSubmit={handleSubmit} className="p-10 space-y-8">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                    <ModalInput label="Operational Name" value={formData.name} onChange={v => setFormData({ ...formData, name: v })} placeholder="Hannah Wright" icon={<User size={14} />} />
-                                    <ModalInput label="Identity Code (Staff ID)" value={formData.employeeId} onChange={v => setFormData({ ...formData, employeeId: v })} placeholder="SEC-001" icon={<Hash size={14} />} />
+                                    <ModalInput label="Operational Name 👤" value={formData.name} onChange={v => setFormData({ ...formData, name: v })} placeholder="Employee Name" icon={<User size={14} />} />
+                                    <ModalInput label="Identity Code 🏷️" value={formData.employeeId} onChange={v => setFormData({ ...formData, employeeId: v })} placeholder="e.g. EMP001" icon={<Hash size={14} />} />
                                     <div className="md:col-span-2">
-                                        <ModalInput label="Communication Vector (Email)" value={formData.email} onChange={v => setFormData({ ...formData, email: v })} placeholder="hannah@sktechnology.com" type="email" icon={<Mail size={14} />} />
+                                        <ModalInput label="Communication Vector 📧" value={formData.email} onChange={v => setFormData({ ...formData, email: v })} placeholder="employee@company.com" type="email" icon={<Mail size={14} />} />
                                     </div>
-                                    <ModalInput label="Contact Node (Phone)" value={formData.phone} onChange={v => setFormData({ ...formData, phone: v })} placeholder="+91 XXXX-XXXXX" icon={<Phone size={14} />} />
-                                    <ModalInput label="Security Key (Auth)" value={formData.password} onChange={v => setFormData({ ...formData, password: v })} placeholder="••••••••" type="password" icon={<Shield size={14} />} />
+                                    <ModalInput label="Contact Node 📞" value={formData.phone} onChange={v => setFormData({ ...formData, phone: v })} placeholder="+91 XXXXX XXXXX" icon={<Phone size={14} />} />
+                                    <div className="space-y-2.5">
+                                        <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
+                                            <Shield size={14} /> Permission Level
+                                        </label>
+                                        <select
+                                            value={formData.role}
+                                            onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                                            className="w-full bg-slate-50/50 border border-slate-100 rounded-2xl px-5 py-3.5 text-sm focus:outline-none focus:border-primary-500 focus:bg-white focus:ring-4 focus:ring-primary-500/5 transition-all text-slate-800 font-bold appearance-none cursor-pointer"
+                                        >
+                                            <option value="employee">Field Employee</option>
+                                            <option value="manager">Operations Manager</option>
+                                            <option value="admin">System Admin</option>
+                                        </select>
+                                    </div>
+                                    <ModalInput label="Security Key 🔐" value={formData.password} onChange={v => setFormData({ ...formData, password: v })} placeholder="••••••••" type="password" icon={<Shield size={14} />} />
+
+                                    <div className="md:col-span-2 space-y-3">
+                                        <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
+                                            Expertise & Skills
+                                        </label>
+                                        <div className="flex flex-wrap gap-2">
+                                            {[
+                                                { skill: 'Installation', emoji: '🔌' },
+                                                { skill: 'Maintenance', emoji: '🛠️' },
+                                                { skill: 'Service', emoji: '⚡' },
+                                                { skill: 'Inspection', emoji: '🔍' }
+                                            ].map(({ skill, emoji }) => {
+                                                const isSelected = formData.expertise.includes(skill);
+                                                return (
+                                                    <button
+                                                        key={skill}
+                                                        type="button"
+                                                        onClick={() => {
+                                                            const newExpertise = isSelected
+                                                                ? formData.expertise.filter(s => s !== skill)
+                                                                : [...formData.expertise, skill];
+                                                            setFormData({ ...formData, expertise: newExpertise });
+                                                        }}
+                                                        className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border flex items-center gap-2 ${isSelected
+                                                            ? 'bg-primary-500 text-white border-primary-600 shadow-lg shadow-primary-500/20'
+                                                            : 'bg-slate-50 text-slate-400 border-slate-100 hover:bg-slate-100'
+                                                            }`}
+                                                    >
+                                                        <span>{emoji}</span>
+                                                        {skill}
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="flex flex-col sm:flex-row gap-4 pt-4">
                                     <button
                                         onClick={() => {
                                             setShowModal(false);
                                             setEditingId(null);
-                                            setFormData({ name: '', email: '', password: '', phone: '', employeeId: '' });
+                                            setFormData({ name: '', email: '', password: '', phone: '', employeeId: '', expertise: [] });
                                         }}
                                         type="button"
                                         className="flex-1 py-4 text-[10px] font-black text-slate-400 bg-slate-50 border border-slate-100 rounded-2xl hover:bg-slate-100 transition-all uppercase tracking-[0.2em]"

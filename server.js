@@ -43,6 +43,7 @@ mongoose.connect(process.env.MONGODB_URI)
 // API Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/employee', require('./routes/employee'));
+app.use('/api/performance', require('./routes/performance'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/tracking', require('./routes/tracking'));
 app.use('/api/announcements', require('./routes/announcement'));

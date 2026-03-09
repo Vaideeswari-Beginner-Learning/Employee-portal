@@ -26,6 +26,8 @@ import AdminTaskPanel from './pages/admin/TaskAdminPanel';
 // Global Comms Pages
 import SupportChat from './pages/employee/SupportChat';
 import AdminComms from './pages/admin/AdminComms';
+import ManagerComms from './pages/admin/ManagerComms';
+import PerformanceHub from './pages/admin/PerformanceHub';
 
 function App() {
   return (
@@ -57,7 +59,9 @@ function App() {
         <Route path="/admin/live-tracker" element={<LiveTracker />} />
         <Route path="/admin/announcements" element={<Announcements />} />
         <Route path="/admin/tasks" element={<AdminTaskPanel />} />
+        <Route path="/admin/merit" element={<PerformanceHub />} />
         <Route path="/admin/comms" element={<AdminComms />} />
+        <Route path="/manager/comms" element={<ManagerComms />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/dashboard" replace />} />

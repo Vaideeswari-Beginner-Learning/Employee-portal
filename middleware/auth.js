@@ -25,41 +25,42 @@ const auth = async (req, res, next) => {
 
 const adminAuth = async (req, res, next) => {
     try {
-        const authHeader = req.header('Authorization');
-        const token = authHeader?.replace('Bearer ', '');
-        console.log('Admin Auth - Raw Header:', authHeader);
-        console.log('Admin Auth - Extracted Token:', token);
-
-        if (!token || token === 'null' || token === 'undefined') {
-            console.error(`[AdminAuth] Authentication failed: ${!token ? 'Missing' : 'Invalid ("' + token + '")'} token.`);
-            return res.status(401).send({ error: 'Authentication failed: Invalid or missing token.' });
-        }
+        const token = req.header('Authorization')?.replace('Bearer ', '');
+        if (!token) return res.status(401).send({ error: 'Auth required' });
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findOne({ _id: decoded._id });
 
-        if (!user) {
-            console.error(`[AdminAuth] Authentication failed: User node ${decoded._id} not found in database.`);
-            return res.status(401).send({ error: 'Authentication failed: User not found.' });
+        if (!user || user.role !== 'admin') {
+            return res.status(403).send({ error: 'Administrative clearance required.' });
         }
-
-        if (user.email !== 'admin@cctv.com') {
-            const warnMsg = `[AdminAuth] Access denied: User ${user.email} (ID: ${user._id}) has role "${user.role}". Admin role required.\n`;
-            console.warn(warnMsg);
-            fs.appendFileSync('server.log', warnMsg);
-            return res.status(403).send({ error: 'Access denied: Administrative clearance required.' });
-        }
-
-        console.log(`[AdminAuth] Access granted for user: ${user.email}`);
-
 
         req.token = token;
         req.user = user;
         next();
     } catch (e) {
-        console.error('Admin Auth Error:', e.message);
-        res.status(401).send({ error: e.message || 'Authentication error.' });
+        res.status(401).send({ error: 'Authentication error.' });
     }
 };
 
-module.exports = { auth, adminAuth };
+const managerAuth = async (req, res, next) => {
+    try {
+        const token = req.header('Authorization')?.replace('Bearer ', '');
+        if (!token) return res.status(401).send({ error: 'Auth required' });
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await User.findOne({ _id: decoded._id });
+
+        if (!user || (user.role !== 'admin' && user.role !== 'manager')) {
+            return res.status(403).send({ error: 'Managerial or Administrative clearance required.' });
+        }
+
+        req.token = token;
+        req.user = user;
+        next();
+    } catch (e) {
+        res.status(401).send({ error: 'Authentication error.' });
+    }
+};
+
+module.exports = { auth, adminAuth, managerAuth };

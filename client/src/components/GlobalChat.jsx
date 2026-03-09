@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
-import { Send, Paperclip, Mic, Square, X, Image as ImageIcon, FileText, Camera } from 'lucide-react';
+import { Send, Paperclip, Mic, Square, X, Image as ImageIcon, FileText, Camera, Activity } from 'lucide-react';
 import api from '../utils/api';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 
-const GlobalChat = ({ employeeId }) => {
+const GlobalChat = ({ employeeId, roomLabel }) => {
     const { user } = useAuth();
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
@@ -14,13 +14,16 @@ const GlobalChat = ({ employeeId }) => {
     const [loading, setLoading] = useState(true);
     const [sending, setSending] = useState(false);
     const messagesEndRef = useRef(null);
+    const isFetchingRef = useRef(false);
     const mediaRecorderRef = useRef(null);
     const audioChunksRef = useRef([]);
 
     useEffect(() => {
+        setMessages([]); // Clear previous chat context immediately
         if (employeeId) {
             fetchMessages();
-            const interval = setInterval(fetchMessages, 10000);
+            // Faster polling for better responsiveness (3 seconds)
+            const interval = setInterval(fetchMessages, 3000);
             return () => clearInterval(interval);
         } else {
             setLoading(false);
@@ -36,14 +39,31 @@ const GlobalChat = ({ employeeId }) => {
     };
 
     const fetchMessages = async () => {
+        if (isFetchingRef.current) return;
+        isFetchingRef.current = true;
+
         try {
-            const res = await api.get(`/chat/${employeeId}`);
-            setMessages(res.data);
+            console.log(`[ChatDebug] Polling messages for room: ${employeeId}`);
+            const res = await api.get(`chat/${employeeId}`);
+            setMessages(prev => {
+                // Only update if message count changed or if loading for the first time
+                if (loading || res.data.length !== prev.length) {
+                    console.log(`[ChatDebug] Syncing ${res.data.length} messages`);
+                    return res.data;
+                }
+                return prev;
+            });
+
+            if (loading) {
+                setTimeout(scrollToBottom, 100);
+            }
             setLoading(false);
         } catch (error) {
-            console.error('Error fetching messages:', error);
+            console.error('[GlobalChat] Fetch Error:', error);
             if (loading) toast.error('Failed to load chat history');
             setLoading(false);
+        } finally {
+            isFetchingRef.current = false;
         }
     };
 
@@ -110,7 +130,7 @@ const GlobalChat = ({ employeeId }) => {
                 formData.append('attachmentType', 'voice');
             }
 
-            const res = await api.post(`/chat/${employeeId}`, formData, {
+            const res = await api.post(`chat/${employeeId}`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
@@ -129,7 +149,8 @@ const GlobalChat = ({ employeeId }) => {
     const getFullUrl = (url) => {
         if (!url) return '';
         if (url.startsWith('http')) return url;
-        return `/uploads/${url}`;
+        // Ensure leading slash for server static route
+        return url.startsWith('/') ? url : `/uploads/${url}`;
     };
 
     if (!employeeId) {
@@ -143,9 +164,19 @@ const GlobalChat = ({ employeeId }) => {
     return (
         <div className="flex flex-col h-full bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
             {/* Header */}
-            <div className="bg-white border-b border-slate-200 p-4 shrink-0 shadow-sm z-10">
-                <h3 className="text-sm font-black text-slate-800 uppercase tracking-wider">Internal Comms Channel</h3>
-                <p className="text-xs text-slate-500 font-medium mt-0.5">End-to-end support encrypted node.</p>
+            <div className="bg-white border-b border-slate-200 p-4 shrink-0 shadow-sm z-10 flex items-center justify-between">
+                <div>
+                    <h3 className="text-sm font-black text-slate-800 uppercase tracking-wider">Internal Comms Channel</h3>
+                    <p className="text-xs text-slate-500 font-medium mt-0.5 whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px]">Channel: <span className="text-primary-600 font-bold">{roomLabel || user?.name}</span></p>
+                </div>
+                <button
+                    type="button"
+                    onClick={() => { fetchMessages(); toast.success('Syncing Node...'); }}
+                    className="p-2 hover:bg-slate-100 rounded-xl text-slate-400 hover:text-primary-500 transition-all shrink-0"
+                    title="Force Sync"
+                >
+                    <Activity size={18} />
+                </button>
             </div>
 
             {/* Messages Area */}
@@ -159,8 +190,8 @@ const GlobalChat = ({ employeeId }) => {
                     </div>
                 ) : (
                     messages.map((msg) => {
-                        const senderIdStr = String(msg.sender?._id || msg.sender);
-                        const userIdStr = String(user?._id);
+                        const senderIdStr = String(msg.sender?._id || msg.sender).toLowerCase();
+                        const userIdStr = String(user?._id || user?.id).toLowerCase();
                         const isMe = senderIdStr === userIdStr;
                         return (
                             <div key={msg._id} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>

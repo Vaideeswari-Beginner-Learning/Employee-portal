@@ -1,15 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const Task = require('../models/Task');
-const { auth } = require('../middleware/auth');
-
-// Note: To simplify access for this demo, keeping endpoints accessible by authenticated users.
-// In production, we would use role-based checks (auth.isAdmin, etc.).
+const { auth, managerAuth } = require('../middleware/auth');
 
 // @route   POST /api/tasks
-// @desc    Admin assigns a new task
-// @access  Private
-router.post('/', auth, async (req, res) => {
+// @desc    Admin/Manager assigns a new task
+// @access  Private (Admin/Manager)
+router.post('/', managerAuth, async (req, res) => {
     try {
         const { clientName, location, taskType, priority, dueDate, assignedTo } = req.body;
 
@@ -24,6 +21,8 @@ router.post('/', auth, async (req, res) => {
         });
 
         const savedTask = await newTask.save();
+        await savedTask.populate('assignedTo', 'name role employeeId');
+        await savedTask.populate('assignedBy', 'name');
         res.status(201).json(savedTask);
     } catch (err) {
         console.error('Error assigning task:', err);
@@ -36,12 +35,12 @@ router.post('/', auth, async (req, res) => {
 // @access  Private
 router.get('/', auth, async (req, res) => {
     try {
-        // If the user requesting is not an admin, only return their tasks
-        const filter = req.user.role === 'admin' ? {} : { assignedTo: req.user.id };
+        // Admins and Managers see everything. Employees only see their own.
+        const filter = (req.user.role === 'admin' || req.user.role === 'manager') ? {} : { assignedTo: req.user._id };
 
         const tasks = await Task.find(filter)
-            .populate('assignedTo', 'firstName lastName role employeeId')
-            .populate('assignedBy', 'firstName lastName')
+            .populate('assignedTo', 'name role employeeId')
+            .populate('assignedBy', 'name')
             .sort({ createdAt: -1 });
 
         res.json(tasks);
@@ -60,6 +59,14 @@ router.put('/:id/status', auth, async (req, res) => {
 
         const task = await Task.findById(req.params.id);
         if (!task) return res.status(404).json({ message: 'Task not found' });
+
+        // Access Control: Only the assigned employee OR an admin/manager can update status
+        const isOwner = task.assignedTo.toString() === req.user._id.toString();
+        const isLeader = req.user.role === 'admin' || req.user.role === 'manager';
+
+        if (!isOwner && !isLeader) {
+            return res.status(403).json({ message: 'Inadequate clearance for task modification.' });
+        }
 
         // Timer Start Logic
         if (status === 'In Progress' && task.status !== 'In Progress') {
@@ -92,7 +99,7 @@ router.put('/:id/status', auth, async (req, res) => {
         const updatedTask = await task.save();
 
         // Populate before returning for the frontend
-        await updatedTask.populate('assignedTo', 'firstName lastName role employeeId');
+        await updatedTask.populate('assignedTo', 'name role employeeId');
 
         res.json(updatedTask);
     } catch (err) {

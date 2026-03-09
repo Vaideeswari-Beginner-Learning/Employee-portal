@@ -43,9 +43,8 @@ const AdminTaskPanel = () => {
         try {
             const res = await api.get('admin/employees');
             setEmployees(res.data);
-            if (res.data.length > 0) {
-                setNewTask(prev => ({ ...prev, assignedTo: res.data[0]._id }));
-            }
+            // Pre-select first employee or clear if none
+            setNewTask(prev => ({ ...prev, assignedTo: res.data.length > 0 ? res.data[0]._id : '' }));
         } catch (err) {
             console.error('Error fetching employees:', err);
         }
@@ -106,7 +105,10 @@ const AdminTaskPanel = () => {
 
                 <div className="flex items-center gap-4">
                     <button
-                        onClick={() => setShowDispatchModal(true)}
+                        onClick={() => {
+                            fetchEmployees(); // Ensure dropdown is synced with latest personnel
+                            setShowDispatchModal(true);
+                        }}
                         className="px-6 py-3 rounded-2xl bg-blue-600 text-white font-bold text-sm shadow-md shadow-blue-500/20 hover:bg-blue-500 transition-all flex items-center gap-2 relative overflow-hidden group"
                     >
                         <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
@@ -172,7 +174,12 @@ const AdminTaskPanel = () => {
                                                 className="p-4 bg-slate-50 hover:bg-slate-100 border border-slate-100 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-2 cursor-pointer transition-colors group"
                                             >
                                                 <div>
-                                                    <h4 className="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">{task.clientName}</h4>
+                                                    <div className="flex items-center gap-2">
+                                                        <h4 className="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">{task.clientName}</h4>
+                                                        {task.assignedBy?._id === task.assignedTo?._id && (
+                                                            <span className="px-1.5 py-0.5 rounded bg-blue-50 text-blue-500 text-[8px] font-black uppercase tracking-tighter border border-blue-100">Self-Task</span>
+                                                        )}
+                                                    </div>
                                                     <p className="text-xs text-slate-500 mt-1">{task.taskType} • {task.location}</p>
                                                     {task.startLocation && (
                                                         <span className="text-[9px] font-bold text-emerald-600 flex items-center gap-1 mt-1">
@@ -307,7 +314,12 @@ const AdminTaskPanel = () => {
                                         <span className="text-[10px] font-black text-slate-500 uppercase bg-slate-50 border border-slate-100 px-2 py-0.5 rounded-lg">{approval.timeElapsed || 0}m log</span>
                                     </div>
                                     <h4 className="text-sm font-black text-slate-900 mb-1 group-hover:text-blue-600 transition-colors">{approval.clientName}</h4>
-                                    <p className="text-[11px] text-slate-500 mb-4">{approval.taskType} • By {approval.assignedTo?.firstName} {approval.assignedTo?.lastName}</p>
+                                    <p className="text-[11px] text-slate-500 mb-4">
+                                        {approval.taskType} • By {approval.assignedTo?.name}
+                                        {approval.assignedBy?._id === approval.assignedTo?._id && (
+                                            <span className="ml-2 text-[9px] text-blue-500 font-black tracking-tighter">[SELF]</span>
+                                        )}
+                                    </p>
 
                                     <div className="flex gap-2">
                                         <button
@@ -371,26 +383,45 @@ const AdminTaskPanel = () => {
                                 </select>
                             </div>
                             <div>
-                                <label className="text-xs font-bold text-slate-700 uppercase mb-2 block">Select Employee (Matched by Expertise)</label>
+                                <label className="text-xs font-bold text-slate-700 uppercase mb-2 block">Select Employee</label>
                                 <select
                                     className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-500"
                                     value={newTask.assignedTo}
                                     onChange={(e) => setNewTask({ ...newTask, assignedTo: e.target.value })}
                                 >
+                                    <option value="" disabled>Select Personnel...</option>
+                                    {/* Matched employees at the top with ✨ */}
                                     {employees
-                                        .filter(emp => !newTask.taskType || (emp.expertise && emp.expertise.some(exp =>
+                                        .filter(emp => emp.expertise?.some(exp =>
                                             exp === newTask.taskType || (newTask.taskType === 'Repair' && exp === 'Service')
-                                        )))
+                                        ))
                                         .map(emp => (
-                                            <option key={emp._id} value={emp._id}>{emp.name}</option>
+                                            <option key={emp._id} value={emp._id}>
+                                                🎯 {emp.name || emp.email?.split('@')[0] || 'Unknown'} (Perfect Match: {newTask.taskType})
+                                            </option>
                                         ))
                                     }
-                                    {employees.filter(emp => emp.expertise && emp.expertise.some(exp =>
-                                        exp === newTask.taskType || (newTask.taskType === 'Repair' && exp === 'Service')
-                                    )).length === 0 && (
-                                            <option value="" disabled>No employees with this expertise</option>
-                                        )}
+                                    {/* All other employees */}
+                                    {employees
+                                        .filter(emp => !emp.expertise?.some(exp =>
+                                            exp === newTask.taskType || (newTask.taskType === 'Repair' && exp === 'Service')
+                                        ))
+                                        .map(emp => (
+                                            <option key={emp._id} value={emp._id}>
+                                                {emp.name || emp.email?.split('@')[0] || 'Unknown'}
+                                                {emp.expertise?.length > 0 ? ` (${emp.expertise.join(', ')})` : ' (No expertise set)'}
+                                            </option>
+                                        ))
+                                    }
+                                    {employees.length === 0 && (
+                                        <option disabled>🚫 No employees found in system</option>
+                                    )}
                                 </select>
+                                {employees.filter(emp => emp.expertise?.some(exp =>
+                                    exp === newTask.taskType || (newTask.taskType === 'Repair' && exp === 'Service')
+                                )).length === 0 && employees.length > 0 && (
+                                        <p className="text-[10px] text-amber-600 font-bold mt-1.5">⚠️ No employees with {newTask.taskType} expertise — all personnel shown below.</p>
+                                    )}
                             </div>
                             <div>
                                 <label className="text-xs font-bold text-slate-700 uppercase mb-2 block">Client name</label>
@@ -456,7 +487,12 @@ const AdminTaskPanel = () => {
                         <div className="space-y-4">
                             <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
                                 <p className="text-xs font-bold text-slate-500 mb-1">Assigned Employee</p>
-                                <p className="text-sm font-bold text-slate-900">{selectedApproval.assignedTo?.firstName} {selectedApproval.assignedTo?.lastName}</p>
+                                <p className="text-sm font-bold text-slate-900">
+                                    {selectedApproval.assignedTo?.name}
+                                    {selectedApproval.assignedBy?._id === selectedApproval.assignedTo?._id && (
+                                        <span className="ml-2 px-2 py-0.5 rounded bg-blue-100 text-blue-600 text-[10px] font-black uppercase">Self-Tasked</span>
+                                    )}
+                                </p>
                             </div>
                             <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
                                 <p className="text-xs font-bold text-slate-500 mb-1">Task Type</p>

@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
+const { auth } = require('../middleware/auth');
 
 // Login Route
 router.post('/login', async (req, res) => {
@@ -32,6 +33,13 @@ router.post('/login', async (req, res) => {
         console.error("Login route error:", e);
         res.status(400).send({ error: e.message || 'An error occurred', stack: e.stack });
     }
+});
+
+// @route   GET /api/auth/me
+// @desc    Get current user profile
+// @access  Private
+router.get('/me', auth, async (req, res) => {
+    res.send(req.user);
 });
 
 // Forgot Password Route
