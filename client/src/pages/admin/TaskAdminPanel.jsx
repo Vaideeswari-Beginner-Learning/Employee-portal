@@ -95,24 +95,19 @@ const AdminTaskPanel = () => {
     const containerRef = useRef();
     const modalRef = useRef();
 
-    useGSAP(() => {
-        // Animate stat cards and sections on load
-        gsap.from('.stat-card', {
-            y: 30,
-            opacity: 0,
-            duration: 0.6,
-            stagger: 0.1,
-            ease: 'power3.out'
-        });
+    gsap.registerPlugin(useGSAP);
 
-        gsap.from('.stagger-item', {
-            y: 20,
-            opacity: 0,
-            duration: 0.5,
-            stagger: 0.05,
-            ease: 'power2.out',
-            delay: 0.3
-        });
+    useGSAP(() => {
+        // Explicitly use fromTo to prevent React Strict mode glitches where 'from' saves opacity: 0 as the starting base
+        gsap.fromTo('.stat-card',
+            { y: 30, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: 'power3.out' }
+        );
+
+        gsap.fromTo('.stagger-item',
+            { y: 20, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.5, stagger: 0.05, ease: 'power2.out', delay: 0.3 }
+        );
     }, { scope: containerRef });
 
     useGSAP(() => {
