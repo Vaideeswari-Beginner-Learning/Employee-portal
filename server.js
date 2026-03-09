@@ -8,6 +8,13 @@ const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 5001;
 
+// Ensure uploads directory exists
+const uploadsDir = path.join(process.cwd(), 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir);
+    console.log('Created uploads directory');
+}
+
 // CORS - allowing local Vite dev server specifically
 app.use(cors({
     origin: [

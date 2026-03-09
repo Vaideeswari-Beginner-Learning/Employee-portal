@@ -33,4 +33,6 @@ Thumbs.db
 *.user
 
 # Uploads (user data)
-backend/uploads/
+uploads/*
+!uploads/.gitkeep
+
