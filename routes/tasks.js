@@ -4,11 +4,22 @@ const Task = require('../models/Task');
 const { auth, managerAuth } = require('../middleware/auth');
 
 // @route   POST /api/tasks
-// @desc    Admin/Manager assigns a new task
-// @access  Private (Admin/Manager)
-router.post('/', managerAuth, async (req, res) => {
+// @desc    Create a new task (Admins/Managers can assign to anyone, Employees can only self-assign)
+// @access  Private
+router.post('/', auth, async (req, res) => {
     try {
         const { clientName, location, taskType, priority, dueDate, assignedTo } = req.body;
+
+        const role = req.user.role.toLowerCase();
+        let finalAssignedTo = assignedTo;
+
+        if (role === 'employee') {
+            // Employees can ONLY assign tasks to themselves
+            finalAssignedTo = req.user._id;
+        } else {
+            // Admins/Managers can assign to anyone, fallback to themselves if omitted
+            finalAssignedTo = assignedTo || req.user._id;
+        }
 
         const newTask = new Task({
             clientName,
@@ -16,7 +27,7 @@ router.post('/', managerAuth, async (req, res) => {
             taskType,
             priority,
             dueDate,
-            assignedTo: assignedTo || req.user._id,
+            assignedTo: finalAssignedTo,
             assignedBy: req.user._id
         });
 
