@@ -108,7 +108,7 @@ const AdminTaskPanel = () => {
             { y: 20, opacity: 0 },
             { y: 0, opacity: 1, duration: 0.5, stagger: 0.05, ease: 'power2.out', delay: 0.3 }
         );
-    }, { scope: containerRef });
+    }, { scope: containerRef, dependencies: [stats, tasks, employees] });
 
     useGSAP(() => {
         if (showDispatchModal && modalRef.current) {
@@ -433,14 +433,14 @@ const AdminTaskPanel = () => {
                                     onChange={(e) => setNewTask({ ...newTask, assignedTo: e.target.value })}
                                 >
                                     <option value="" disabled>Select Personnel...</option>
-                                    {/* Matched employees at the top with ✨ */}
+                                    {/* Matched employees at the top */}
                                     {employees
                                         .filter(emp => emp.expertise?.some(exp =>
                                             exp === newTask.taskType || (newTask.taskType === 'Repair' && exp === 'Service')
                                         ))
                                         .map(emp => (
                                             <option key={emp._id} value={emp._id}>
-                                                🎯 {emp.name || emp.email?.split('@')[0] || 'Unknown'} (Perfect Match!)
+                                                ★ {emp.name || emp.email?.split('@')[0] || 'Unknown'} - RECOMMENDED
                                             </option>
                                         ))
                                     }
@@ -451,13 +451,13 @@ const AdminTaskPanel = () => {
                                         ))
                                         .map(emp => (
                                             <option key={emp._id} value={emp._id}>
-                                                👤 {emp.name || emp.email?.split('@')[0] || 'Unknown'}
-                                                {emp.expertise?.length > 0 ? ` (${emp.expertise.join(', ')})` : ' (No expertise set)'}
+                                                • {emp.name || emp.email?.split('@')[0] || 'Unknown'}
+                                                {emp.expertise?.length > 0 ? ` [${emp.expertise.join(', ')}]` : ' [No set expertise]'}
                                             </option>
                                         ))
                                     }
                                     {employees.length === 0 && (
-                                        <option disabled>🚫 No employees found in system</option>
+                                        <option disabled>-- No employees available in system --</option>
                                     )}
                                 </select>
                                 {employees.filter(emp => emp.expertise?.some(exp =>

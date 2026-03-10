@@ -35,7 +35,7 @@ const AdminDashboard = () => {
             { y: 20, opacity: 0 },
             { y: 0, opacity: 1, duration: 0.5, stagger: 0.05, ease: 'power2.out', delay: 0.2 }
         );
-    }, { scope: containerRef });
+    }, { scope: containerRef, dependencies: [stats] });
 
     useEffect(() => {
         const fetchStats = async () => {
