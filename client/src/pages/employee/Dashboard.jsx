@@ -42,37 +42,37 @@ const EmployeeDashboard = () => {
     }, []);
 
     return (
-        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700">
+        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700 bg-slate-900 min-h-screen p-6 md:p-10">
             {/* Header / Company Title */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                    <h2 className="text-3xl font-display font-black text-slate-800 tracking-tight">
+                    <h2 className="text-4xl font-display font-black text-white tracking-tight">
                         Command<span className="text-primary-500 italic">.Center</span>
                     </h2>
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-[0.3em] mt-2">Operational Identity Node: {user?.employeeId || '002'}</p>
+                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mt-3">Operational Identity Node: {user?.employeeId || '002'}</p>
                 </div>
-                <div className="flex items-center gap-4 bg-white/50 px-5 py-2.5 rounded-2xl border border-slate-100/50 backdrop-blur-sm">
-                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Network Secure</span>
+                <div className="flex items-center gap-4 bg-white/5 px-5 py-2.5 rounded-2xl border border-white/10 backdrop-blur-xl shadow-inner">
+                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
+                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Network Secure</span>
                 </div>
             </div>
 
             {/* Profile Information Card */}
-            <div className="card-premium p-10 flex flex-col lg:flex-row gap-12 items-center lg:items-start relative overflow-hidden group">
-                <div className="absolute top-0 right-0 p-20 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity duration-700">
-                    <Shield size={200} className="text-slate-900" />
+            <div className="bg-slate-800/50 backdrop-blur-xl border border-white/5 rounded-[3rem] p-10 flex flex-col lg:flex-row gap-12 items-center lg:items-start relative overflow-hidden group shadow-2xl">
+                <div className="absolute top-0 right-0 p-20 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity duration-700">
+                    <Shield size={200} className="text-white" />
                 </div>
 
                 <div className="relative">
-                    <div className="w-40 h-40 rounded-[2.5rem] p-1.5 bg-gradient-to-tr from-primary-100 to-primary-50 shadow-xl shadow-primary-500/10">
-                        <div className="w-full h-full rounded-[2rem] bg-white overflow-hidden border-4 border-white flex items-center justify-center text-5xl font-display font-black text-primary-200 uppercase">
+                    <div className="w-40 h-40 rounded-[2.5rem] p-1.5 bg-gradient-to-tr from-primary-500/20 to-primary-500/5 shadow-2xl">
+                        <div className="w-full h-full rounded-[2rem] bg-slate-900 overflow-hidden border-4 border-white/5 flex items-center justify-center text-5xl font-display font-black text-primary-500 uppercase shadow-inner">
                             {user?.name?.charAt(0)}
                         </div>
                     </div>
                     <motion.div
                         whileHover={{ scale: 1.1 }}
                         onClick={() => navigate('/settings')}
-                        className="absolute -bottom-2 -right-2 w-10 h-10 rounded-2xl bg-primary-500 text-white flex items-center justify-center shadow-lg border-4 border-white cursor-pointer"
+                        className="absolute -bottom-2 -right-2 w-10 h-10 rounded-2xl bg-primary-500 text-white flex items-center justify-center shadow-2xl border-4 border-slate-900 cursor-pointer"
                     >
                         <Edit2 size={16} />
                     </motion.div>
@@ -81,8 +81,8 @@ const EmployeeDashboard = () => {
                 <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-12">
                     <div className="space-y-6">
                         <div>
-                            <h1 className="text-3xl font-display font-black text-slate-800 tracking-tight mb-1">{user?.name}</h1>
-                            <p className="text-sm font-bold text-primary-500 uppercase tracking-widest">{user?.role || 'Executive Protocol'}</p>
+                            <h1 className="text-3xl font-display font-black text-white tracking-tight mb-1">{user?.name}</h1>
+                            <p className="text-[10px] font-black text-primary-400 uppercase tracking-[0.3em]">{user?.role || 'Executive Protocol'}</p>
                         </div>
                         <div className="space-y-3">
                             <InfoLine label="Internal ID" value={user?.employeeId || 'EMP-2026-002'} />
@@ -101,13 +101,13 @@ const EmployeeDashboard = () => {
 
                     <div className="flex flex-col justify-between items-end gap-6 text-right">
                         <div>
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 leading-none">Administrative Core</p>
-                            <h3 className="text-2xl font-display font-black text-slate-700">Operations</h3>
-                            <p className="text-xs font-bold text-primary-600 mt-2 flex items-center gap-2 justify-end">
+                            <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-2 leading-none">Administrative Core</p>
+                            <h3 className="text-2xl font-display font-black text-slate-200">Operations</h3>
+                            <p className="text-[10px] font-black text-primary-500 mt-2 flex items-center gap-2 justify-end uppercase tracking-widest">
                                 <MapPin size={12} /> Regional Hub Alpha
                             </p>
                         </div>
-                        <button onClick={() => navigate('/settings')} className="btn-teal w-full sm:w-auto">Synchronize Profile</button>
+                        <button onClick={() => navigate('/settings')} className="px-8 py-3.5 bg-primary-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-primary-500/20 hover:bg-primary-600 transition-all active:scale-95">Synchronize Profile</button>
                     </div>
                 </div>
             </div>
@@ -118,41 +118,41 @@ const EmployeeDashboard = () => {
                 <div className="xl:col-span-2 space-y-10">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                         {/* Contact Information */}
-                        <div className="card-premium h-full flex flex-col">
-                            <div className="p-6 border-b border-slate-50 flex items-center justify-between">
+                        <div className="bg-slate-800/50 backdrop-blur-xl border border-white/5 rounded-[2.5rem] h-full flex flex-col shadow-2xl overflow-hidden">
+                            <div className="p-6 border-b border-white/5 bg-white/5 flex items-center justify-between">
                                 <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-primary-50 rounded-lg text-primary-500">
+                                    <div className="p-2 bg-primary-500/10 rounded-xl text-primary-400 border border-primary-500/20">
                                         <Mail size={18} />
                                     </div>
-                                    <h3 className="font-display font-bold text-sm text-slate-700 uppercase tracking-wider">Communication Nodes</h3>
+                                    <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">Communication Nodes</h3>
                                 </div>
-                                <Plus size={16} className="text-slate-300 cursor-pointer hover:text-primary-500 transition-colors" />
+                                <Plus size={16} className="text-slate-600 cursor-pointer hover:text-primary-400 transition-colors" />
                             </div>
                             <div className="p-8 flex-1 space-y-6">
-                                <div className="p-5 bg-slate-50/50 rounded-2xl border border-slate-100/50 group hover:border-primary-100 transition-colors">
-                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-2">
-                                        Primary Vector <span className="w-1.5 h-1.5 rounded-full bg-primary-500 animate-pulse" />
+                                <div className="p-5 bg-white/5 rounded-2xl border border-white/10 group hover:border-primary-500/30 transition-colors shadow-inner">
+                                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-2 flex items-center gap-2">
+                                        Primary Vector <span className="w-1.5 h-1.5 rounded-full bg-primary-500 animate-pulse shadow-[0_0_8px_rgba(99,102,241,0.5)]" />
                                     </p>
-                                    <p className="text-sm font-bold text-slate-800">{user?.email}</p>
+                                    <p className="text-sm font-black text-white">{user?.email}</p>
                                 </div>
-                                <button onClick={() => navigate('/settings')} className="w-full py-4 text-[10px] font-black text-primary-500 border-2 border-primary-500/10 rounded-2xl hover:bg-primary-500 hover:text-white transition-all uppercase tracking-widest">Register New Vector</button>
+                                <button onClick={() => navigate('/settings')} className="w-full py-4 text-[10px] font-black text-primary-400 border border-white/10 rounded-2xl hover:bg-primary-500 hover:text-white transition-all uppercase tracking-widest shadow-xl">Register New Vector</button>
                             </div>
                         </div>
 
                         {/* Address Information */}
-                        <div className="card-premium h-full flex flex-col">
-                            <div className="p-6 border-b border-slate-50 flex items-center gap-3">
-                                <div className="p-2 bg-orange-50 rounded-lg text-orange-500">
+                        <div className="bg-slate-800/50 backdrop-blur-xl border border-white/5 rounded-[2.5rem] h-full flex flex-col shadow-2xl overflow-hidden">
+                            <div className="p-6 border-b border-white/5 bg-white/5 flex items-center gap-3">
+                                <div className="p-2 bg-orange-500/10 rounded-xl text-orange-400 border border-orange-500/20">
                                     <MapPin size={18} />
                                 </div>
-                                <h3 className="font-display font-bold text-sm text-slate-700 uppercase tracking-wider">Geospatial Registry</h3>
+                                <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">Geospatial Registry</h3>
                             </div>
                             <div className="p-8 flex-1 flex flex-col justify-center items-center text-center">
-                                <div className="w-16 h-16 bg-slate-50 rounded-3xl flex items-center justify-center mb-6 text-slate-200">
+                                <div className="w-16 h-16 bg-white/5 rounded-3xl flex items-center justify-center mb-6 text-slate-700 shadow-inner border border-white/5">
                                     <MapPin size={32} />
                                 </div>
-                                <p className="text-xs font-bold text-slate-400 mb-8 leading-relaxed px-4 uppercase tracking-tighter">No physical coordinates registered in the system database.</p>
-                                <button onClick={() => navigate('/field-ops')} className="w-full py-4 text-[10px] font-black text-orange-500 border-2 border-orange-500/10 rounded-2xl hover:bg-orange-500 hover:text-white transition-all uppercase tracking-widest">Open Field Tracker</button>
+                                <p className="text-[10px] font-black text-slate-500 mb-8 leading-relaxed px-4 uppercase tracking-[0.2em]">No physical coordinates registered in the system database.</p>
+                                <button onClick={() => navigate('/field-ops')} className="w-full py-4 text-[10px] font-black text-orange-400 border border-white/10 rounded-2xl hover:bg-orange-500 hover:text-white transition-all uppercase tracking-widest shadow-xl">Open Field Tracker</button>
                             </div>
                         </div>
                     </div>
@@ -160,12 +160,12 @@ const EmployeeDashboard = () => {
                     {/* Lower Sections */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                         {/* Modules Section */}
-                        <div className="card-premium">
-                            <div className="p-6 border-b border-slate-50 flex items-center gap-3">
-                                <div className="p-2 bg-blue-50 rounded-lg text-blue-500">
+                        <div className="bg-slate-800/50 backdrop-blur-xl border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
+                            <div className="p-6 border-b border-white/5 bg-white/5 flex items-center gap-3">
+                                <div className="p-2 bg-indigo-500/10 rounded-xl text-indigo-400 border border-indigo-500/20">
                                     <LayoutDashboard size={18} />
                                 </div>
-                                <h3 className="font-display font-bold text-sm text-slate-700 uppercase tracking-wider">Active Protocols</h3>
+                                <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">Active Protocols</h3>
                             </div>
                             <div className="p-6 grid grid-cols-2 gap-4">
                                 <ModuleBadge color="bg-amber-400" name="Briefing" onClick={() => navigate('/attendance')} />
@@ -176,22 +176,22 @@ const EmployeeDashboard = () => {
                         </div>
 
                         {/* Custom Fields */}
-                        <div className="card-premium">
-                            <div className="p-6 border-b border-slate-50 flex items-center gap-3">
-                                <div className="p-2 bg-indigo-50 rounded-lg text-indigo-500">
+                        <div className="bg-slate-800/50 backdrop-blur-xl border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
+                            <div className="p-6 border-b border-white/5 bg-white/5 flex items-center gap-3">
+                                <div className="p-2 bg-emerald-500/10 rounded-xl text-emerald-400 border border-emerald-500/20">
                                     <FileText size={18} />
                                 </div>
-                                <h3 className="font-display font-bold text-sm text-slate-700 uppercase tracking-wider">System Metadata</h3>
+                                <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">System Metadata</h3>
                             </div>
                             <div className="p-8">
-                                <div className="p-5 bg-slate-900 rounded-2xl border border-slate-800 shadow-xl overflow-hidden relative">
+                                <div className="p-5 bg-slate-900/80 rounded-2xl border border-white/5 shadow-inner overflow-hidden relative">
                                     <div className="absolute top-0 right-0 p-4 opacity-5">
                                         <Activity size={40} className="text-white" />
                                     </div>
-                                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] mb-3">Field Classification</p>
+                                    <p className="text-[9px] font-black text-slate-600 uppercase tracking-[0.2em] mb-4">Field Classification</p>
                                     <div className="flex items-center justify-between gap-4">
-                                        <p className="text-xs font-bold text-slate-400">Deployment Logic:</p>
-                                        <span className="px-3 py-1 bg-primary-500/10 text-primary-400 text-[10px] font-black rounded-lg uppercase tracking-widest border border-primary-500/20">Remote Synced</span>
+                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-tight">Deployment Logic:</p>
+                                        <span className="px-3 py-1 bg-primary-500/10 text-primary-400 text-[9px] font-black rounded-lg uppercase tracking-widest border border-primary-500/20 shadow-lg">Remote Synced</span>
                                     </div>
                                 </div>
                             </div>
@@ -206,33 +206,33 @@ const EmployeeDashboard = () => {
                     </div>
 
                     <div>
-                        <h3 className="text-sm font-black text-slate-800 uppercase tracking-[0.3em] mb-8 pl-1">Global Broadcasts</h3>
+                        <h3 className="text-xs font-black text-slate-600 uppercase tracking-[0.4em] mb-8 pl-1">Global Broadcasts</h3>
                         <div className="space-y-4">
                             {announcements.length > 0 ? announcements.slice(0, 3).map((ann) => (
-                                <div key={ann._id} className="card-premium p-6 border-l-4 border-l-primary-500 bg-white/50 backdrop-blur-sm">
+                                <div key={ann._id} className="bg-slate-800/40 backdrop-blur-md p-6 border-l-4 border-l-primary-500 border border-white/5 rounded-2xl shadow-xl hover:bg-slate-800/60 transition-all">
                                     <div className="flex justify-between items-start mb-2">
-                                        <span className={`text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded ${ann.priority === 'high' ? 'bg-red-50 text-red-500' : 'bg-primary-50 text-primary-500'}`}>
+                                        <span className={`text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded shadow-sm ${ann.priority === 'high' ? 'bg-red-500/20 text-red-400 border border-red-500/20' : 'bg-primary-500/20 text-primary-400 border border-primary-500/20'}`}>
                                             {ann.priority}
                                         </span>
-                                        <span className="text-[8px] font-bold text-slate-300 uppercase tracking-tighter">
+                                        <span className="text-[8px] font-black text-slate-600 uppercase tracking-tighter">
                                             {new Date(ann.createdAt).toLocaleDateString()}
                                         </span>
                                     </div>
-                                    <h4 className="text-xs font-black text-slate-800 mb-1">{ann.title}</h4>
-                                    <p className="text-[10px] text-slate-500 line-clamp-2">{ann.content}</p>
+                                    <h4 className="text-xs font-black text-slate-200 mb-1">{ann.title}</h4>
+                                    <p className="text-[10px] text-slate-500 line-clamp-2 leading-relaxed">{ann.content}</p>
                                 </div>
                             )) : (
-                                <div className="p-10 text-center bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
-                                    <p className="text-[9px] font-black text-slate-300 uppercase tracking-[0.2em]">No Active Broadcasts</p>
+                                <div className="p-10 text-center bg-white/5 rounded-[2rem] border border-dashed border-white/5 shadow-inner">
+                                    <p className="text-[10px] font-black text-slate-600 uppercase tracking-[0.2em]">Zero Broadcast Vectors Detected</p>
                                 </div>
                             )}
                         </div>
                     </div>
 
                     <div>
-                        <h3 className="text-sm font-black text-slate-800 uppercase tracking-[0.3em] mb-8 pl-1">Telemetry Stream</h3>
+                        <h3 className="text-xs font-black text-slate-600 uppercase tracking-[0.4em] mb-8 pl-1">Telemetry Stream</h3>
                         <div className="space-y-8 relative pl-4">
-                            <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-slate-100 shadow-inner" />
+                            <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-white/5 shadow-inner" />
 
                             <ActivityCard
                                 type="Absence Synced"
@@ -253,35 +253,35 @@ const EmployeeDashboard = () => {
 
 const InfoLine = ({ label, value }) => (
     <div className="flex items-center justify-between gap-4">
-        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{label}</span>
-        <span className="text-xs font-bold text-slate-700 uppercase tracking-tight">{value}</span>
+        <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{label}</span>
+        <span className="text-xs font-black text-white uppercase tracking-tight tabular-nums">{value}</span>
     </div>
 );
 
 const ModuleBadge = ({ color, name, onClick }) => (
-    <div onClick={onClick} className={`flex items-center gap-3 p-3 bg-white border border-slate-100 rounded-xl hover:border-primary-100 hover:bg-primary-50/10 transition-all cursor-pointer group shadow-sm ${onClick ? 'active:scale-95' : ''}`}>
-        <div className={`w-3 h-3 rounded-lg ${color} shadow-sm group-hover:scale-125 transition-transform`} />
-        <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest group-hover:text-primary-500 transition-colors">{name}</span>
+    <div onClick={onClick} className={`flex items-center gap-3 p-4 bg-white/5 border border-white/5 rounded-2xl hover:border-primary-500/30 hover:bg-white/10 transition-all cursor-pointer group shadow-xl ${onClick ? 'active:scale-95' : ''}`}>
+        <div className={`w-3 h-3 rounded-full ${color} shadow-lg group-hover:scale-125 transition-transform`} />
+        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest group-hover:text-primary-400 transition-colors">{name}</span>
     </div>
 );
 
 const ActivityCard = ({ type, color, icon, title, subtitle, time, author }) => (
     <div className="relative group">
-        <div className={`absolute -left-[25px] top-4 w-7 h-7 rounded-xl ${color} flex items-center justify-center text-white border-4 border-[#f8fafb] shadow-lg group-hover:scale-110 transition-transform z-10`}>
+        <div className={`absolute -left-[25px] top-4 w-7 h-7 rounded-xl ${color} flex items-center justify-center text-white border-4 border-slate-900 shadow-2xl group-hover:scale-110 transition-transform z-10`}>
             {icon}
         </div>
-        <div className="card-premium p-6 group-hover:border-primary-100 transition-colors">
+        <div className="bg-slate-800/40 backdrop-blur-md p-6 border border-white/5 rounded-2xl shadow-xl hover:bg-slate-800/60 transition-all group-hover:border-primary-500/30">
             <div className="flex items-center justify-between mb-3">
                 <span className={`text-[9px] font-black ${color.replace('bg-', 'text-')} uppercase tracking-widest`}>{type}</span>
                 <span className="text-[9px] font-bold text-slate-300 uppercase tracking-tighter">{time}</span>
             </div>
-            <h4 className="text-sm font-black text-slate-800 mb-1 leading-tight">{title}</h4>
-            <p className="text-xs font-medium text-slate-500 mb-4">{subtitle}</p>
-            <div className="flex items-center gap-2 pt-3 border-t border-slate-50">
-                <div className="w-5 h-5 bg-slate-100 rounded-full flex items-center justify-center text-[10px] font-black text-slate-400">
+            <h4 className="text-sm font-black text-white mb-1 leading-tight tracking-tight uppercase">{title}</h4>
+            <p className="text-[10px] font-bold text-slate-500 mb-4 uppercase tracking-widest">{subtitle}</p>
+            <div className="flex items-center gap-2 pt-4 border-t border-white/5">
+                <div className="w-6 h-6 bg-white/5 border border-white/10 rounded-full flex items-center justify-center text-[10px] font-black text-primary-400 shadow-inner">
                     {author?.charAt(0)}
                 </div>
-                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{author}</span>
+                <span className="text-[9px] font-black text-slate-600 uppercase tracking-[0.2em]">{author}</span>
             </div>
         </div>
     </div>

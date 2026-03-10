@@ -193,4 +193,15 @@ router.get('/reports', async (req, res) => {
     }
 });
 
+// Delete Report
+router.delete('/reports/:id', managerAuth, async (req, res) => {
+    try {
+        const report = await Report.findByIdAndDelete(req.params.id);
+        if (!report) return res.status(404).send({ error: 'Report not found' });
+        res.send({ message: 'Report deleted successfully', report });
+    } catch (e) {
+        res.status(500).send(e);
+    }
+});
+
 module.exports = router;

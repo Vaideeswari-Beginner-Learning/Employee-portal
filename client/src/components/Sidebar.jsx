@@ -47,9 +47,7 @@ const Sidebar = () => {
                 { name: 'Task Assignments', icon: <Layers size={20} />, path: '/admin/tasks' }
             );
 
-            if (isAdmin) {
-                items.push({ name: 'Personnel Merit', icon: <Star size={20} />, path: '/admin/merit' });
-            }
+            items.push({ name: 'Personnel Merit', icon: <Star size={20} />, path: '/admin/merit' });
 
             // Comms page differs by role
             if (isAdmin) {
