@@ -94,6 +94,48 @@ router.get('/dashboard-stats', async (req, res) => {
     }
 });
 
+// Manager Dashboard Performance Stats (Calculates team averages)
+router.get('/manager-stats', async (req, res) => {
+    try {
+        const employees = await User.find({ role: 'employee' });
+        const PerformanceReview = require('../models/PerformanceReview');
+
+        let totalRating = 0;
+        let totalTask = 0;
+        let totalAttendance = 0;
+        let totalTeamwork = 0;
+        let reviewCount = 0;
+
+        for (const emp of employees) {
+            totalRating += (emp.performanceRating || 0);
+
+            // Get their latest review for detailed metrics
+            const latestReview = await PerformanceReview.findOne({ employeeId: emp._id }).sort({ createdAt: -1 });
+            if (latestReview && latestReview.metrics) {
+                totalTask += (latestReview.metrics.taskCompletion || 0);
+                totalAttendance += (latestReview.metrics.attendanceScore || 0);
+                totalTeamwork += (latestReview.metrics.teamworkScore || 0);
+                reviewCount++;
+            }
+        }
+
+        const empCount = employees.length || 1; // avoid division by zero
+        const revCount = reviewCount || 1;
+
+        res.send({
+            avgRating: (totalRating / empCount).toFixed(1),
+            avgTaskCompletion: Math.round(totalTask / revCount),
+            avgAttendanceScore: Math.round(totalAttendance / revCount),
+            avgTeamworkScore: Math.round(totalTeamwork / revCount),
+            totalEmployees: employees.length,
+            reviewsLogged: reviewCount
+        });
+
+    } catch (e) {
+        res.status(500).send(e);
+    }
+});
+
 // Attendance Management
 router.get('/attendance', async (req, res) => {
     try {

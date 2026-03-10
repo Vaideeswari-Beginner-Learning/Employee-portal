@@ -18,10 +18,11 @@ const ManagerDashboard = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const [stats, setStats] = useState({
-        totalEmployees: 0,
-        todayAttendance: 0,
-        pendingLeaves: 0,
-        todayReports: 0
+        avgRating: '0.0',
+        avgTaskCompletion: 0,
+        avgAttendanceScore: 0,
+        avgTeamworkScore: 0,
+        totalEmployees: 0
     });
     const [tasks, setTasks] = useState([]);
     const containerRef = useRef();
@@ -44,7 +45,7 @@ const ManagerDashboard = () => {
                 // Fetch stats (can reuse admin stats endpoint if they apply, or we assume a manager has team view)
                 // For now, we will fetch global tasks to populate the chart
                 const [statsRes, tasksRes] = await Promise.all([
-                    api.get('admin/dashboard-stats'),
+                    api.get('admin/manager-stats'),
                     api.get('tasks') // Or an endpoint that gets tasks for the manager's team
                 ]);
                 setStats(statsRes.data);
@@ -80,10 +81,10 @@ const ManagerDashboard = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div className="stat-card opacity-0"><ManagerStat label="Team Size" value={stats.totalEmployees} icon={<Users size={20} />} color="text-blue-500" bgColor="bg-blue-50" onClick={() => navigate('/admin/employees')} /></div>
-                <div className="stat-card opacity-0"><ManagerStat label="Team Duty Status" value={`${stats.todayAttendance}%`} icon={<CalendarCheck size={20} />} color="text-emerald-500" bgColor="bg-emerald-50" onClick={() => navigate('/admin/attendance-hub')} /></div>
-                <div className="stat-card opacity-0"><ManagerStat label="Pending Leaves" value={stats.pendingLeaves} icon={<FileText size={20} />} color="text-orange-500" bgColor="bg-orange-50" onClick={() => navigate('/admin/leaves')} /></div>
-                <div className="stat-card opacity-0"><ManagerStat label="Field Reports" value={stats.todayReports} icon={<Activity size={20} />} color="text-indigo-500" bgColor="bg-indigo-50" onClick={() => navigate('/admin/reports')} /></div>
+                <div className="stat-card opacity-0"><ManagerStat label="Task Completion" value={`${stats.avgTaskCompletion}%`} icon={<CheckCircle2 size={20} />} color="text-indigo-500" bgColor="bg-indigo-50" onClick={() => navigate('/admin/tasks')} /></div>
+                <div className="stat-card opacity-0"><ManagerStat label="Attendance Score" value={`${stats.avgAttendanceScore}%`} icon={<CalendarCheck size={20} />} color="text-emerald-500" bgColor="bg-emerald-50" onClick={() => navigate('/admin/attendance-hub')} /></div>
+                <div className="stat-card opacity-0"><ManagerStat label="Teamwork Score" value={`${stats.avgTeamworkScore}%`} icon={<Users size={20} />} color="text-orange-500" bgColor="bg-orange-50" onClick={() => navigate('/admin/performance')} /></div>
+                <div className="stat-card opacity-0"><ManagerStat label="Average Merit Rating" value={`${stats.avgRating} ★`} icon={<TrendingUp size={20} />} color="text-blue-500" bgColor="bg-blue-50" onClick={() => navigate('/admin/performance')} /></div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
