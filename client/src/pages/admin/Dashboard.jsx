@@ -3,7 +3,7 @@ import {
     Users, CalendarCheck, FileText,
     AlertCircle, TrendingUp, Clock,
     Search, Download, ChevronRight,
-    Activity, Megaphone, Building2, UserCircle2, Briefcase
+    Activity, Megaphone, Building2, UserCircle2, Briefcase, UserCheck, CheckCircle
 } from 'lucide-react';
 import { AreaChart, Area, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import gsap from 'gsap';
@@ -190,14 +190,14 @@ const AdminDashboard = () => {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 {/* Wavy Line Charts Col */}
                 <div className="lg:col-span-7 flex flex-col gap-6">
-                    <WavyStatCard title="Number of companies" value="30" icon={<Building2 size={16} />} colorHex="#3b82f6" data={[{ v: 10 }, { v: 12 }, { v: 15 }, { v: 25 }, { v: 22 }, { v: 30 }]} />
-                    <WavyStatCard title="Number of contacts" value="100" icon={<UserCircle2 size={16} />} colorHex="#4ade80" data={[{ v: 50 }, { v: 60 }, { v: 55 }, { v: 80 }, { v: 75 }, { v: 100 }]} />
-                    <WavyStatCard title="Total deals in pipeline" value="288" icon={<Briefcase size={16} />} colorHex="#f97316" data={[{ v: 100 }, { v: 150 }, { v: 120 }, { v: 200 }, { v: 220 }, { v: 288 }]} />
+                    <WavyStatCard title="Active Personnel" value={stats.totalEmployees || 0} icon={<Users size={16} />} colorHex="#10b981" data={[{ v: 0 }, { v: Math.round((stats.totalEmployees || 10) * 0.4) }, { v: Math.round((stats.totalEmployees || 10) * 0.6) }, { v: Math.round((stats.totalEmployees || 10) * 0.5) }, { v: Math.round((stats.totalEmployees || 10) * 0.8) }, { v: stats.totalEmployees || 10 }]} />
+                    <WavyStatCard title="Today's Check-ins" value={stats.todayAttendance || 0} icon={<UserCheck size={16} />} colorHex="#14b8a6" data={[{ v: 0 }, { v: Math.round((stats.todayAttendance || 5) * 0.3) }, { v: Math.round((stats.todayAttendance || 5) * 0.2) }, { v: Math.round((stats.todayAttendance || 5) * 0.7) }, { v: Math.round((stats.todayAttendance || 5) * 0.6) }, { v: stats.todayAttendance || 5 }]} />
+                    <WavyStatCard title="Active Field Tasks" value={tasks.filter(t => t.status !== 'Completed').length || 0} icon={<Activity size={16} />} colorHex="#06b6d4" data={[{ v: 0 }, { v: 5 }, { v: 3 }, { v: 8 }, { v: 6 }, { v: tasks.filter(t => t.status !== 'Completed').length || 4 }]} />
                 </div>
 
                 {/* Gauge Chart Col */}
                 <div className="lg:col-span-5 h-full">
-                    <GaugeCard percentage={25.82} expected="$9,023,009.00" realized="$2,329,523.00" />
+                    <GaugeCard percentage={tasks.length > 0 ? Math.round((tasks.filter(t => t.status === 'Completed').length / tasks.length) * 100) : 0} expected={`${tasks.length} Total`} realized={`${tasks.filter(t => t.status === 'Completed').length} Solved`} />
                 </div>
             </div>
 
@@ -366,48 +366,102 @@ const HealthBar = ({ label, percentage, color }) => {
     );
 };
 
-const WavyStatCard = ({ title, value, icon, colorHex, data }) => (
-    <div className="card-premium p-6 flex justify-between items-center group relative overflow-hidden bg-white shadow-sm border border-slate-100/50 hover:shadow-md transition-all stat-card opacity-0 h-[140px]">
-        <div className="flex flex-col z-10 w-1/2">
-            <div className="flex items-center gap-2 mb-2">
-                <div className="p-1.5 rounded-lg bg-slate-50 border border-slate-100 shadow-sm" style={{ color: colorHex }}>{icon}</div>
-                <p className="text-xs font-bold text-slate-500 truncate">{title}</p>
+const WavyStatCard = ({ title, value, icon, colorHex, data }) => {
+    const valueRef = useRef(null);
+    const chartRef = useRef(null);
+
+    useGSAP(() => {
+        if (valueRef.current) {
+            gsap.fromTo(valueRef.current,
+                { innerHTML: 0 },
+                {
+                    innerHTML: value,
+                    duration: 2,
+                    ease: "power2.out",
+                    snap: { innerHTML: 1 },
+                    onUpdate: function () {
+                        if (valueRef.current) valueRef.current.innerHTML = Math.round(this.targets()[0].innerHTML);
+                    }
+                }
+            );
+        }
+        if (chartRef.current) {
+            gsap.fromTo(chartRef.current,
+                { opacity: 0, scaleY: 0 },
+                { opacity: 1, scaleY: 1, duration: 1.5, ease: "power3.out", transformOrigin: "bottom" }
+            );
+        }
+    }, [value]);
+
+    return (
+        <div className="card-premium p-6 flex justify-between items-center group relative overflow-hidden bg-white shadow-sm border border-slate-100/50 hover:shadow-md transition-all stat-card opacity-0 h-[140px]">
+            <div className="flex flex-col z-10 w-1/2">
+                <div className="flex items-center gap-2 mb-2">
+                    <div className="p-1.5 rounded-lg bg-slate-50 border border-slate-100 shadow-sm" style={{ color: colorHex }}>{icon}</div>
+                    <p className="text-xs font-bold text-slate-500 truncate">{title}</p>
+                </div>
+                <p ref={valueRef} className="text-4xl font-display font-black text-slate-800 tracking-tighter mt-1">0</p>
             </div>
-            <p className="text-4xl font-display font-black text-slate-800 tracking-tighter mt-1">{value}</p>
+            <div ref={chartRef} className="h-full w-1/2 absolute right-0 bottom-0 opacity-80 pointer-events-none">
+                <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={data} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
+                        <defs>
+                            <linearGradient id={`color${title.replace(/\s+/g, '')}`} x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor={colorHex} stopOpacity={0.3} />
+                                <stop offset="95%" stopColor={colorHex} stopOpacity={0} />
+                            </linearGradient>
+                        </defs>
+                        <Area type="monotone" dataKey="v" stroke={colorHex} strokeWidth={3} fillOpacity={1} fill={`url(#color${title.replace(/\s+/g, '')})`} />
+                    </AreaChart>
+                </ResponsiveContainer>
+            </div>
         </div>
-        <div className="h-full w-1/2 absolute right-0 bottom-0 opacity-80 pointer-events-none">
-            <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={data} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
-                    <defs>
-                        <linearGradient id={`color${title.replace(/\s+/g, '')}`} x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor={colorHex} stopOpacity={0.3} />
-                            <stop offset="95%" stopColor={colorHex} stopOpacity={0} />
-                        </linearGradient>
-                    </defs>
-                    <Area type="monotone" dataKey="v" stroke={colorHex} strokeWidth={3} fillOpacity={1} fill={`url(#color${title.replace(/\s+/g, '')})`} />
-                </AreaChart>
-            </ResponsiveContainer>
-        </div>
-    </div>
-);
+    );
+};
 
 const GaugeCard = ({ percentage, expected, realized }) => {
+    const valueRef = useRef(null);
+    const chartRef = useRef(null);
+
+    useGSAP(() => {
+        if (valueRef.current) {
+            gsap.fromTo(valueRef.current,
+                { innerHTML: 0 },
+                {
+                    innerHTML: percentage,
+                    duration: 2.5,
+                    ease: "power3.out",
+                    snap: { innerHTML: 1 },
+                    onUpdate: function () {
+                        if (valueRef.current) valueRef.current.innerHTML = Math.round(this.targets()[0].innerHTML) + '%';
+                    }
+                }
+            );
+        }
+        if (chartRef.current) {
+            gsap.fromTo(chartRef.current,
+                { opacity: 0, scale: 0.8 },
+                { opacity: 1, scale: 1, duration: 2, ease: "elastic.out(1, 0.7)" }
+            );
+        }
+    }, [percentage]);
+
     const data = [
         { name: 'Realized', value: percentage },
-        { name: 'Remaining', value: 100 - percentage }
+        { name: 'Remaining', value: Math.max(0, 100 - percentage) }
     ];
 
     return (
         <div className="card-premium p-8 h-full flex flex-col items-center justify-between bg-white shadow-sm border border-slate-100/50 relative stat-card opacity-0 min-h-[444px]">
             <div className="w-full flex items-center gap-2 border-b border-slate-100 pb-4">
                 <div className="p-1 rounded-full bg-slate-50 text-slate-500 border border-slate-200">
-                    <span className="text-[10px] font-black tracking-widest leading-none px-1">$</span>
+                    <CheckCircle size={14} />
                 </div>
-                <span className="text-sm font-bold text-slate-800">Total revenue (yearly)</span>
+                <span className="text-sm font-bold text-slate-800">Global Task Completion</span>
             </div>
 
             <div className="w-full flex-1 flex flex-col items-center justify-center relative mt-6">
-                <div className="w-[300px] h-[150px] relative">
+                <div ref={chartRef} className="w-[300px] h-[150px] relative">
                     <ResponsiveContainer width="100%" height="100%">
                         <PieChart>
                             <Pie
@@ -423,7 +477,7 @@ const GaugeCard = ({ percentage, expected, realized }) => {
                                 stroke="none"
                                 cornerRadius={4}
                             >
-                                <Cell key="cell-0" fill="#4ade80" />
+                                <Cell key="cell-0" fill="#10b981" />
                                 <Cell key="cell-1" fill="#f1f5f9" />
                             </Pie>
                         </PieChart>
@@ -438,18 +492,18 @@ const GaugeCard = ({ percentage, expected, realized }) => {
                     <div className="absolute top-[10px] right-[110px] text-[10px] font-bold text-slate-400">60</div>
 
                     <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex flex-col items-center">
-                        <span className="text-3xl font-display font-black text-slate-800">{percentage}%</span>
+                        <span ref={valueRef} className="text-3xl font-display font-black text-slate-800">0%</span>
                     </div>
                 </div>
             </div>
 
             <div className="flex w-full justify-around mt-10 pt-6">
                 <div className="text-center">
-                    <p className="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-1">Expected</p>
+                    <p className="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-1">Expected Matrix</p>
                     <p className="text-base font-black text-slate-800 tabular-nums">{expected}</p>
                 </div>
                 <div className="text-center">
-                    <p className="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-1">Realized</p>
+                    <p className="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-1">Realized Fixes</p>
                     <p className="text-base font-black text-slate-800 tabular-nums">{realized}</p>
                 </div>
             </div>
