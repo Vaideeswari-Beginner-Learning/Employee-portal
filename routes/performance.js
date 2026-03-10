@@ -2,12 +2,12 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const PerformanceReview = require('../models/PerformanceReview');
-const { adminAuth } = require('../middleware/auth');
+const { managerAuth } = require('../middleware/auth');
 
 // @route   POST /api/performance/rate/:employeeId
 // @desc    Rate an employee and add a monthly review
-// @access  Admin/Manager (Admin only for now as per PRD)
-router.post('/rate/:employeeId', adminAuth, async (req, res) => {
+// @access  Admin/Manager
+router.post('/rate/:employeeId', managerAuth, async (req, res) => {
     try {
         const { rating, comment, month, metrics } = req.body;
         const employeeId = req.params.employeeId;

@@ -26,9 +26,9 @@ const performanceReviewSchema = new mongoose.Schema({
         default: ''
     },
     metrics: {
-        tasksCompleted: Number,
-        attendanceRate: Number,
-        onTimeArrival: Number
+        taskCompletion: Number,
+        attendanceScore: Number,
+        teamworkScore: Number
     }
 }, { timestamps: true });
 

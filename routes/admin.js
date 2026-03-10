@@ -9,8 +9,8 @@ const { auth, adminAuth, managerAuth } = require('../middleware/auth');
 // Top-level: Allow both Admins and Managers to access the Command Center APIs
 router.use(managerAuth);
 
-// Create Employee - Admin Only
-router.post('/employees', adminAuth, async (req, res) => {
+// Create Employee
+router.post('/employees', managerAuth, async (req, res) => {
     try {
         const user = new User(req.body);
         await user.save();
@@ -30,8 +30,8 @@ router.get('/employees', async (req, res) => {
     }
 });
 
-// Delete Employee - Admin Only
-router.delete('/employees/:id', adminAuth, async (req, res) => {
+// Delete Employee
+router.delete('/employees/:id', managerAuth, async (req, res) => {
     try {
         const user = await User.findByIdAndDelete(req.params.id);
         if (!user) return res.status(404).send();
@@ -41,8 +41,8 @@ router.delete('/employees/:id', adminAuth, async (req, res) => {
     }
 });
 
-// Update Employee - Admin Only
-router.put('/employees/:id', adminAuth, async (req, res) => {
+// Update Employee
+router.put('/employees/:id', managerAuth, async (req, res) => {
     const updates = Object.keys(req.body);
     const allowedUpdates = ['name', 'email', 'phone', 'employeeId', 'password', 'expertise', 'role'];
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update));

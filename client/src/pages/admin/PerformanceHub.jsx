@@ -15,9 +15,9 @@ const PerformanceHub = () => {
         comment: '',
         month: new Date().toLocaleString('default', { month: 'long', year: 'numeric' }),
         metrics: {
-            tasksCompleted: 0,
-            attendanceRate: 100,
-            onTimeArrival: 100
+            taskCompletion: 100,
+            attendanceScore: 100,
+            teamworkScore: 100
         }
     });
 
@@ -221,7 +221,43 @@ const PerformanceHub = () => {
                             <form onSubmit={handleRate} className="space-y-6">
                                 <div className="space-y-3">
                                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                                        <Star size={12} /> Merit Rating (1-5 Vector)
+                                        <TrendingUp size={12} /> Task Completion Score (0-100)
+                                    </label>
+                                    <input
+                                        type="number" min="0" max="100" required
+                                        value={rateForm.metrics.taskCompletion}
+                                        onChange={(e) => setRateForm({ ...rateForm, metrics: { ...rateForm.metrics, taskCompletion: parseInt(e.target.value) || 0 } })}
+                                        className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm font-bold text-slate-800 focus:outline-none focus:border-primary-500 transition-all"
+                                    />
+                                </div>
+
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                        <TrendingUp size={12} /> Attendance Score (0-100)
+                                    </label>
+                                    <input
+                                        type="number" min="0" max="100" required
+                                        value={rateForm.metrics.attendanceScore}
+                                        onChange={(e) => setRateForm({ ...rateForm, metrics: { ...rateForm.metrics, attendanceScore: parseInt(e.target.value) || 0 } })}
+                                        className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm font-bold text-slate-800 focus:outline-none focus:border-primary-500 transition-all"
+                                    />
+                                </div>
+
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                        <TrendingUp size={12} /> Teamwork Score (0-100)
+                                    </label>
+                                    <input
+                                        type="number" min="0" max="100" required
+                                        value={rateForm.metrics.teamworkScore}
+                                        onChange={(e) => setRateForm({ ...rateForm, metrics: { ...rateForm.metrics, teamworkScore: parseInt(e.target.value) || 0 } })}
+                                        className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm font-bold text-slate-800 focus:outline-none focus:border-primary-500 transition-all"
+                                    />
+                                </div>
+
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                        <Star size={12} /> Performance Rating (1-5 Vector)
                                     </label>
                                     <div className="flex justify-between items-center p-4 bg-slate-50 rounded-2xl border border-slate-100">
                                         {[1, 2, 3, 4, 5].map((s) => (
