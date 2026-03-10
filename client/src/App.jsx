@@ -29,6 +29,7 @@ import SupportChat from './pages/employee/SupportChat';
 import AdminComms from './pages/admin/AdminComms';
 import ManagerComms from './pages/admin/ManagerComms';
 import PerformanceHub from './pages/admin/PerformanceHub';
+import HolidayManager from './pages/admin/HolidayManager';
 
 function App() {
   return (
@@ -64,6 +65,7 @@ function App() {
         <Route path="/admin/merit" element={<PerformanceHub />} />
         <Route path="/admin/comms" element={<AdminComms />} />
         <Route path="/manager/comms" element={<ManagerComms />} />
+        <Route path="/admin/holidays" element={<HolidayManager />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/dashboard" replace />} />

@@ -1,7 +1,7 @@
 ﻿import { useState, useEffect } from 'react';
 import api from '../../utils/api';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Filter, Download, Calendar, User, Clock, CheckCircle, XCircle, MoreHorizontal, Activity, AlertCircle } from 'lucide-react';
+import { Search, Download, Calendar, Clock, CheckCircle, XCircle, MoreHorizontal, Activity, AlertCircle, X, MapPin, User, Badge } from 'lucide-react';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -22,6 +22,7 @@ const AdminAttendance = () => {
     const [loading, setLoading] = useState(true);
     const [notification, setNotification] = useState(null);
     const [openMenuId, setOpenMenuId] = useState(null);
+    const [selectedRecord, setSelectedRecord] = useState(null); // Deep Analysis modal
 
     useEffect(() => {
         const fetchAttendance = async () => {
@@ -59,6 +60,132 @@ const AdminAttendance = () => {
             animate="show"
             className="space-y-10"
         >
+            {/* === DEEP ANALYSIS POPUP MODAL === */}
+            <AnimatePresence>
+                {selectedRecord && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setSelectedRecord(null)}
+                        className="fixed inset-0 z-[400] bg-black/40 backdrop-blur-md flex items-center justify-center p-6"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.85, opacity: 0, y: 30 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.85, opacity: 0, y: 30 }}
+                            transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+                            onClick={e => e.stopPropagation()}
+                            className="relative max-w-md w-full bg-white rounded-[2.5rem] overflow-hidden shadow-2xl border border-sky-100"
+                        >
+                            {/* Header gradient banner */}
+                            <div className="h-32 bg-gradient-to-br from-sky-400 to-blue-600 relative flex items-end p-6">
+                                <button
+                                    onClick={() => setSelectedRecord(null)}
+                                    className="absolute top-4 right-4 p-2 bg-white/20 hover:bg-white/30 rounded-xl text-white transition-all"
+                                >
+                                    <X size={18} />
+                                </button>
+                                <div className="flex items-center gap-4">
+                                    {/* Employee photo or avatar */}
+                                    <div className="w-20 h-20 rounded-2xl border-4 border-white shadow-xl overflow-hidden bg-sky-200 flex items-center justify-center">
+                                        {selectedRecord.biometricPhoto ? (
+                                            <img src={selectedRecord.biometricPhoto} alt="Employee" className="w-full h-full object-cover" />
+                                        ) : (
+                                            <span className="text-3xl font-black text-sky-600 uppercase">
+                                                {selectedRecord.employee?.name?.charAt(0) || '?'}
+                                            </span>
+                                        )}
+                                    </div>
+                                    <div>
+                                        <p className="text-xl font-black text-white uppercase tracking-tight leading-none">
+                                            {selectedRecord.employee?.name || 'Unknown'}
+                                        </p>
+                                        <p className="text-sky-200 text-[10px] font-black uppercase tracking-widest mt-1">
+                                            ID: {selectedRecord.employee?.employeeId || 'N/A'}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Details */}
+                            <div className="p-8 space-y-5">
+                                {/* Date */}
+                                <div className="flex items-center gap-4 p-4 bg-sky-50 rounded-2xl border border-sky-100">
+                                    <div className="p-3 bg-sky-500 rounded-xl text-white shadow-md shadow-sky-300/40">
+                                        <Calendar size={18} />
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Date</p>
+                                        <p className="text-sm font-black text-slate-800">
+                                            {new Date(selectedRecord.date).toLocaleDateString(undefined, { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' })}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Check In / Check Out */}
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-100">
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <Clock size={14} className="text-emerald-500" />
+                                            <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">Check In</p>
+                                        </div>
+                                        <p className="text-xl font-black text-slate-800 tabular-nums">
+                                            {selectedRecord.checkIn
+                                                ? new Date(selectedRecord.checkIn).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })
+                                                : '--:--'}
+                                        </p>
+                                    </div>
+                                    <div className="p-4 bg-orange-50 rounded-2xl border border-orange-100">
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <Clock size={14} className="text-orange-500" />
+                                            <p className="text-[10px] font-black text-orange-600 uppercase tracking-widest">Check Out</p>
+                                        </div>
+                                        <p className="text-xl font-black text-slate-800 tabular-nums">
+                                            {selectedRecord.checkOut
+                                                ? new Date(selectedRecord.checkOut).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })
+                                                : '--:--'}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Status */}
+                                <div className="flex items-center justify-between p-4 bg-sky-50 rounded-2xl border border-sky-100">
+                                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Verification Status</p>
+                                    <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${selectedRecord.status === 'Present'
+                                        ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
+                                        : 'bg-red-100 text-red-600 border-red-200'
+                                        }`}>
+                                        {selectedRecord.status}
+                                    </span>
+                                </div>
+
+                                {/* Location */}
+                                {(selectedRecord.locationName || selectedRecord.latitude) && (
+                                    <div className="flex items-start gap-4 p-4 bg-blue-50 rounded-2xl border border-blue-100">
+                                        <div className="p-3 bg-blue-500 rounded-xl text-white shadow-md shrink-0">
+                                            <MapPin size={16} />
+                                        </div>
+                                        <div>
+                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">GPS Location</p>
+                                            <p className="text-xs font-bold text-slate-700">
+                                                {selectedRecord.locationName || `${selectedRecord.latitude?.toFixed(4)}, ${selectedRecord.longitude?.toFixed(4)}`}
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
+
+                                <button
+                                    onClick={() => setSelectedRecord(null)}
+                                    className="w-full py-4 bg-gradient-to-r from-sky-500 to-blue-600 text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-sky-300/40 hover:from-sky-600 hover:to-blue-700 transition-all active:scale-95"
+                                >
+                                    Close Analysis
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
             {/* Photo Modal */}
             <AnimatePresence>
                 {selectedPhoto && (
@@ -130,7 +257,7 @@ const AdminAttendance = () => {
                             placeholder="Search by personnel name or identity node..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full bg-sky-50/50 border border-sky-100 rounded-2xl py-3.5 pl-12 pr-6 text-sm focus:outline-none focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 transition-all text-slate-200 placeholder:text-slate-400 shadow-inner font-medium"
+                            className="w-full bg-white border border-sky-200 rounded-2xl py-3.5 pl-12 pr-6 text-sm focus:outline-none focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 transition-all text-slate-800 placeholder:text-slate-400 shadow-inner font-medium"
                         />
                     </div>
                 </div>
@@ -173,13 +300,13 @@ const AdminAttendance = () => {
                                                 <div className="p-1.5 bg-emerald-500/10 text-emerald-400 rounded-lg border border-emerald-500/20">
                                                     <Clock size={12} />
                                                 </div>
-                                                <p className="text-xs font-black text-slate-200 tabular-nums">In: {record.checkIn || '--:--'}</p>
+                                                <p className="text-xs font-black text-slate-700 tabular-nums">In: {record.checkIn ? new Date(record.checkIn).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' }) : '--:--'}</p>
                                             </div>
                                             <div className="flex items-center gap-3">
                                                 <div className="p-1.5 bg-orange-500/10 text-orange-400 rounded-lg border border-orange-500/20">
                                                     <Clock size={12} />
                                                 </div>
-                                                <p className="text-xs font-black text-slate-200 tabular-nums">Out: {record.checkOut || '--:--'}</p>
+                                                <p className="text-xs font-black text-slate-700 tabular-nums">Out: {record.checkOut ? new Date(record.checkOut).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' }) : '--:--'}</p>
                                             </div>
                                         </div>
                                     </td>
@@ -227,11 +354,11 @@ const AdminAttendance = () => {
                                                     <button
                                                         onClick={() => {
                                                             setOpenMenuId(null);
-                                                            showNotification('success', 'Full Telemetry Analyzed');
+                                                            setSelectedRecord(record);
                                                         }}
-                                                        className="w-full px-4 py-2.5 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:bg-sky-50 hover:text-sky-500 text-left transition-colors flex items-center gap-2"
+                                                        className="w-full px-4 py-2.5 text-[10px] font-black uppercase tracking-widest text-slate-600 hover:bg-sky-50 hover:text-sky-600 text-left transition-colors flex items-center gap-2"
                                                     >
-                                                        Deep Analysis
+                                                        <Activity size={14} /> Deep Analysis
                                                     </button>
                                                     <div className="h-px bg-sky-50 my-1 w-full" />
                                                     <button

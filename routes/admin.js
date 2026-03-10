@@ -204,4 +204,39 @@ router.delete('/reports/:id', managerAuth, async (req, res) => {
     }
 });
 
+// ====================== HOLIDAY MANAGEMENT ======================
+const Holiday = require('../models/Holiday');
+
+// Get all holidays
+router.get('/holidays', async (req, res) => {
+    try {
+        const holidays = await Holiday.find().sort({ date: 1 });
+        res.send(holidays);
+    } catch (e) {
+        res.status(500).send(e);
+    }
+});
+
+// Create a holiday (admin only)
+router.post('/holidays', adminAuth, async (req, res) => {
+    try {
+        const holiday = new Holiday(req.body);
+        await holiday.save();
+        res.status(201).send(holiday);
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
+
+// Delete a holiday (admin only)
+router.delete('/holidays/:id', adminAuth, async (req, res) => {
+    try {
+        const holiday = await Holiday.findByIdAndDelete(req.params.id);
+        if (!holiday) return res.status(404).send({ error: 'Holiday not found' });
+        res.send({ message: 'Deleted', holiday });
+    } catch (e) {
+        res.status(500).send(e);
+    }
+});
+
 module.exports = router;

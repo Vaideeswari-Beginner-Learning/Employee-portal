@@ -195,8 +195,8 @@ const CreateSelfTaskModal = ({ isOpen, onClose, onSuccess }) => {
             >
                 <div className="flex justify-between items-center mb-8">
                     <h2 className="text-2xl font-black text-slate-800 uppercase tracking-tight">Create <span className="text-sky-500 italic">Self-Task</span></h2>
-                    <button onClick={onClose} className="p-2 text-slate-400 hover:text-slate-800 bg-white rounded-full transition-colors">
-                        âœ•
+                    <button onClick={onClose} className="p-2 text-slate-400 hover:text-slate-800 bg-white rounded-full transition-colors text-lg font-black leading-none">
+                        &times;
                     </button>
                 </div>
 

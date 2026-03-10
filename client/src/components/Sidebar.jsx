@@ -16,7 +16,8 @@ import {
     Megaphone,
     MessageSquare,
     Star,
-    Layers
+    Layers,
+    CalendarDays
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -42,7 +43,8 @@ const Sidebar = () => {
                 { name: 'Absence & Attendance', icon: <CalendarCheck size={20} />, path: '/admin/attendance-hub' },
                 { name: 'Live Field Tracker', icon: <Navigation size={20} />, path: '/admin/live-tracker' },
                 { name: 'Broadcast System', icon: <Megaphone size={20} />, path: '/admin/announcements' },
-                { name: 'Task Assignments', icon: <Layers size={20} />, path: '/admin/tasks' }
+                { name: 'Task Assignments', icon: <Layers size={20} />, path: '/admin/tasks' },
+                { name: 'Holiday Registry', icon: <CalendarDays size={20} />, path: '/admin/holidays' }
             );
 
             items.push({ name: 'Personnel Merit', icon: <Star size={20} />, path: '/admin/merit' });
