@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+﻿import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
     CalendarCheck,
@@ -38,7 +38,7 @@ const AttendanceHub = () => {
             icon: <Clock size={32} />,
             path: "/leave",
             color: "from-indigo-500 to-indigo-600",
-            shadow: "shadow-indigo-500/20",
+            shadow: "shadow-sky-500/20",
             metric: "Terminal.Active"
         }
     ];
@@ -48,17 +48,17 @@ const AttendanceHub = () => {
             {/* Header Section */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
-                    <h1 className="text-4xl font-display font-black text-white tracking-tight leading-none uppercase">
-                        Absence<span className="text-indigo-500 italic">.Registry</span>
+                    <h1 className="text-4xl font-display font-black text-slate-800 tracking-tight leading-none uppercase">
+                        Absence<span className="text-sky-500 italic">.Registry</span>
                     </h1>
-                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mt-4 flex items-center gap-2">
-                        <Shield size={12} className="text-indigo-500" />
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mt-4 flex items-center gap-2">
+                        <Shield size={12} className="text-sky-500" />
                         Personnel Operational Management Hub
                     </p>
                 </div>
-                <div className="hidden lg:flex items-center gap-6 px-6 py-3 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 shadow-sm">
+                <div className="hidden lg:flex items-center gap-6 px-6 py-3 bg-sky-50 backdrop-blur-sm rounded-2xl border border-sky-100 shadow-sm">
                     <div className="flex flex-col">
-                        <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest leading-none">System Status</span>
+                        <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none">System Status</span>
                         <span className="text-xs font-bold text-emerald-500 flex items-center gap-1.5 mt-1">
                             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                             Secure Node
@@ -83,29 +83,29 @@ const AttendanceHub = () => {
 
                         <div className="card-premium h-full p-8 flex flex-col relative z-10 hover:translate-y-[-4px] transition-all duration-500">
                             <div className="flex justify-between items-start mb-8">
-                                <div className={`p-5 rounded-2xl bg-gradient-to-br ${item.color} text-white shadow-lg ${item.shadow} group-hover:scale-110 transition-transform duration-500`}>
+                                <div className={`p-5 rounded-2xl bg-gradient-to-br ${item.color} text-slate-800 shadow-lg ${item.shadow} group-hover:scale-110 transition-transform duration-500`}>
                                     {item.icon}
                                 </div>
                                 <div className="text-right">
-                                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1">{item.metric}</p>
+                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">{item.metric}</p>
                                     <div className="flex justify-end gap-1">
                                         {[1, 2, 3].map(i => (
-                                            <div key={i} className={`w-1 h-1 rounded-full ${i === 1 ? 'bg-indigo-500' : 'bg-slate-700'}`} />
+                                            <div key={i} className={`w-1 h-1 rounded-full ${i === 1 ? 'bg-sky-500' : 'bg-slate-700'}`} />
                                         ))}
                                     </div>
                                 </div>
                             </div>
 
-                            <h3 className="text-xl font-display font-black text-white mb-3 group-hover:text-indigo-400 transition-colors uppercase">
+                            <h3 className="text-xl font-display font-black text-slate-800 mb-3 group-hover:text-sky-500 transition-colors uppercase">
                                 {item.title}
                             </h3>
-                            <p className="text-xs font-medium text-slate-500 leading-relaxed mb-8 flex-1">
+                            <p className="text-xs font-medium text-slate-400 leading-relaxed mb-8 flex-1">
                                 {item.desc}
                             </p>
 
-                            <div className="pt-6 flex items-center justify-between border-t border-white/5">
-                                <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest group-hover:text-indigo-400 transition-colors">Launch Module</span>
-                                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-500 group-hover:bg-indigo-600 group-hover:text-white transition-all transform group-hover:translate-x-1 shadow-inner">
+                            <div className="pt-6 flex items-center justify-between border-t border-sky-100">
+                                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest group-hover:text-sky-500 transition-colors">Launch Module</span>
+                                <div className="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center text-slate-400 group-hover:bg-sky-500 group-hover:text-slate-800 transition-all transform group-hover:translate-x-1 shadow-inner">
                                     <ArrowRight size={18} />
                                 </div>
                             </div>
@@ -119,7 +119,7 @@ const AttendanceHub = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
-                className="card-premium p-8 bg-slate-900 border-slate-800 text-white shadow-2xl overflow-hidden relative"
+                className="card-premium p-8 bg-sky-50 border-slate-800 text-slate-800 shadow-2xl overflow-hidden relative"
             >
                 <div className="absolute top-0 right-0 p-12 opacity-5 scale-150 rotate-12">
                     <Activity size={120} />
@@ -127,7 +127,7 @@ const AttendanceHub = () => {
 
                 <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
                     <div className="flex items-center gap-6">
-                        <div className="p-5 bg-white/10 rounded-2xl backdrop-blur-sm border border-white/10">
+                        <div className="p-5 bg-sky-100 rounded-2xl backdrop-blur-sm border border-sky-100">
                             <ClipboardCheck size={28} className="text-primary-400" />
                         </div>
                         <div>
@@ -138,8 +138,8 @@ const AttendanceHub = () => {
                         </div>
                     </div>
                     <div className="flex items-center gap-3">
-                        <div className="h-px w-12 bg-slate-800 hidden sm:block" />
-                        <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em]">Integrated Security Protocol Active</p>
+                        <div className="h-px w-12 bg-white hidden sm:block" />
+                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.4em]">Integrated Security Protocol Active</p>
                     </div>
                 </div>
             </motion.div>
@@ -148,3 +148,5 @@ const AttendanceHub = () => {
 };
 
 export default AttendanceHub;
+
+

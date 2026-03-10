@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+﻿import { useState, useEffect, useRef } from 'react';
 import {
     Users, CalendarCheck, FileText,
     AlertCircle, TrendingUp, Clock,
@@ -85,7 +85,7 @@ const ManagerDashboard = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div className="stat-card opacity-0"><ManagerStat label="Task Completion" value={`${stats.avgTaskCompletion}%`} icon={<CheckCircle2 size={20} />} color="text-indigo-500" bgColor="bg-indigo-50" onClick={() => navigate('/admin/tasks')} /></div>
+                <div className="stat-card opacity-0"><ManagerStat label="Task Completion" value={`${stats.avgTaskCompletion}%`} icon={<CheckCircle2 size={20} />} color="text-sky-500" bgColor="bg-indigo-50" onClick={() => navigate('/admin/tasks')} /></div>
                 <div className="stat-card opacity-0"><ManagerStat label="Attendance Score" value={`${stats.avgAttendanceScore}%`} icon={<CalendarCheck size={20} />} color="text-emerald-500" bgColor="bg-emerald-50" onClick={() => navigate('/admin/attendance-hub')} /></div>
                 <div className="stat-card opacity-0"><ManagerStat label="Teamwork Score" value={`${stats.avgTeamworkScore}%`} icon={<Users size={20} />} color="text-orange-500" bgColor="bg-orange-50" onClick={() => navigate('/admin/performance')} /></div>
                 <div className="stat-card opacity-0"><ManagerStat label="Average Merit Rating" value={stats.avgRating} icon={<TrendingUp size={20} />} color="text-blue-500" bgColor="bg-blue-50" onClick={() => navigate('/admin/performance')} /></div>
@@ -98,7 +98,7 @@ const ManagerDashboard = () => {
                     <TaskStatusChart tasks={tasks} />
                 </div>
 
-                <div className="lg:col-span-7 card-premium flex flex-col overflow-hidden bg-white/50 backdrop-blur-sm stagger-item opacity-0">
+                <div className="lg:col-span-7 card-premium flex flex-col overflow-hidden bg-sky-500 backdrop-blur-sm stagger-item opacity-0">
                     <div className="p-8 border-b border-slate-100/50 flex items-center justify-between">
                         <div>
                             <h2 className="font-display font-black text-slate-800 tracking-tight">Team <span className="text-blue-500">Activity</span></h2>
@@ -130,7 +130,7 @@ const ManagerStat = ({ label, value, icon, color, bgColor, onClick }) => (
             {icon}
         </div>
         <div className="flex items-center justify-between mb-8">
-            <div className={`p-4 rounded-[1.25rem] ${bgColor} ${color} shadow-sm border border-white/50 group-hover:scale-110 transition-transform duration-300`}>
+            <div className={`p-4 rounded-[1.25rem] ${bgColor} ${color} shadow-sm border border-sky-1000 group-hover:scale-110 transition-transform duration-300`}>
                 {icon}
             </div>
             <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-300 group-hover:text-blue-500 group-hover:bg-blue-50 cursor-pointer transition-colors">
@@ -145,7 +145,7 @@ const ManagerStat = ({ label, value, icon, color, bgColor, onClick }) => (
 );
 
 const ActivityItem = ({ name, action, time, status, onClick }) => {
-    let statusClass = 'bg-slate-50 text-slate-500 border-slate-100';
+    let statusClass = 'bg-slate-50 text-slate-400 border-slate-100';
     if (status === 'Secure') statusClass = 'bg-emerald-50 text-emerald-500 border-emerald-100';
     if (status === 'Active') statusClass = 'bg-blue-50 text-blue-500 border-blue-100';
     if (status === 'Pending') statusClass = 'bg-orange-50 text-orange-500 border-orange-100';
@@ -178,3 +178,5 @@ const ActivityItem = ({ name, action, time, status, onClick }) => {
 };
 
 export default ManagerDashboard;
+
+

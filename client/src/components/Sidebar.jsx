@@ -10,9 +10,7 @@ import {
     FileText,
     Settings,
     LogOut,
-    ChevronDown,
     Shield,
-    Activity,
     Navigation,
     MapPin,
     Megaphone,
@@ -49,7 +47,6 @@ const Sidebar = () => {
 
             items.push({ name: 'Personnel Merit', icon: <Star size={20} />, path: '/admin/merit' });
 
-            // Comms page differs by role
             if (isAdmin) {
                 items.push({ name: 'Employee Comms', icon: <MessageSquare size={20} />, path: '/admin/comms' });
             } else {
@@ -60,12 +57,12 @@ const Sidebar = () => {
                 { name: 'System Settings', icon: <Settings size={20} />, path: '/settings' }
             );
 
-            return [{ title: 'Protocol Navigation', items }];
+            return [{ title: 'Navigation', items }];
         }
 
         return [
             {
-                title: 'Protocol Navigation',
+                title: 'Navigation',
                 items: [
                     { name: 'My Dashboard', icon: <LayoutDashboard size={20} />, path: '/dashboard' },
                     { name: 'Field Reports', icon: <ClipboardList size={20} />, path: '/reports' },
@@ -74,7 +71,7 @@ const Sidebar = () => {
                     { name: 'My Tasks', icon: <Layers size={20} />, path: '/tasks' },
                     { name: 'Field Operations', icon: <MapPin size={20} />, path: '/field-ops' },
                     { name: 'Support Node', icon: <MessageSquare size={20} />, path: '/support' },
-                    { name: 'Identity Matrix', icon: <Settings size={20} />, path: '/settings' },
+                    { name: 'Settings', icon: <Settings size={20} />, path: '/settings' },
                 ]
             }
         ];
@@ -83,60 +80,92 @@ const Sidebar = () => {
     const menuGroups = getMenuGroups();
 
     return (
-        <aside className="w-[240px] h-screen bg-[#0F172A] flex flex-col fixed left-0 top-0 z-50 text-slate-400 border-r border-white/5 shadow-2xl">
+        <motion.aside
+            initial={{ x: -240, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+            className="w-[240px] h-screen bg-white flex flex-col fixed left-0 top-0 z-50 border-r border-sky-100 shadow-xl shadow-sky-100/50"
+        >
+            {/* Background gradient accent */}
+            <div className="absolute inset-0 bg-gradient-to-b from-sky-50/50 to-white pointer-events-none" />
+
             {/* Logo Section */}
-            <div className="p-8 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
+            <div className="p-8 flex items-center gap-3 relative z-10">
+                <motion.div
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-400 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-sky-300/40"
+                >
                     <Shield size={22} className="drop-shadow-sm" />
-                </div>
+                </motion.div>
                 <div>
-                    <span className="font-display font-black text-white tracking-widest text-sm block leading-none uppercase">SK Technology</span>
-                    <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-[0.2em] mt-1 block tracking-tighter">Admin Portal</span>
+                    <span className="font-display font-black text-slate-800 tracking-widest text-sm block leading-none uppercase">SK Technology</span>
+                    <span className="text-[10px] font-bold text-sky-500 uppercase tracking-[0.2em] mt-1 block">Admin Portal</span>
                 </div>
             </div>
 
             {/* Profile Section */}
-            <div className="px-6 py-6 border-b border-white/5 mb-4 bg-white/5">
-                <div className="flex items-center gap-4 relative z-10">
+            <div className="px-6 py-5 mb-4 bg-gradient-to-r from-sky-50 to-blue-50 border-y border-sky-100 relative z-10">
+                <div className="flex items-center gap-4">
                     <div className="relative">
-                        <div className="w-11 h-11 rounded-2xl bg-indigo-600 flex items-center justify-center text-lg font-black text-white shadow-sm uppercase">
+                        <motion.div
+                            whileHover={{ scale: 1.05 }}
+                            className="w-11 h-11 rounded-2xl bg-gradient-to-br from-sky-400 to-blue-600 flex items-center justify-center text-lg font-black text-white shadow-md shadow-sky-200/50 uppercase"
+                        >
                             {user?.name?.charAt(0)}
-                        </div>
-                        <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-[3px] border-[#0F172A] rounded-full"></div>
+                        </motion.div>
+                        <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-400 border-[3px] border-white rounded-full shadow-sm" />
                     </div>
                     <div className="min-w-0">
-                        <p className="text-[13px] font-black text-white truncate leading-tight mb-1">{user?.name}</p>
-                        <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest leading-none">{user?.role}</p>
+                        <p className="text-[13px] font-black text-slate-800 truncate leading-tight mb-1">{user?.name}</p>
+                        <p className="text-[9px] font-bold text-sky-500 uppercase tracking-widest leading-none">{user?.role}</p>
                     </div>
                 </div>
             </div>
 
             {/* Navigation */}
-            <nav className="flex-1 px-4 space-y-6 overflow-y-auto sidebar-scroll pb-10">
+            <nav className="flex-1 px-3 space-y-1 overflow-y-auto pb-10 relative z-10">
                 {menuGroups.map((group, groupIdx) => (
-                    <div key={groupIdx} className="space-y-2">
+                    <div key={groupIdx} className="space-y-1">
                         {group.title && (
-                            <div className="px-5 py-2">
-                                <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em]">{group.title}</p>
+                            <div className="px-5 py-3">
+                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">{group.title}</p>
                             </div>
                         )}
-                        <div className="space-y-1 relative">
-                            {group.items.map((item) => {
+                        <div className="space-y-0.5">
+                            {group.items.map((item, idx) => {
                                 const isActive = location.pathname === item.path;
                                 return (
-                                    <button
+                                    <motion.button
                                         key={item.path}
+                                        initial={{ opacity: 0, x: -20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ delay: idx * 0.05, duration: 0.3 }}
+                                        whileHover={{ x: 4 }}
                                         onClick={() => navigate(item.path)}
-                                        className={`w-full group px-5 py-3 rounded-xl flex items-center gap-4 text-[12px] font-bold transition-all duration-200 relative
+                                        className={`w-full group px-4 py-3 rounded-xl flex items-center gap-4 text-[12px] font-bold transition-all duration-200 relative
                                             ${isActive
-                                                ? 'bg-indigo-500/10 text-indigo-400 shadow-sm border border-indigo-500/20'
-                                                : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                                                ? 'bg-gradient-to-r from-sky-500 to-blue-500 text-white shadow-lg shadow-sky-300/40'
+                                                : 'text-slate-500 hover:text-sky-600 hover:bg-sky-50'}`}
                                     >
-                                        <span className={`${isActive ? 'text-indigo-400' : 'text-slate-500 group-hover:text-indigo-300'} transition-colors`}>
+                                        {isActive && (
+                                            <motion.div
+                                                layoutId="activeTab"
+                                                className="absolute inset-0 bg-gradient-to-r from-sky-500 to-blue-500 rounded-xl -z-10"
+                                            />
+                                        )}
+                                        <span className={`${isActive ? 'text-white' : 'text-slate-400 group-hover:text-sky-500'} transition-colors`}>
                                             {item.icon}
                                         </span>
                                         <span className="tracking-tight">{item.name}</span>
-                                    </button>
+                                        {isActive && (
+                                            <motion.div
+                                                initial={{ scale: 0 }}
+                                                animate={{ scale: 1 }}
+                                                className="ml-auto w-1.5 h-1.5 bg-white rounded-full"
+                                            />
+                                        )}
+                                    </motion.button>
                                 );
                             })}
                         </div>
@@ -145,16 +174,18 @@ const Sidebar = () => {
             </nav>
 
             {/* Session Footer */}
-            <div className="p-6 border-t border-white/5">
-                <button
+            <div className="p-5 border-t border-sky-100 relative z-10">
+                <motion.button
+                    whileHover={{ x: -4 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={logout}
-                    className="w-full px-5 py-3 rounded-xl flex items-center gap-4 text-[12px] font-black text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-all group"
+                    className="w-full px-5 py-3 rounded-xl flex items-center gap-4 text-[12px] font-bold text-slate-500 hover:text-red-500 hover:bg-red-50 transition-all group"
                 >
                     <LogOut size={18} className="group-hover:-translate-x-1 transition-transform" />
-                    <span className="uppercase tracking-widest font-bold">Terminate</span>
-                </button>
+                    <span className="uppercase tracking-widest">Sign Out</span>
+                </motion.button>
             </div>
-        </aside>
+        </motion.aside>
     );
 };
 

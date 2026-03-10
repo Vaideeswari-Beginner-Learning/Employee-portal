@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -68,7 +68,7 @@ const ForgotPasswordPage = () => {
                         <h1 className="text-3xl font-display font-black text-slate-900 tracking-tight leading-tight mb-2">
                             Reset Password
                         </h1>
-                        <p className="text-sm font-medium text-slate-500">
+                        <p className="text-sm font-medium text-slate-400">
                             Enter your email to receive a password recovery link.
                         </p>
                     </div>
@@ -120,7 +120,7 @@ const ForgotPasswordPage = () => {
                                 className="w-full relative group overflow-hidden rounded-2xl shadow-[0_20px_40px_-10px_rgba(37,99,235,0.3)]"
                             >
                                 <div className="absolute inset-0 bg-primary-600 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
-                                <div className="relative bg-primary-500 group-hover:bg-transparent text-white py-5 px-6 flex items-center justify-center gap-3 transition-all duration-300">
+                                <div className="relative bg-primary-500 group-hover:bg-transparent text-slate-800 py-5 px-6 flex items-center justify-center gap-3 transition-all duration-300">
                                     {isLoading ? (
                                         <Loader2 className="animate-spin" size={20} />
                                     ) : (
@@ -140,3 +140,5 @@ const ForgotPasswordPage = () => {
 };
 
 export default ForgotPasswordPage;
+
+

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -90,7 +90,7 @@ const ResetPasswordPage = () => {
                         <h1 className="text-3xl font-display font-black text-slate-900 tracking-tight leading-tight mb-2">
                             Set New Password
                         </h1>
-                        <p className="text-sm font-medium text-slate-500">
+                        <p className="text-sm font-medium text-slate-400">
                             Enter your new password below.
                         </p>
                     </div>
@@ -109,7 +109,7 @@ const ResetPasswordPage = () => {
                                     required
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    placeholder="••••••••••••••••"
+                                    placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                                     className="w-full bg-slate-50/50 border border-slate-100 rounded-2xl py-5 pl-14 pr-6 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-500/20 transition-all placeholder:text-slate-300"
                                 />
                             </div>
@@ -128,7 +128,7 @@ const ResetPasswordPage = () => {
                                     required
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
-                                    placeholder="••••••••••••••••"
+                                    placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                                     className="w-full bg-slate-50/50 border border-slate-100 rounded-2xl py-5 pl-14 pr-6 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-500/20 transition-all placeholder:text-slate-300"
                                 />
                             </div>
@@ -161,7 +161,7 @@ const ResetPasswordPage = () => {
                                 className="w-full relative group overflow-hidden rounded-2xl shadow-[0_20px_40px_-10px_rgba(16,185,129,0.3)]"
                             >
                                 <div className="absolute inset-0 bg-emerald-600 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
-                                <div className="relative bg-emerald-500 group-hover:bg-transparent text-white py-5 px-6 flex items-center justify-center gap-3 transition-all duration-300">
+                                <div className="relative bg-emerald-500 group-hover:bg-transparent text-slate-800 py-5 px-6 flex items-center justify-center gap-3 transition-all duration-300">
                                     {isLoading ? (
                                         <Loader2 className="animate-spin" size={20} />
                                     ) : (
@@ -181,3 +181,5 @@ const ResetPasswordPage = () => {
 };
 
 export default ResetPasswordPage;
+
+

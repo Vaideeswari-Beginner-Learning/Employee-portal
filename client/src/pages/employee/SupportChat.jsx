@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import GlobalChat from '../../components/GlobalChat';
 import { MessageSquare, Users, Shield, Briefcase } from 'lucide-react';
@@ -33,7 +33,7 @@ const TABS = [
 const getRoomId = (tabId, userId) => {
     if (tabId === 'admin') return 'me';       // employee's own DM room (admin reads this)
     if (tabId === 'team') return 'team';      // team group room
-    if (tabId === 'manager') return userId;   // same DM room — manager can open it by employee ID
+    if (tabId === 'manager') return userId;   // same DM room â€” manager can open it by employee ID
     return 'me';
 };
 
@@ -52,7 +52,7 @@ const SupportChat = () => {
                     <h1 className="text-3xl font-display font-black text-slate-800 tracking-tight">
                         Comms<span className="text-primary-500">.Node</span>
                     </h1>
-                    <p className="text-sm font-bold text-slate-500 mt-2 uppercase tracking-wider">
+                    <p className="text-sm font-bold text-slate-400 mt-2 uppercase tracking-wider">
                         {currentTab?.description}
                     </p>
                 </div>
@@ -62,9 +62,9 @@ const SupportChat = () => {
                     {TABS.map(tab => {
                         const isActive = activeTab === tab.id;
                         const activeClasses = {
-                            blue: 'bg-blue-600 text-white shadow-lg shadow-blue-500/20',
-                            violet: 'bg-violet-600 text-white shadow-lg shadow-violet-500/20',
-                            indigo: 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20',
+                            blue: 'bg-blue-600 text-slate-800 shadow-lg shadow-blue-500/20',
+                            violet: 'bg-violet-600 text-slate-800 shadow-lg shadow-violet-500/20',
+                            indigo: 'bg-sky-500 text-slate-800 shadow-lg shadow-sky-500/20',
                         };
                         return (
                             <button
@@ -72,7 +72,7 @@ const SupportChat = () => {
                                 onClick={() => setActiveTab(tab.id)}
                                 className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${isActive
                                     ? activeClasses[tab.color]
-                                    : 'text-slate-400 hover:text-slate-600 hover:bg-slate-200/50'
+                                    : 'text-slate-400 hover:text-slate-500 hover:bg-slate-200/50'
                                     }`}
                             >
                                 {tab.icon}
@@ -96,3 +96,5 @@ const SupportChat = () => {
 };
 
 export default SupportChat;
+
+

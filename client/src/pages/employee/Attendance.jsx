@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+﻿import { useState, useEffect, useRef } from 'react';
 import api from '../../utils/api';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Clock, Calendar, CheckCircle, AlertCircle, Loader2, ChevronRight, Activity, MapPin, Fingerprint, LogOut } from 'lucide-react';
@@ -164,7 +164,7 @@ const AttendancePage = () => {
     };
 
     return (
-        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700 bg-slate-900 min-h-screen p-6 md:p-10">
+        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700 bg-sky-50 min-h-screen p-6 md:p-10">
             {/* Notification Portal */}
             <AnimatePresence>
                 {notification && (
@@ -174,7 +174,7 @@ const AttendancePage = () => {
                         exit={{ y: -100, opacity: 0 }}
                         className="fixed top-10 left-1/2 -translate-x-1/2 z-[200]"
                     >
-                        <div className={`px-8 py-4 rounded-2xl shadow-2xl border backdrop-blur-xl flex items-center gap-4 ${notification.type === 'error' ? 'bg-red-500/90 text-white border-red-400' : 'bg-emerald-500/90 text-white border-emerald-400'}`}>
+                        <div className={`px-8 py-4 rounded-2xl shadow-2xl border backdrop-blur-xl flex items-center gap-4 ${notification.type === 'error' ? 'bg-red-500/90 text-slate-800 border-red-400' : 'bg-emerald-500/90 text-slate-800 border-emerald-400'}`}>
                             {notification.type === 'success' ? <CheckCircle size={20} /> : <AlertCircle size={20} />}
                             <span className="text-[10px] font-black uppercase tracking-[0.2em]">{notification.message}</span>
                         </div>
@@ -184,16 +184,16 @@ const AttendancePage = () => {
 
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
-                    <h1 className="text-4xl font-display font-black text-white tracking-tight leading-none uppercase">Shift<span className="text-indigo-500 italic">.Logs</span></h1>
-                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mt-3">High Precision Temporal Registry</p>
+                    <h1 className="text-4xl font-display font-black text-slate-800 tracking-tight leading-none uppercase">Shift<span className="text-sky-500 italic">.Logs</span></h1>
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mt-3">High Precision Temporal Registry</p>
                 </div>
-                <div className="flex items-center gap-4 bg-white/5 shadow-2xl px-6 py-3 rounded-2xl border border-white/10 backdrop-blur-xl group">
-                    <Clock size={20} className="text-indigo-500 group-hover:rotate-12 transition-transform" />
+                <div className="flex items-center gap-4 bg-sky-50 shadow-2xl px-6 py-3 rounded-2xl border border-sky-100 backdrop-blur-xl group">
+                    <Clock size={20} className="text-sky-500 group-hover:rotate-12 transition-transform" />
                     <div className="flex flex-col">
-                        <span className="text-sm font-black text-white tracking-tighter tabular-nums leading-none">
+                        <span className="text-sm font-black text-slate-800 tracking-tighter tabular-nums leading-none">
                             {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                         </span>
-                        <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest mt-1">
+                        <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">
                             {currentTime.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' })}
                         </span>
                     </div>
@@ -203,18 +203,18 @@ const AttendancePage = () => {
             <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
                 {/* Control Center */}
                 <div className="xl:col-span-5 space-y-10">
-                    <div className="bg-slate-800/50 backdrop-blur-xl border border-white/5 rounded-[3rem] p-12 overflow-hidden relative group shadow-2xl">
+                    <div className="bg-white/50 backdrop-blur-xl border border-sky-100 rounded-[3rem] p-12 overflow-hidden relative group shadow-2xl">
                         {/* Immersive Background */}
                         <div className="absolute top-0 right-0 p-16 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity duration-700 scale-[2]">
-                            <Fingerprint size={100} className="text-white" />
+                            <Fingerprint size={100} className="text-slate-800" />
                         </div>
 
                         <div className="text-center space-y-10 relative z-10">
                             <div className="flex flex-col items-center gap-4">
-                                <div className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] border shadow-2xl transition-all duration-500 ${status === 'checked-in' ? 'bg-emerald-500 text-white border-emerald-400 shadow-emerald-500/20' : 'bg-white/5 text-slate-500 border-white/10'}`}>
+                                <div className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] border shadow-2xl transition-all duration-500 ${status === 'checked-in' ? 'bg-emerald-500 text-slate-800 border-emerald-400 shadow-emerald-500/20' : 'bg-sky-50 text-slate-400 border-sky-100'}`}>
                                     {status === 'checked-in' ? 'Pulse Active' : 'Pulse Terminated'}
                                 </div>
-                                <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] leading-relaxed">Identity Verified: Biometric Node Alpha</p>
+                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-relaxed">Identity Verified: Biometric Node Alpha</p>
                             </div>
 
                             <div className="flex justify-center py-6 min-h-[300px]">
@@ -231,12 +231,12 @@ const AttendancePage = () => {
                                                 <button
                                                     onClick={handleAttendanceFlow}
                                                     disabled={loading}
-                                                    className="w-48 h-48 rounded-[3rem] bg-indigo-600 shadow-2xl shadow-indigo-600/30 flex flex-col items-center justify-center gap-4 text-white hover:bg-indigo-700 active:scale-95 transition-all relative overflow-hidden group/btn border border-indigo-400/20"
+                                                    className="w-48 h-48 rounded-[3rem] bg-sky-500 shadow-2xl shadow-sky-600/30 flex flex-col items-center justify-center gap-4 text-slate-800 hover:bg-sky-700 active:scale-95 transition-all relative overflow-hidden group/btn border border-sky-400/20"
                                                 >
-                                                    <div className="absolute inset-0 bg-white/10 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
+                                                    <div className="absolute inset-0 bg-sky-100 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
                                                     {loading ? <Loader2 className="animate-spin" size={40} /> : (
                                                         <>
-                                                            <div className="p-4 bg-white/20 rounded-2xl shadow-inner border border-white/10">
+                                                            <div className="p-4 bg-white/20 rounded-2xl shadow-inner border border-sky-100">
                                                                 <MapPin size={32} />
                                                             </div>
                                                             <span className="text-xs font-black uppercase tracking-[0.3em]">Verify GPS</span>
@@ -247,15 +247,15 @@ const AttendancePage = () => {
 
                                             {step === 2 && (
                                                 <div className="flex flex-col items-center gap-6 w-full max-w-sm">
-                                                    <div className="relative w-full aspect-square rounded-[3rem] overflow-hidden border-4 border-indigo-600 shadow-2xl bg-slate-900">
+                                                    <div className="relative w-full aspect-square rounded-[3rem] overflow-hidden border-4 border-sky-600 shadow-2xl bg-sky-50">
                                                         <video ref={videoRef} autoPlay playsInline className="w-full h-full object-cover" />
                                                         <div className="absolute inset-0 border-[40px] border-slate-900/50 pointer-events-none flex items-center justify-center">
-                                                            <div className="w-48 h-64 border-2 border-indigo-500/50 rounded-[4rem] border-dashed" />
+                                                            <div className="w-48 h-64 border-2 border-sky-500/50 rounded-[4rem] border-dashed" />
                                                         </div>
                                                     </div>
                                                     <button
                                                         onClick={capturePhoto}
-                                                        className="px-12 py-5 bg-slate-900 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] shadow-xl hover:bg-slate-800 transition-all flex items-center gap-3"
+                                                        className="px-12 py-5 bg-sky-50 text-slate-800 rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] shadow-xl hover:bg-white transition-all flex items-center gap-3"
                                                     >
                                                         <Fingerprint size={18} />
                                                         Capture Biometrics
@@ -271,7 +271,7 @@ const AttendancePage = () => {
                                                     <button
                                                         onClick={handleAttendanceFlow}
                                                         disabled={loading}
-                                                        className="px-12 py-5 bg-emerald-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] shadow-xl shadow-emerald-500/20 hover:bg-emerald-600 transition-all flex items-center gap-3"
+                                                        className="px-12 py-5 bg-emerald-500 text-slate-800 rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] shadow-xl shadow-emerald-500/20 hover:bg-emerald-600 transition-all flex items-center gap-3"
                                                     >
                                                         {loading ? <Loader2 className="animate-spin" size={18} /> : (
                                                             <>
@@ -280,7 +280,7 @@ const AttendancePage = () => {
                                                             </>
                                                         )}
                                                     </button>
-                                                    <button onClick={() => setStep(2)} className="text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-slate-600 transition-colors">Recapture Identity</button>
+                                                    <button onClick={() => setStep(2)} className="text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-slate-500 transition-colors">Recapture Identity</button>
                                                 </div>
                                             )}
                                         </motion.div>
@@ -292,9 +292,9 @@ const AttendancePage = () => {
                                             exit={{ scale: 0.9, opacity: 0 }}
                                             onClick={() => handleAction('check-out')}
                                             disabled={loading}
-                                            className="w-48 h-48 rounded-[3rem] bg-slate-900 shadow-[0_32px_64px_-16px_rgba(15,23,42,0.4)] flex flex-col items-center justify-center gap-4 text-white hover:bg-slate-800 active:scale-95 transition-all relative overflow-hidden group/btn"
+                                            className="w-48 h-48 rounded-[3rem] bg-sky-50 shadow-[0_32px_64px_-16px_rgba(15,23,42,0.4)] flex flex-col items-center justify-center gap-4 text-slate-800 hover:bg-white active:scale-95 transition-all relative overflow-hidden group/btn"
                                         >
-                                            <div className="absolute inset-0 bg-white/5 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
+                                            <div className="absolute inset-0 bg-sky-50 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
                                             {loading ? <Loader2 className="animate-spin" size={40} /> : (
                                                 <>
                                                     <div className="p-4 bg-red-500/20 rounded-2xl shadow-inner">
@@ -308,8 +308,8 @@ const AttendancePage = () => {
                                 </AnimatePresence>
                             </div>
 
-                            <div className="bg-slate-900/50 rounded-2xl p-5 border border-white/5 shadow-inner backdrop-blur-md">
-                                <p className="text-[9px] font-black text-slate-500 leading-relaxed uppercase tracking-[0.1em]">
+                            <div className="bg-sky-50/50 rounded-2xl p-5 border border-sky-100 shadow-inner backdrop-blur-md">
+                                <p className="text-[9px] font-black text-slate-400 leading-relaxed uppercase tracking-[0.1em]">
                                     Your operational metadata is encrypted and logged in compliance with Standard HR-22 protocols.
                                 </p>
                             </div>
@@ -324,34 +324,34 @@ const AttendancePage = () => {
 
                 {/* History List */}
                 <div className="xl:col-span-7 h-full">
-                    <div className="bg-slate-800/50 backdrop-blur-xl border border-white/5 rounded-[3.5rem] flex flex-col h-full overflow-hidden shadow-2xl">
-                        <div className="p-10 border-b border-white/5 bg-white/5 flex items-center justify-between">
+                    <div className="bg-white/50 backdrop-blur-xl border border-sky-100 rounded-[3.5rem] flex flex-col h-full overflow-hidden shadow-2xl">
+                        <div className="p-10 border-b border-sky-100 bg-sky-50 flex items-center justify-between">
                             <div>
-                                <h2 className="text-2xl font-display font-black text-white tracking-tight uppercase">Temporal <span className="text-indigo-500">Registry</span></h2>
-                                <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mt-2">Personnel Operation Logs</p>
+                                <h2 className="text-2xl font-display font-black text-slate-800 tracking-tight uppercase">Temporal <span className="text-sky-500">Registry</span></h2>
+                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mt-2">Personnel Operation Logs</p>
                             </div>
-                            <div className="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-xl border border-white/10 shadow-inner">
-                                <Calendar size={16} className="text-indigo-500" />
+                            <div className="flex items-center gap-3 bg-sky-50 px-4 py-2 rounded-xl border border-sky-100 shadow-inner">
+                                <Calendar size={16} className="text-sky-500" />
                                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Current Cycle</span>
                             </div>
                         </div>
 
                         <div className="flex-1 overflow-y-auto max-h-[600px] px-6 py-6 space-y-3 custom-scrollbar">
                             {history.length > 0 ? history.map((entry, idx) => (
-                                <div key={entry._id} className="p-6 bg-slate-900/50 rounded-[2rem] border border-white/5 shadow-xl hover:bg-slate-800/80 hover:border-indigo-500/30 transition-all group flex items-center justify-between">
+                                <div key={entry._id} className="p-6 bg-sky-50/50 rounded-[2rem] border border-sky-100 shadow-xl hover:bg-white/80 hover:border-sky-500/30 transition-all group flex items-center justify-between">
                                     <div className="flex items-center gap-8">
-                                        <div className="text-center min-w-[70px] p-4 bg-slate-900/80 rounded-2xl border border-white/5 shadow-inner group-hover:bg-indigo-500/10 transition-colors">
-                                            <p className="text-2xl font-display font-black text-white tracking-tighter leading-none mb-1">
+                                        <div className="text-center min-w-[70px] p-4 bg-sky-50/80 rounded-2xl border border-sky-100 shadow-inner group-hover:bg-sky-500/10 transition-colors">
+                                            <p className="text-2xl font-display font-black text-slate-800 tracking-tighter leading-none mb-1">
                                                 {new Date(entry.date).getDate()}
                                             </p>
-                                            <p className="text-[10px] font-black text-indigo-500 uppercase tracking-widest leading-none">
+                                            <p className="text-[10px] font-black text-sky-500 uppercase tracking-widest leading-none">
                                                 {new Date(entry.date).toLocaleString('en-US', { month: 'short' })}
                                             </p>
                                         </div>
 
                                         <div className="grid grid-cols-2 gap-10">
                                             <TimeMetric label="Authorization" time={entry.checkIn} color="text-emerald-400" />
-                                            <TimeMetric label="Termination" time={entry.checkOut || '--:--'} color="text-slate-500" />
+                                            <TimeMetric label="Termination" time={entry.checkOut || '--:--'} color="text-slate-400" />
                                         </div>
                                     </div>
 
@@ -361,10 +361,10 @@ const AttendancePage = () => {
                                 </div>
                             )) : (
                                 <div className="p-32 text-center flex flex-col items-center justify-center">
-                                    <div className="w-20 h-20 bg-white/5 rounded-[2.5rem] border border-white/5 flex items-center justify-center mb-6 text-slate-700 shadow-inner">
+                                    <div className="w-20 h-20 bg-sky-50 rounded-[2.5rem] border border-sky-100 flex items-center justify-center mb-6 text-slate-700 shadow-inner">
                                         <Activity size={40} />
                                     </div>
-                                    <p className="text-[10px] font-black text-slate-600 uppercase tracking-[0.4em]">Zero Telemetry Detected</p>
+                                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em]">Zero Telemetry Detected</p>
                                 </div>
                             )}
                         </div>
@@ -376,14 +376,14 @@ const AttendancePage = () => {
 };
 
 const PresenceMetric = ({ label, value, unit, icon }) => (
-    <div className="bg-slate-800/50 backdrop-blur-xl border border-white/5 p-8 rounded-[2.5rem] flex flex-col items-center justify-center text-center gap-2 group hover:scale-[1.02] shadow-2xl transition-all">
-        <div className="p-3 bg-white/5 border border-white/5 rounded-xl text-slate-500 group-hover:text-indigo-400 group-hover:bg-indigo-500/10 transition-colors shadow-inner">
+    <div className="bg-white/50 backdrop-blur-xl border border-sky-100 p-8 rounded-[2.5rem] flex flex-col items-center justify-center text-center gap-2 group hover:scale-[1.02] shadow-2xl transition-all">
+        <div className="p-3 bg-sky-50 border border-sky-100 rounded-xl text-slate-400 group-hover:text-sky-500 group-hover:bg-sky-500/10 transition-colors shadow-inner">
             {icon}
         </div>
         <div>
-            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">{label}</p>
-            <p className="text-3xl font-display font-black text-white leading-none">
-                {value}<span className="text-sm text-slate-600 ml-1 border-l border-white/5 pl-2 uppercase font-black">{unit}</span>
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{label}</p>
+            <p className="text-3xl font-display font-black text-slate-800 leading-none">
+                {value}<span className="text-sm text-slate-500 ml-1 border-l border-sky-100 pl-2 uppercase font-black">{unit}</span>
             </p>
         </div>
     </div>
@@ -391,7 +391,7 @@ const PresenceMetric = ({ label, value, unit, icon }) => (
 
 const TimeMetric = ({ label, time, color }) => (
     <div className="space-y-1">
-        <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest">{label}</p>
+        <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{label}</p>
         <p className={`text-sm font-black tabular-nums tracking-tighter ${color} flex items-center gap-2`}>
             {time}
             <ChevronRight size={14} className="opacity-10" />
@@ -400,3 +400,5 @@ const TimeMetric = ({ label, time, color }) => (
 );
 
 export default AttendancePage;
+
+

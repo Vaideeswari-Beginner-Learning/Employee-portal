@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     FilePlus,
@@ -83,7 +83,7 @@ const ReportsPage = () => {
     };
 
     return (
-        <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in slide-in-from-bottom-5 duration-700 bg-slate-900/50 p-6 md:p-10 rounded-[3rem] border border-white/5 shadow-2xl">
+        <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in slide-in-from-bottom-5 duration-700 bg-sky-50/50 p-6 md:p-10 rounded-[3rem] border border-sky-100 shadow-2xl">
             {/* Notification Portal */}
             <AnimatePresence>
                 {notification && (
@@ -93,7 +93,7 @@ const ReportsPage = () => {
                         exit={{ y: -100, opacity: 0 }}
                         className="fixed top-10 left-1/2 -translate-x-1/2 z-[200]"
                     >
-                        <div className={`px-8 py-4 rounded-2xl shadow-2xl border backdrop-blur-xl flex items-center gap-4 ${notification.type === 'error' ? 'bg-red-500/90 text-white border-red-400' : 'bg-emerald-500/90 text-white border-emerald-400'}`}>
+                        <div className={`px-8 py-4 rounded-2xl shadow-2xl border backdrop-blur-xl flex items-center gap-4 ${notification.type === 'error' ? 'bg-red-500/90 text-slate-800 border-red-400' : 'bg-emerald-500/90 text-slate-800 border-emerald-400'}`}>
                             {notification.type === 'success' ? <CheckCircle size={20} /> : <AlertCircle size={20} />}
                             <span className="text-[10px] font-black uppercase tracking-[0.2em]">{notification.message}</span>
                         </div>
@@ -103,17 +103,17 @@ const ReportsPage = () => {
 
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-display font-black text-white tracking-tight uppercase">Field<span className="text-indigo-500 italic">.Reports</span></h1>
-                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mt-2">Submit job telemetry and metrics</p>
+                    <h1 className="text-3xl font-display font-black text-slate-800 tracking-tight uppercase">Field<span className="text-sky-500 italic">.Reports</span></h1>
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mt-2">Submit job telemetry and metrics</p>
                 </div>
-                <div className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] shadow-inner">
+                <div className="px-4 py-2 bg-sky-50 border border-sky-100 rounded-xl text-[10px] font-black text-sky-500 uppercase tracking-[0.2em] shadow-inner">
                     Protocol: ISO-SEC-9001
                 </div>
             </div>
 
-            <div className="bg-slate-800/50 backdrop-blur-xl border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
-                <div className="p-6 border-b border-white/5 bg-white/5 flex items-center gap-3">
-                    <FilePlus size={18} className="text-indigo-400" />
+            <div className="bg-white/50 backdrop-blur-xl border border-sky-100 rounded-[2.5rem] overflow-hidden shadow-2xl">
+                <div className="p-6 border-b border-sky-100 bg-sky-50 flex items-center gap-3">
+                    <FilePlus size={18} className="text-sky-500" />
                     <h2 className="text-xs font-black uppercase tracking-widest text-slate-400">Initiate New Deployment Report</h2>
                 </div>
 
@@ -125,14 +125,14 @@ const ReportsPage = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                         <div className="space-y-3">
-                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Installation Status</label>
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Installation Status</label>
                             <div className="flex gap-4">
                                 {['Yes', 'No'].map(opt => (
                                     <button
                                         key={opt}
                                         type="button"
                                         onClick={() => setFormData({ ...formData, isInstalled: opt })}
-                                        className={`flex-1 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest border transition-all ${formData.isInstalled === opt ? 'bg-indigo-600 text-white border-indigo-500 shadow-lg shadow-indigo-600/20' : 'bg-white/5 text-slate-500 border-white/10 hover:border-indigo-500/30'}`}
+                                        className={`flex-1 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest border transition-all ${formData.isInstalled === opt ? 'bg-sky-500 text-slate-800 border-sky-500 shadow-lg shadow-sky-600/20' : 'bg-sky-50 text-slate-400 border-sky-100 hover:border-sky-500/30'}`}
                                     >
                                         {opt === 'Yes' ? 'Active' : 'Pending'}
                                     </button>
@@ -143,39 +143,39 @@ const ReportsPage = () => {
                     </div>
 
                     <div className="space-y-3">
-                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Anomalies / Field Notes</label>
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Anomalies / Field Notes</label>
                         <textarea
                             value={formData.issues}
                             onChange={e => setFormData({ ...formData, issues: e.target.value })}
                             rows="4"
-                            className="w-full bg-slate-900 border border-white/5 rounded-2xl p-5 text-sm font-black text-white focus:outline-none focus:border-indigo-500/50 transition-all placeholder:text-slate-800 outline-none shadow-inner uppercase tracking-tight"
+                            className="w-full bg-sky-50 border border-sky-100 rounded-2xl p-5 text-sm font-black text-slate-800 focus:outline-none focus:border-sky-500/50 transition-all placeholder:text-slate-800 outline-none shadow-inner uppercase tracking-tight"
                             placeholder="Identify any hardware conflicts or security gaps detected during deployment..."
                         />
                     </div>
 
                     <div className="space-y-4">
-                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Visual Evidence (Upload)</label>
-                        <div className="relative border-2 border-dashed border-white/5 rounded-[2rem] p-10 text-center hover:border-indigo-500/50 transition-all bg-slate-900 group shadow-inner">
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Visual Evidence (Upload)</label>
+                        <div className="relative border-2 border-dashed border-sky-100 rounded-[2rem] p-10 text-center hover:border-sky-500/50 transition-all bg-sky-50 group shadow-inner">
                             <input
                                 type="file"
                                 onChange={e => setFormData({ ...formData, image: e.target.files[0] })}
                                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                             />
-                            <Upload className="mx-auto text-slate-800 mb-4 group-hover:text-indigo-400 transition-colors" size={32} />
-                            <p className="text-[10px] text-slate-500 uppercase tracking-widest font-black">
+                            <Upload className="mx-auto text-slate-800 mb-4 group-hover:text-sky-500 transition-colors" size={32} />
+                            <p className="text-[10px] text-slate-400 uppercase tracking-widest font-black">
                                 {formData.image ? formData.image.name : 'Drag files here or tap to capture'}
                             </p>
                         </div>
                     </div>
 
-                    <div className="pt-8 border-t border-white/5 flex items-center justify-between">
+                    <div className="pt-8 border-t border-sky-100 flex items-center justify-between">
                         <div className="flex items-center gap-2 text-orange-400 bg-orange-500/10 px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] border border-orange-500/20">
                             <Shield size={12} /> SECURE CRYPTOGRAPHIC UPLINK
                         </div>
                         <button
                             type="submit"
                             disabled={loading || submitted}
-                            className={`px-12 py-4 rounded-2xl flex items-center justify-center gap-3 transform active:scale-95 transition-all font-black text-[10px] uppercase tracking-widest shadow-2xl ${submitted ? 'bg-emerald-500 text-white shadow-emerald-500/20' : 'bg-indigo-600 text-white shadow-indigo-600/20 hover:bg-indigo-700 border border-indigo-400/20'}`}
+                            className={`px-12 py-4 rounded-2xl flex items-center justify-center gap-3 transform active:scale-95 transition-all font-black text-[10px] uppercase tracking-widest shadow-2xl ${submitted ? 'bg-emerald-500 text-slate-800 shadow-emerald-500/20' : 'bg-sky-500 text-slate-800 shadow-sky-600/20 hover:bg-sky-700 border border-sky-400/20'}`}
                         >
                             {loading ? <Upload className="animate-spin" size={18} /> :
                                 submitted ? <><CheckCircle size={18} /> Telemetry Synced</> :
@@ -185,43 +185,43 @@ const ReportsPage = () => {
                 </form>
             </div>
 
-            <div className="bg-slate-800/50 backdrop-blur-xl border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
-                <div className="p-6 border-b border-white/5 bg-white/5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div className="bg-white/50 backdrop-blur-xl border border-sky-100 rounded-[2.5rem] overflow-hidden shadow-2xl">
+                <div className="p-6 border-b border-sky-100 bg-sky-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div className="flex items-center gap-3">
-                        <ClipboardList size={18} className="text-indigo-400" />
+                        <ClipboardList size={18} className="text-sky-500" />
                         <h2 className="text-xs font-black uppercase tracking-widest text-slate-400">Tactical Logs Archive</h2>
                     </div>
                 </div>
 
                 <div className="overflow-x-auto min-w-full">
-                    <table className="w-full text-left bg-slate-900/10">
+                    <table className="w-full text-left bg-sky-50/10">
                         <thead>
-                            <tr className="border-b border-white/5 text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] bg-white/5">
+                            <tr className="border-b border-sky-100 text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] bg-sky-50">
                                 <th className="px-8 py-5">Descriptor / Time-Stamp</th>
                                 <th className="px-8 py-5">Location Space</th>
                                 <th className="px-8 py-5">Status Vector</th>
                                 <th className="px-8 py-5 text-right">Analysis</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-white/5">
+                        <tbody className="divide-y divide-sky-100">
                             {reports.length > 0 ? reports.map((report) => (
                                 <tr key={report._id} className="hover:bg-gray-50/50 transition-colors group">
                                     <td className="px-8 py-6">
                                         <div className="flex items-center gap-4">
-                                            <div className="w-10 h-10 rounded-xl bg-slate-900 border border-white/5 flex items-center justify-center text-indigo-400 shadow-inner">
+                                            <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-500 shadow-inner">
                                                 <Calendar size={16} />
                                             </div>
                                             <div>
-                                                <p className="text-sm font-black text-white uppercase tracking-tight leading-none mb-1.5">{report.clientName}</p>
-                                                <p className="text-[10px] text-slate-600 font-bold tracking-widest uppercase">
+                                                <p className="text-sm font-black text-slate-800 uppercase tracking-tight leading-none mb-1.5">{report.clientName}</p>
+                                                <p className="text-[10px] text-slate-500 font-bold tracking-widest uppercase">
                                                     {new Date(report.createdAt).toLocaleDateString(undefined, { day: '2-digit', month: 'short', year: 'numeric' })}
                                                 </p>
                                             </div>
                                         </div>
                                     </td>
                                     <td className="px-8 py-6">
-                                        <div className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-[0.1em]">
-                                            <MapPin size={12} className="text-indigo-400" />
+                                        <div className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-[0.1em]">
+                                            <MapPin size={12} className="text-sky-500" />
                                             {report.location}
                                         </div>
                                     </td>
@@ -236,7 +236,7 @@ const ReportsPage = () => {
                                         <button
                                             type="button"
                                             onClick={() => setSelectedReport(report)}
-                                            className="px-6 py-2.5 bg-slate-900 border border-white/5 rounded-xl text-[10px] font-black text-indigo-400 uppercase tracking-widest hover:bg-indigo-600 hover:text-white hover:border-indigo-500 transition-all shadow-xl ml-auto group"
+                                            className="px-6 py-2.5 bg-sky-50 border border-sky-100 rounded-xl text-[10px] font-black text-sky-500 uppercase tracking-widest hover:bg-sky-500 hover:text-slate-800 hover:border-sky-500 transition-all shadow-xl ml-auto group"
                                         >
                                             Inspect <ExternalLink size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                                         </button>
@@ -257,22 +257,22 @@ const ReportsPage = () => {
                 </div>
             </div>
 
-            <div className="p-8 bg-indigo-500/5 text-indigo-400/60 rounded-[2rem] border border-indigo-500/10 text-[9px] font-black uppercase tracking-[0.3em] text-center leading-relaxed backdrop-blur-sm">
+            <div className="p-8 bg-sky-500/5 text-sky-500/60 rounded-[2rem] border border-sky-500/10 text-[9px] font-black uppercase tracking-[0.3em] text-center leading-relaxed backdrop-blur-sm">
                 By submitting this document, you certify that all information is accurate and verified per the Installation Compliance Act of 2026.
             </div>
 
             {/* Analysis Modal */}
             <AnimatePresence>
                 {selectedReport && (
-                    <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[100] flex items-center justify-center p-6 lg:p-12">
+                    <div className="fixed inset-0 bg-white/80 backdrop-blur-md z-[100] flex items-center justify-center p-6 lg:p-12">
                         <motion.div
                             initial={{ scale: 0.9, opacity: 0, y: 30 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.9, opacity: 0, y: 30 }}
-                            className="bg-slate-900 rounded-[3.5rem] w-full max-w-6xl max-h-[90vh] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8)] border border-white/10 flex flex-col md:flex-row shadow-2xl"
+                            className="bg-sky-50 rounded-[3.5rem] w-full max-w-6xl max-h-[90vh] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8)] border border-sky-100 flex flex-col md:flex-row shadow-2xl"
                         >
                             {/* Side Image / Visualization Section */}
-                            <div className="md:w-[55%] bg-slate-900 flex items-center justify-center p-12 relative group min-h-[400px]">
+                            <div className="md:w-[55%] bg-sky-50 flex items-center justify-center p-12 relative group min-h-[400px]">
                                 <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent" />
                                 {selectedReport.image ? (
                                     <img
@@ -282,48 +282,48 @@ const ReportsPage = () => {
                                     />
                                 ) : (
                                     <div className="text-center space-y-6 relative z-10">
-                                        <div className="w-24 h-24 rounded-[2rem] bg-white/5 flex items-center justify-center text-white/20 mx-auto border border-white/5">
+                                        <div className="w-24 h-24 rounded-[2rem] bg-sky-50 flex items-center justify-center text-white/20 mx-auto border border-sky-100">
                                             <Camera size={48} />
                                         </div>
                                         <p className="text-white/20 text-[10px] font-black uppercase tracking-[0.5em]">No Visual Capture Detected</p>
                                     </div>
                                 )}
-                                <div className="absolute top-8 left-8 px-5 py-2.5 bg-black/40 rounded-2xl text-[10px] font-black text-white uppercase tracking-[0.25em] border border-white/10 backdrop-blur-xl z-20 flex items-center gap-3">
+                                <div className="absolute top-8 left-8 px-5 py-2.5 bg-black/40 rounded-2xl text-[10px] font-black text-slate-800 uppercase tracking-[0.25em] border border-sky-100 backdrop-blur-xl z-20 flex items-center gap-3">
                                     <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
                                     Evidence Stream [Grid-Alpha]
                                 </div>
                             </div>
 
                             {/* Deep Detail Section */}
-                            <div className="md:w-[45%] p-12 lg:p-16 space-y-12 overflow-y-auto bg-slate-800/50 backdrop-blur-xl">
+                            <div className="md:w-[45%] p-12 lg:p-16 space-y-12 overflow-y-auto bg-white/50 backdrop-blur-xl">
                                 <div className="flex justify-between items-start">
                                     <div>
-                                        <h2 className="text-3xl font-display font-black text-white tracking-tight leading-none uppercase mb-4">{selectedReport.clientName}</h2>
-                                        <div className="flex items-center gap-3 text-indigo-400">
+                                        <h2 className="text-3xl font-display font-black text-slate-800 tracking-tight leading-none uppercase mb-4">{selectedReport.clientName}</h2>
+                                        <div className="flex items-center gap-3 text-sky-500">
                                             <MapPin size={14} className="animate-pulse" />
                                             <p className="text-[10px] font-black uppercase tracking-[0.2em]">{selectedReport.location}</p>
                                         </div>
                                     </div>
-                                    <button onClick={() => setSelectedReport(null)} className="w-14 h-14 rounded-2xl bg-white/5 text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-all flex items-center justify-center group border border-white/5">
+                                    <button onClick={() => setSelectedReport(null)} className="w-14 h-14 rounded-2xl bg-sky-50 text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-all flex items-center justify-center group border border-sky-100">
                                         <X size={28} className="group-hover:rotate-90 transition-transform" />
                                     </button>
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-10 border-y border-white/5 py-10">
+                                <div className="grid grid-cols-2 gap-10 border-y border-sky-100 py-10">
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] block">Reporting Date</label>
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block">Reporting Date</label>
                                         <p className="text-sm font-black text-slate-200 uppercase tracking-tight">{new Date(selectedReport.createdAt).toLocaleDateString()}</p>
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] block">Hardware Matrix</label>
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block">Hardware Matrix</label>
                                         <p className="text-sm font-black text-slate-200 uppercase tracking-tight tabular-nums">{selectedReport.cameraCount} Active Units</p>
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] block">Protocol Identity</label>
-                                        <p className="text-xs font-black text-indigo-400 tabular-nums bg-indigo-500/10 px-3 py-1 rounded-lg border border-indigo-500/20 inline-block tracking-tighter">#{selectedReport._id?.slice(-12).toUpperCase()}</p>
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block">Protocol Identity</label>
+                                        <p className="text-xs font-black text-sky-500 tabular-nums bg-sky-500/10 px-3 py-1 rounded-lg border border-sky-500/20 inline-block tracking-tighter">#{selectedReport._id?.slice(-12).toUpperCase()}</p>
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] block">Logic Status</label>
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block">Logic Status</label>
                                         <span className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.15em] shadow-sm
                                             ${selectedReport.isInstalled === 'Yes' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-orange-500/10 text-orange-400 border border-orange-500/20'}`}>
                                             <div className={`w-1.5 h-1.5 rounded-full ${selectedReport.isInstalled === 'Yes' ? 'bg-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-orange-400'}`} />
@@ -333,15 +333,15 @@ const ReportsPage = () => {
                                 </div>
 
                                 <div className="space-y-5">
-                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] block">Field Anomalies & Verification Log</label>
-                                    <div className="bg-slate-900/50 p-8 rounded-[2rem] border border-white/5 text-sm font-black text-slate-400 uppercase leading-relaxed relative overflow-hidden group tracking-tight">
-                                        <div className="absolute top-0 left-0 w-1 h-full bg-indigo-500/40" />
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block">Field Anomalies & Verification Log</label>
+                                    <div className="bg-sky-50/50 p-8 rounded-[2rem] border border-sky-100 text-sm font-black text-slate-400 uppercase leading-relaxed relative overflow-hidden group tracking-tight">
+                                        <div className="absolute top-0 left-0 w-1 h-full bg-sky-500/40" />
                                         "{selectedReport.issues || 'No anomalies detected during the physical deployment cycle and biometric verification.'}"
                                     </div>
                                 </div>
 
                                 <div className="pt-10 flex gap-6">
-                                    <button className="flex-1 py-5 text-[10px] font-black uppercase tracking-[0.25em] text-slate-500 bg-white/5 border border-white/10 rounded-[1.5rem] hover:bg-white/10 transition-all active:scale-[0.98]">Archive Data</button>
+                                    <button className="flex-1 py-5 text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 bg-sky-50 border border-sky-100 rounded-[1.5rem] hover:bg-sky-100 transition-all active:scale-[0.98]">Archive Data</button>
                                 </div>
                             </div>
                         </motion.div>
@@ -354,19 +354,21 @@ const ReportsPage = () => {
 
 const ReportInput = ({ label, value, onChange, placeholder, type = "text", icon }) => (
     <div className="space-y-3">
-        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">{label}</label>
+        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{label}</label>
         <div className="relative">
-            {icon && <div className="absolute left-4 top-1/2 -translate-y-1/2 text-indigo-400">{icon}</div>}
+            {icon && <div className="absolute left-4 top-1/2 -translate-y-1/2 text-sky-500">{icon}</div>}
             <input
                 required
                 type={type}
                 value={value}
                 onChange={e => onChange(e.target.value)}
                 placeholder={placeholder}
-                className={`w-full bg-slate-900 border border-white/5 rounded-2xl p-4 text-sm font-black text-white focus:outline-none focus:border-indigo-500/50 transition-all placeholder:text-slate-800 outline-none shadow-inner uppercase tracking-tight ${icon ? 'pl-11' : ''}`}
+                className={`w-full bg-sky-50 border border-sky-100 rounded-2xl p-4 text-sm font-black text-slate-800 focus:outline-none focus:border-sky-500/50 transition-all placeholder:text-slate-800 outline-none shadow-inner uppercase tracking-tight ${icon ? 'pl-11' : ''}`}
             />
         </div>
     </div>
 );
 
 export default ReportsPage;
+
+

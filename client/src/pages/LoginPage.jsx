@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -84,7 +84,7 @@ const LoginPage = () => {
                             <div className="absolute inset-0 bg-primary-500 rounded-3xl opacity-0 group-hover:opacity-5 transition-opacity duration-500" />
                             <Shield size={40} className="text-primary-500 transform group-hover:rotate-[15deg] transition-transform duration-500" />
                             <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-orange-500 rounded-full border-4 border-white flex items-center justify-center">
-                                <Fingerprint size={10} className="text-white" />
+                                <Fingerprint size={10} className="text-slate-800" />
                             </div>
                         </motion.div>
 
@@ -133,7 +133,7 @@ const LoginPage = () => {
                                     required
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    placeholder="••••••••••••••••"
+                                    placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                                     className="w-full bg-slate-50/50 border border-slate-100 rounded-2xl py-5 pl-14 pr-6 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-4 focus:ring-primary-500/5 focus:border-primary-500/20 transition-all placeholder:text-slate-300"
                                 />
                             </div>
@@ -163,7 +163,7 @@ const LoginPage = () => {
                                 className="w-full relative group overflow-hidden rounded-2xl shadow-[0_20px_40px_-10px_rgba(37,99,235,0.3)]"
                             >
                                 <div className="absolute inset-0 bg-primary-600 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
-                                <div className="relative bg-primary-500 group-hover:bg-transparent text-white py-5 px-6 flex items-center justify-center gap-3 transition-all duration-300">
+                                <div className="relative bg-primary-500 group-hover:bg-transparent text-slate-800 py-5 px-6 flex items-center justify-center gap-3 transition-all duration-300">
                                     {isLoading ? (
                                         <Loader2 className="animate-spin" size={20} />
                                     ) : (
@@ -203,3 +203,5 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
+
