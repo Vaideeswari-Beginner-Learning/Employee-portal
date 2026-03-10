@@ -98,10 +98,12 @@ router.post('/:employeeId', auth, upload.single('attachment'), async (req, res) 
             }
         }
 
+        const senderNameStr = req.user.name || (req.user.role === 'admin' ? 'Admin Support' : 'Employee');
+
         const newMessage = new Message({
             employeeId: targetId,
             sender: req.user._id,
-            senderName: req.user.name || (req.user.role === 'admin' ? 'Admin Support' : 'Staff Member'),
+            senderName: senderNameStr,
             content: content || '',
             attachmentUrl,
             attachmentType: finalAttachmentType
