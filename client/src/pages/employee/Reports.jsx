@@ -276,7 +276,7 @@ const ReportsPage = () => {
                                 <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 to-transparent" />
                                 {selectedReport.image ? (
                                     <img
-                                        src={`/uploads/${selectedReport.image}`}
+                                        src={`${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace(/\/api\/?$/, '') : ''}/uploads/${selectedReport.image}`}
                                         className="max-h-full max-w-full object-contain shadow-[0_30px_60px_rgba(0,0,0,0.5)] rounded-2xl relative z-10 transition-transform group-hover:scale-[1.02] duration-700"
                                         alt="Field Evidence"
                                     />

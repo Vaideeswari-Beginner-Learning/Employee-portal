@@ -29,15 +29,19 @@ const AdminDashboard = () => {
     const containerRef = useRef();
 
     useGSAP(() => {
-        gsap.fromTo('.stat-card',
-            { y: 30, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: 'power3.out' }
-        );
+        if (gsap.utils.toArray('.stat-card').length > 0) {
+            gsap.fromTo('.stat-card',
+                { y: 30, opacity: 0 },
+                { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: 'power3.out' }
+            );
+        }
 
-        gsap.fromTo('.stagger-item',
-            { y: 20, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.5, stagger: 0.05, ease: 'power2.out', delay: 0.2 }
-        );
+        if (gsap.utils.toArray('.stagger-item').length > 0) {
+            gsap.fromTo('.stagger-item',
+                { y: 20, opacity: 0 },
+                { y: 0, opacity: 1, duration: 0.5, stagger: 0.05, ease: 'power2.out', delay: 0.2 }
+            );
+        }
     }, { scope: containerRef, dependencies: [stats, tasks] });
 
     useEffect(() => {

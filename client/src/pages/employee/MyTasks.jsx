@@ -35,10 +35,12 @@ const MyTasks = () => {
     const filteredTasks = filter === 'All' ? tasks : tasks.filter(t => t.status === filter);
 
     useGSAP(() => {
-        gsap.fromTo('.stagger-item',
-            { y: 20, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.5, stagger: 0.05, ease: 'power2.out' }
-        );
+        if (gsap.utils.toArray('.stagger-item').length > 0) {
+            gsap.fromTo('.stagger-item',
+                { y: 20, opacity: 0 },
+                { y: 0, opacity: 1, duration: 0.5, stagger: 0.05, ease: 'power2.out' }
+            );
+        }
     }, { scope: containerRef, dependencies: [filteredTasks.length, viewMode] });
 
     return (

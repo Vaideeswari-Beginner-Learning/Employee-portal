@@ -155,8 +155,15 @@ const PerformanceHub = () => {
                                             <p className="text-sm font-bold text-slate-400 uppercase tracking-[0.2em]">{selectedEmployee.email}</p>
                                             <div className="flex items-center gap-4 mt-3">
                                                 <div className="flex items-center gap-2 px-3 py-1 bg-orange-50 text-orange-600 rounded-lg border border-orange-100">
-                                                    <Star size={14} fill="currentColor" />
-                                                    <span className="text-xs font-black">{selectedEmployee.performanceRating || '0.0'} Merit</span>
+                                                    <div className="flex gap-0.5">
+                                                        {[...Array(5)].map((_, i) => {
+                                                            const rating = selectedEmployee.performanceRating || 0;
+                                                            return (
+                                                                <Star key={i} size={14} fill={i < Math.round(rating) ? "currentColor" : "none"} className={i < Math.round(rating) ? "text-orange-500" : "text-orange-200"} />
+                                                            );
+                                                        })}
+                                                    </div>
+                                                    <span className="text-xs font-black ml-1">{selectedEmployee.performanceRating || '0.0'} Merit</span>
                                                 </div>
                                             </div>
                                         </div>
