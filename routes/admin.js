@@ -44,7 +44,7 @@ router.delete('/employees/:id', adminAuth, async (req, res) => {
 // Update Employee - Admin Only
 router.put('/employees/:id', adminAuth, async (req, res) => {
     const updates = Object.keys(req.body);
-    const allowedUpdates = ['name', 'email', 'phone', 'employeeId', 'password', 'expertise'];
+    const allowedUpdates = ['name', 'email', 'phone', 'employeeId', 'password', 'expertise', 'role'];
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
 
     if (!isValidOperation) {
