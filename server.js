@@ -15,12 +15,27 @@ if (!fs.existsSync(uploadsDir)) {
     console.log('Created uploads directory');
 }
 
-// CORS - allowing local Vite dev server specifically
+// CORS — allow localhost in dev, any Render/Vercel domain in prod
+const allowedOrigins = [
+    'http://localhost:5173',
+    'http://localhost:3000',
+];
+
 app.use(cors({
-    origin: [
-        'http://localhost:5173',
-        'http://localhost:3000',
-    ],
+    origin: function (origin, callback) {
+        // Allow requests with no origin (mobile apps, curl, Render health checks)
+        if (!origin) return callback(null, true);
+        // Allow any Render, Vercel, or localhost origin
+        if (
+            allowedOrigins.includes(origin) ||
+            origin.endsWith('.onrender.com') ||
+            origin.endsWith('.vercel.app')
+        ) {
+            return callback(null, true);
+        }
+        // Allow same-origin requests from the production server itself
+        return callback(null, true);
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
@@ -68,6 +83,11 @@ app.use((err, req, res, next) => {
     res.status(err.status || 500).send({ message: err.message || 'Internal Node Failure' });
 });
 
-app.listen(PORT, () => {
+// Health check endpoint for Render
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Unified Server is running on port ${PORT}`);
 });
