@@ -6,7 +6,8 @@ import {
     Activity, Megaphone, Building2, UserCircle2, Briefcase, UserCheck, CheckCircle,
     ShieldCheck, Zap, ArrowUpRight, ArrowDownRight, ArrowDown
 } from 'lucide-react';
-import { AreaChart, Area, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { AreaChart, Area, ResponsiveContainer, PieChart, Pie, Cell, XAxis, YAxis, Tooltip } from 'recharts';
+import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import api from '../../utils/api';
