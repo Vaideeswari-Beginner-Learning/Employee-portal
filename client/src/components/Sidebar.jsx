@@ -16,9 +16,9 @@ import {
     Navigation,
     MapPin,
     Megaphone,
-    SquareCheck,
     MessageSquare,
-    Star
+    Star,
+    Layers
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -44,7 +44,7 @@ const Sidebar = () => {
                 { name: '📅 Absence & Attendance', icon: <CalendarCheck size={20} />, path: '/admin/attendance-hub' },
                 { name: '📍 Live Field Tracker', icon: <Navigation size={20} />, path: '/admin/live-tracker' },
                 { name: '📢 Broadcast System', icon: <Megaphone size={20} />, path: '/admin/announcements' },
-                { name: '✅ Task Assignments', icon: <SquareCheck size={20} />, path: '/admin/tasks' }
+                { name: 'Task Assignments', icon: <Layers size={20} />, path: '/admin/tasks' }
             );
 
             if (isAdmin) {
@@ -73,7 +73,7 @@ const Sidebar = () => {
                     { name: '📂 Field Reports', icon: <ClipboardList size={20} />, path: '/reports' },
                     { name: '📅 Shift Logs', icon: <CalendarCheck size={20} />, path: '/attendance' },
                     { name: '📄 Leave Terminal', icon: <FileText size={20} />, path: '/leave' },
-                    { name: '✅ My Tasks', icon: <SquareCheck size={20} />, path: '/tasks' },
+                    { name: 'My Tasks', icon: <Layers size={20} />, path: '/tasks' },
                     { name: '📍 Field Operations', icon: <MapPin size={20} />, path: '/field-ops' },
                     { name: '💬 Support Node', icon: <MessageSquare size={20} />, path: '/support' },
                     { name: '⚙️ Identity Matrix', icon: <Settings size={20} />, path: '/settings' },
