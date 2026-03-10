@@ -32,7 +32,7 @@ const Sidebar = () => {
     const getMenuGroups = () => {
         if (isAdmin || isManager) {
             const items = [
-                { name: '📊 Command Center', icon: <LayoutDashboard size={20} />, path: '/admin-dashboard' },
+                { name: '📊 Command Center', icon: <LayoutDashboard size={20} />, path: isAdmin ? '/admin-dashboard' : '/manager-dashboard' },
             ];
 
             if (isAdmin) {

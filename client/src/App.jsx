@@ -10,6 +10,7 @@ import LeavePage from './pages/employee/Leave';
 import SettingsPage from './pages/employee/Settings';
 
 import AdminDashboard from './pages/admin/Dashboard';
+import ManagerDashboard from './pages/admin/ManagerDashboard';
 import EmployeeMgmt from './pages/admin/Employees';
 import AdminAttendance from './pages/admin/Attendance';
 import AdminReports from './pages/admin/Reports';
@@ -51,6 +52,7 @@ function App() {
 
         {/* Admin Routes */}
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/manager-dashboard" element={<ManagerDashboard />} />
         <Route path="/admin/employees" element={<EmployeeMgmt />} />
         <Route path="/admin/attendance" element={<AdminAttendance />} />
         <Route path="/admin/reports" element={<AdminReports />} />

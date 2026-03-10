@@ -17,22 +17,28 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../utils/api';
+import TaskStatusChart from '../../components/TaskStatusChart';
 
 const EmployeeDashboard = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const [announcements, setAnnouncements] = useState([]);
+    const [tasks, setTasks] = useState([]);
 
     useEffect(() => {
-        const fetchAnnouncements = async () => {
+        const fetchData = async () => {
             try {
-                const res = await api.get('announcements');
-                setAnnouncements(res.data);
+                const [annRes, tasksRes] = await Promise.all([
+                    api.get('announcements'),
+                    api.get('tasks')
+                ]);
+                setAnnouncements(annRes.data);
+                setTasks(tasksRes.data);
             } catch (err) {
-                console.error('Broadcast fetch error:', err);
+                console.error('Fetch error:', err);
             }
         };
-        fetchAnnouncements();
+        fetchData();
     }, []);
 
     return (
@@ -195,6 +201,10 @@ const EmployeeDashboard = () => {
 
                 {/* Right Column / Activity & Announcements */}
                 <div className="space-y-10">
+                    <div className="animate-in fade-in slide-in-from-right-5 duration-700 delay-300">
+                        <TaskStatusChart tasks={tasks} />
+                    </div>
+
                     <div>
                         <h3 className="text-sm font-black text-slate-800 uppercase tracking-[0.3em] mb-8 pl-1">Global Broadcasts</h3>
                         <div className="space-y-4">

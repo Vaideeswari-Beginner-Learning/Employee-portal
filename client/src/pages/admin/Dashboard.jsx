@@ -11,6 +11,7 @@ import { useGSAP } from '@gsap/react';
 import api from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import TaskStatusChart from '../../components/TaskStatusChart';
 
 gsap.registerPlugin(useGSAP);
 
@@ -23,6 +24,7 @@ const AdminDashboard = () => {
         pendingLeaves: 0,
         todayReports: 0
     });
+    const [tasks, setTasks] = useState([]);
     const [isExporting, setIsExporting] = useState(false);
     const containerRef = useRef();
 
@@ -36,18 +38,22 @@ const AdminDashboard = () => {
             { y: 20, opacity: 0 },
             { y: 0, opacity: 1, duration: 0.5, stagger: 0.05, ease: 'power2.out', delay: 0.2 }
         );
-    }, { scope: containerRef, dependencies: [stats] });
+    }, { scope: containerRef, dependencies: [stats, tasks] });
 
     useEffect(() => {
-        const fetchStats = async () => {
+        const fetchData = async () => {
             try {
-                const res = await api.get('admin/dashboard-stats');
-                setStats(res.data);
+                const [statsRes, tasksRes] = await Promise.all([
+                    api.get('admin/dashboard-stats'),
+                    api.get('tasks')
+                ]);
+                setStats(statsRes.data);
+                setTasks(tasksRes.data);
             } catch (err) {
-                console.error(err);
+                console.error('Error fetching dashboard data:', err);
             }
         };
-        fetchStats();
+        fetchData();
     }, []);
 
     const convertToCSV = (data, headersList) => {
@@ -214,6 +220,10 @@ const AdminDashboard = () => {
                 </div>
 
                 <div className="lg:col-span-4 space-y-10">
+                    <div className="stagger-item opacity-0">
+                        <TaskStatusChart tasks={tasks} />
+                    </div>
+
                     <div className="card-premium p-8 gradient-mesh-bg border-white/40 stagger-item opacity-0">
                         <h2 className="font-display font-black text-slate-800 mb-8 flex items-center gap-3">
                             <TrendingUp size={20} className="text-primary-500" />
