@@ -197,11 +197,15 @@ const GlobalChat = ({ employeeId, roomLabel }) => {
                             <div key={msg._id} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
                                 <div className="flex items-end gap-2 max-w-[85%]">
                                     {!isMe && (
-                                        <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center shrink-0 mb-1">
-                                            <span className="text-[10px] font-bold text-blue-700">
-                                                {msg.senderName?.charAt(0) || '?'}
-                                            </span>
-                                        </div>
+                                        msg.sender?.profilePhoto ? (
+                                            <img src={getFullUrl(msg.sender.profilePhoto)} alt="User photo" className="w-6 h-6 rounded-full object-cover shrink-0 mb-1 border border-slate-200" />
+                                        ) : (
+                                            <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center shrink-0 mb-1">
+                                                <span className="text-[10px] font-bold text-blue-700">
+                                                    {msg.senderName?.charAt(0) || '?'}
+                                                </span>
+                                            </div>
+                                        )
                                     )}
                                     <div className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
                                         {!isMe && <span className="text-[10px] font-bold text-slate-500 mb-1 ml-1">{msg.senderName}</span>}

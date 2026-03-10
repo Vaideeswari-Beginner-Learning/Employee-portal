@@ -3,8 +3,9 @@ import {
     Users, CalendarCheck, FileText,
     AlertCircle, TrendingUp, Clock,
     Search, Download, ChevronRight,
-    Activity, Megaphone
+    Activity, Megaphone, Building2, UserCircle2, Briefcase
 } from 'lucide-react';
+import { AreaChart, Area, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import api from '../../utils/api';
@@ -176,11 +177,18 @@ const AdminDashboard = () => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div className="stat-card opacity-0"><AdminStat label="Total Personnel" value={stats.totalEmployees} icon={<Users size={20} />} color="text-primary-500" bgColor="bg-primary-50" onClick={() => navigate('/admin/employees')} /></div>
-                <div className="stat-card opacity-0"><AdminStat label="Duty Status" value={`${stats.todayAttendance}%`} icon={<CalendarCheck size={20} />} color="text-emerald-500" bgColor="bg-emerald-50" onClick={() => navigate('/admin/attendance')} /></div>
-                <div className="stat-card opacity-0"><AdminStat label="Pending Auth" value={stats.pendingLeaves} icon={<AlertCircle size={20} />} color="text-orange-500" bgColor="bg-orange-50" onClick={() => navigate('/admin/leaves')} /></div>
-                <div className="stat-card opacity-0"><AdminStat label="Telemetry In" value={stats.todayReports} icon={<Activity size={20} />} color="text-indigo-500" bgColor="bg-indigo-50" onClick={() => navigate('/admin/reports')} /></div>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                {/* Wavy Line Charts Col */}
+                <div className="lg:col-span-7 flex flex-col gap-6">
+                    <WavyStatCard title="Number of companies" value="30" icon={<Building2 size={16} />} colorHex="#3b82f6" data={[{ v: 10 }, { v: 12 }, { v: 15 }, { v: 25 }, { v: 22 }, { v: 30 }]} />
+                    <WavyStatCard title="Number of contacts" value="100" icon={<UserCircle2 size={16} />} colorHex="#4ade80" data={[{ v: 50 }, { v: 60 }, { v: 55 }, { v: 80 }, { v: 75 }, { v: 100 }]} />
+                    <WavyStatCard title="Total deals in pipeline" value="288" icon={<Briefcase size={16} />} colorHex="#f97316" data={[{ v: 100 }, { v: 150 }, { v: 120 }, { v: 200 }, { v: 220 }, { v: 288 }]} />
+                </div>
+
+                {/* Gauge Chart Col */}
+                <div className="lg:col-span-5 h-full">
+                    <GaugeCard percentage={25.82} expected="$9,023,009.00" realized="$2,329,523.00" />
+                </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
@@ -338,6 +346,97 @@ const HealthBar = ({ label, percentage, color }) => {
                     className={`h-full ${color} rounded-md shadow-sm relative overflow-hidden`}
                 >
                     <div className="absolute inset-0 bg-white/20 animate-pulse" />
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const WavyStatCard = ({ title, value, icon, colorHex, data }) => (
+    <div className="card-premium p-6 flex justify-between items-center group relative overflow-hidden bg-white shadow-sm border border-slate-100/50 hover:shadow-md transition-all stat-card opacity-0 h-[140px]">
+        <div className="flex flex-col z-10 w-1/2">
+            <div className="flex items-center gap-2 mb-2">
+                <div className="p-1.5 rounded-lg bg-slate-50 border border-slate-100 shadow-sm" style={{ color: colorHex }}>{icon}</div>
+                <p className="text-xs font-bold text-slate-500 truncate">{title}</p>
+            </div>
+            <p className="text-4xl font-display font-black text-slate-800 tracking-tighter mt-1">{value}</p>
+        </div>
+        <div className="h-full w-1/2 absolute right-0 bottom-0 opacity-80 pointer-events-none">
+            <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={data} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
+                    <defs>
+                        <linearGradient id={`color${title.replace(/\s+/g, '')}`} x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor={colorHex} stopOpacity={0.3} />
+                            <stop offset="95%" stopColor={colorHex} stopOpacity={0} />
+                        </linearGradient>
+                    </defs>
+                    <Area type="monotone" dataKey="v" stroke={colorHex} strokeWidth={3} fillOpacity={1} fill={`url(#color${title.replace(/\s+/g, '')})`} />
+                </AreaChart>
+            </ResponsiveContainer>
+        </div>
+    </div>
+);
+
+const GaugeCard = ({ percentage, expected, realized }) => {
+    const data = [
+        { name: 'Realized', value: percentage },
+        { name: 'Remaining', value: 100 - percentage }
+    ];
+
+    return (
+        <div className="card-premium p-8 h-full flex flex-col items-center justify-between bg-white shadow-sm border border-slate-100/50 relative stat-card opacity-0 min-h-[444px]">
+            <div className="w-full flex items-center gap-2 border-b border-slate-100 pb-4">
+                <div className="p-1 rounded-full bg-slate-50 text-slate-500 border border-slate-200">
+                    <span className="text-[10px] font-black tracking-widest leading-none px-1">$</span>
+                </div>
+                <span className="text-sm font-bold text-slate-800">Total revenue (yearly)</span>
+            </div>
+
+            <div className="w-full flex-1 flex flex-col items-center justify-center relative mt-6">
+                <div className="w-[300px] h-[150px] relative">
+                    <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                            <Pie
+                                data={data}
+                                cx="50%"
+                                cy="100%"
+                                startAngle={180}
+                                endAngle={0}
+                                innerRadius={110}
+                                outerRadius={140}
+                                paddingAngle={2}
+                                dataKey="value"
+                                stroke="none"
+                                cornerRadius={4}
+                            >
+                                <Cell key="cell-0" fill="#4ade80" />
+                                <Cell key="cell-1" fill="#f1f5f9" />
+                            </Pie>
+                        </PieChart>
+                    </ResponsiveContainer>
+
+                    {/* Gauge Labels */}
+                    <div className="absolute top-4 left-[20px] text-[10px] font-bold text-slate-400">0</div>
+                    <div className="absolute top-4 right-[20px] text-[10px] font-bold text-slate-400">100</div>
+                    <div className="absolute top-[30px] left-[55px] text-[10px] font-bold text-slate-400">20</div>
+                    <div className="absolute top-[30px] right-[55px] text-[10px] font-bold text-slate-400">80</div>
+                    <div className="absolute top-[10px] left-[110px] text-[10px] font-bold text-slate-400">40</div>
+                    <div className="absolute top-[10px] right-[110px] text-[10px] font-bold text-slate-400">60</div>
+
+                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex flex-col items-center">
+                        <span className="text-3xl font-display font-black text-slate-800">{percentage}%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div className="flex w-full justify-around mt-10 pt-6">
+                <div className="text-center">
+                    <p className="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-1">Expected</p>
+                    <p className="text-base font-black text-slate-800 tabular-nums">{expected}</p>
+                </div>
+                <div className="text-center">
+                    <p className="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-1">Realized</p>
+                    <p className="text-base font-black text-slate-800 tabular-nums">{realized}</p>
                 </div>
             </div>
         </div>
