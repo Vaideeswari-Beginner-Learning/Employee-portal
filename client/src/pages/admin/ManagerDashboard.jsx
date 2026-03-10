@@ -84,7 +84,7 @@ const ManagerDashboard = () => {
                 <div className="stat-card opacity-0"><ManagerStat label="Task Completion" value={`${stats.avgTaskCompletion}%`} icon={<CheckCircle2 size={20} />} color="text-indigo-500" bgColor="bg-indigo-50" onClick={() => navigate('/admin/tasks')} /></div>
                 <div className="stat-card opacity-0"><ManagerStat label="Attendance Score" value={`${stats.avgAttendanceScore}%`} icon={<CalendarCheck size={20} />} color="text-emerald-500" bgColor="bg-emerald-50" onClick={() => navigate('/admin/attendance-hub')} /></div>
                 <div className="stat-card opacity-0"><ManagerStat label="Teamwork Score" value={`${stats.avgTeamworkScore}%`} icon={<Users size={20} />} color="text-orange-500" bgColor="bg-orange-50" onClick={() => navigate('/admin/performance')} /></div>
-                <div className="stat-card opacity-0"><ManagerStat label="Average Merit Rating" value={`${stats.avgRating} ★`} icon={<TrendingUp size={20} />} color="text-blue-500" bgColor="bg-blue-50" onClick={() => navigate('/admin/performance')} /></div>
+                <div className="stat-card opacity-0"><ManagerStat label="Average Merit Rating" value={stats.avgRating} icon={<TrendingUp size={20} />} color="text-blue-500" bgColor="bg-blue-50" onClick={() => navigate('/admin/performance')} /></div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">

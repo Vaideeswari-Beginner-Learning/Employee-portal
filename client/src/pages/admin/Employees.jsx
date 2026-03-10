@@ -188,7 +188,7 @@ const EmployeeMgmt = () => {
                             <div className="px-10 py-8 border-b border-slate-50 flex justify-between items-center bg-gradient-to-r from-slate-50/50 to-white">
                                 <div>
                                     <h2 className="text-2xl font-display font-black text-slate-800 tracking-tight">
-                                        {editingId ? '🛠️ Update' : '🚀 Onboard'}<span className="text-primary-500">.Node</span>
+                                        {editingId ? 'Update' : 'Onboard'}<span className="text-primary-500">.Node</span>
                                     </h2>
                                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
                                         {editingId ? 'Personnel Identity Modification' : 'Personnel Registry Initialization'}
@@ -207,12 +207,12 @@ const EmployeeMgmt = () => {
                             </div>
                             <form onSubmit={handleSubmit} className="p-10 space-y-8">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                    <ModalInput label="Operational Name 👤" value={formData.name} onChange={v => setFormData({ ...formData, name: v })} placeholder="Employee Name" icon={<User size={14} />} />
-                                    <ModalInput label="Identity Code 🏷️" value={formData.employeeId} onChange={v => setFormData({ ...formData, employeeId: v })} placeholder="e.g. EMP001" icon={<Hash size={14} />} />
+                                    <ModalInput label="Operational Name" value={formData.name} onChange={v => setFormData({ ...formData, name: v })} placeholder="Employee Name" icon={<User size={14} />} />
+                                    <ModalInput label="Identity Code" value={formData.employeeId} onChange={v => setFormData({ ...formData, employeeId: v })} placeholder="e.g. EMP001" icon={<Hash size={14} />} />
                                     <div className="md:col-span-2">
-                                        <ModalInput label="Communication Vector 📧" value={formData.email} onChange={v => setFormData({ ...formData, email: v })} placeholder="employee@company.com" type="email" icon={<Mail size={14} />} />
+                                        <ModalInput label="Communication Vector" value={formData.email} onChange={v => setFormData({ ...formData, email: v })} placeholder="employee@company.com" type="email" icon={<Mail size={14} />} />
                                     </div>
-                                    <ModalInput label="Contact Node 📞" value={formData.phone} onChange={v => setFormData({ ...formData, phone: v })} placeholder="+91 XXXXX XXXXX" icon={<Phone size={14} />} />
+                                    <ModalInput label="Contact Node" value={formData.phone} onChange={v => setFormData({ ...formData, phone: v })} placeholder="+91 XXXXX XXXXX" icon={<Phone size={14} />} />
                                     <div className="space-y-2.5">
                                         <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
                                             <Shield size={14} /> Permission Level
@@ -227,7 +227,7 @@ const EmployeeMgmt = () => {
                                             <option value="admin">System Admin</option>
                                         </select>
                                     </div>
-                                    <ModalInput label="Security Key 🔐" value={formData.password} onChange={v => setFormData({ ...formData, password: v })} placeholder="••••••••" type="password" icon={<Shield size={14} />} />
+                                    <ModalInput label="Security Key" value={formData.password} onChange={v => setFormData({ ...formData, password: v })} placeholder="••••••••" type="password" icon={<Shield size={14} />} />
 
                                     <div className="md:col-span-2 space-y-3">
                                         <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
@@ -235,10 +235,10 @@ const EmployeeMgmt = () => {
                                         </label>
                                         <div className="flex flex-wrap gap-2">
                                             {[
-                                                { skill: 'Installation', emoji: '🔌' },
-                                                { skill: 'Maintenance', emoji: '🛠️' },
-                                                { skill: 'Service', emoji: '⚡' },
-                                                { skill: 'Inspection', emoji: '🔍' }
+                                                { skill: 'Installation', emoji: '' },
+                                                { skill: 'Maintenance', emoji: '' },
+                                                { skill: 'Service', emoji: '' },
+                                                { skill: 'Inspection', emoji: '' }
                                             ].map(({ skill, emoji }) => {
                                                 const isSelected = formData.expertise.includes(skill);
                                                 return (

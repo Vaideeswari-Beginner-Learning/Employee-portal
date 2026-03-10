@@ -389,7 +389,7 @@ const AdminTaskPanel = () => {
 
                         <div className="px-8 mt-8 mb-2 flex justify-between items-start relative z-10">
                             <div>
-                                <h2 className="text-3xl font-display font-black text-slate-900 tracking-tight">Assign Task 🚀</h2>
+                                <h2 className="text-3xl font-display font-black text-slate-900 tracking-tight">Assign Task</h2>
                                 <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-2">Deploy Field Personnel</p>
                             </div>
                             <button
@@ -419,10 +419,10 @@ const AdminTaskPanel = () => {
                                         }
                                     }}
                                 >
-                                    <option value="Installation">🔧 Installation</option>
-                                    <option value="Maintenance">🛠️ Maintenance</option>
-                                    <option value="Repair">⚡ Repair</option>
-                                    <option value="Inspection">🔍 Inspection</option>
+                                    <option value="Installation">Installation</option>
+                                    <option value="Maintenance">Maintenance</option>
+                                    <option value="Repair">Repair</option>
+                                    <option value="Inspection">Inspection</option>
                                 </select>
                             </div>
                             <div className="space-y-1.5">
@@ -440,7 +440,7 @@ const AdminTaskPanel = () => {
                                         ))
                                         .map(emp => (
                                             <option key={emp._id} value={emp._id}>
-                                                ★ {emp.name || emp.email?.split('@')[0] || 'Unknown'} - RECOMMENDED
+                                                {emp.name || emp.email?.split('@')[0] || 'Unknown'} - RECOMMENDED
                                             </option>
                                         ))
                                     }
@@ -500,9 +500,9 @@ const AdminTaskPanel = () => {
                                         value={newTask.priority}
                                         onChange={(e) => setNewTask({ ...newTask, priority: e.target.value })}
                                     >
-                                        <option value="Normal">🟢 Routine (Normal)</option>
-                                        <option value="High">🟠 Priority (High)</option>
-                                        <option value="Urgent">🔴 Critical (Urgent)</option>
+                                        <option value="Normal">Routine (Normal)</option>
+                                        <option value="High">Priority (High)</option>
+                                        <option value="Urgent">Critical (Urgent)</option>
                                     </select>
                                 </div>
                                 <div className="space-y-1.5">

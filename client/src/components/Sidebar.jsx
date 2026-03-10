@@ -32,34 +32,34 @@ const Sidebar = () => {
     const getMenuGroups = () => {
         if (isAdmin || isManager) {
             const items = [
-                { name: '📊 Command Center', icon: <LayoutDashboard size={20} />, path: isAdmin ? '/admin-dashboard' : '/manager-dashboard' },
+                { name: 'Command Center', icon: <LayoutDashboard size={20} />, path: isAdmin ? '/admin-dashboard' : '/manager-dashboard' },
             ];
 
             if (isAdmin) {
-                items.push({ name: '👥 Personnel Registry', icon: <Users size={20} />, path: '/admin/employees' });
+                items.push({ name: 'Personnel Registry', icon: <Users size={20} />, path: '/admin/employees' });
             }
 
             items.push(
-                { name: '📂 Field Documents', icon: <ClipboardList size={20} />, path: '/admin/reports' },
-                { name: '📅 Absence & Attendance', icon: <CalendarCheck size={20} />, path: '/admin/attendance-hub' },
-                { name: '📍 Live Field Tracker', icon: <Navigation size={20} />, path: '/admin/live-tracker' },
-                { name: '📢 Broadcast System', icon: <Megaphone size={20} />, path: '/admin/announcements' },
+                { name: 'Field Documents', icon: <ClipboardList size={20} />, path: '/admin/reports' },
+                { name: 'Absence & Attendance', icon: <CalendarCheck size={20} />, path: '/admin/attendance-hub' },
+                { name: 'Live Field Tracker', icon: <Navigation size={20} />, path: '/admin/live-tracker' },
+                { name: 'Broadcast System', icon: <Megaphone size={20} />, path: '/admin/announcements' },
                 { name: 'Task Assignments', icon: <Layers size={20} />, path: '/admin/tasks' }
             );
 
             if (isAdmin) {
-                items.push({ name: '⭐ Personnel Merit', icon: <Star size={20} />, path: '/admin/merit' });
+                items.push({ name: 'Personnel Merit', icon: <Star size={20} />, path: '/admin/merit' });
             }
 
             // Comms page differs by role
             if (isAdmin) {
-                items.push({ name: '💬 Employee Comms', icon: <MessageSquare size={20} />, path: '/admin/comms' });
+                items.push({ name: 'Employee Comms', icon: <MessageSquare size={20} />, path: '/admin/comms' });
             } else {
-                items.push({ name: '💬 Team Comms', icon: <MessageSquare size={20} />, path: '/manager/comms' });
+                items.push({ name: 'Team Comms', icon: <MessageSquare size={20} />, path: '/manager/comms' });
             }
 
             items.push(
-                { name: '⚙️ System Settings', icon: <Settings size={20} />, path: '/settings' }
+                { name: 'System Settings', icon: <Settings size={20} />, path: '/settings' }
             );
 
             return [{ title: 'Protocol Navigation', items }];
@@ -69,14 +69,14 @@ const Sidebar = () => {
             {
                 title: 'Protocol Navigation',
                 items: [
-                    { name: '📊 My Dashboard', icon: <LayoutDashboard size={20} />, path: '/dashboard' },
-                    { name: '📂 Field Reports', icon: <ClipboardList size={20} />, path: '/reports' },
-                    { name: '📅 Shift Logs', icon: <CalendarCheck size={20} />, path: '/attendance' },
-                    { name: '📄 Leave Terminal', icon: <FileText size={20} />, path: '/leave' },
+                    { name: 'My Dashboard', icon: <LayoutDashboard size={20} />, path: '/dashboard' },
+                    { name: 'Field Reports', icon: <ClipboardList size={20} />, path: '/reports' },
+                    { name: 'Shift Logs', icon: <CalendarCheck size={20} />, path: '/attendance' },
+                    { name: 'Leave Terminal', icon: <FileText size={20} />, path: '/leave' },
                     { name: 'My Tasks', icon: <Layers size={20} />, path: '/tasks' },
-                    { name: '📍 Field Operations', icon: <MapPin size={20} />, path: '/field-ops' },
-                    { name: '💬 Support Node', icon: <MessageSquare size={20} />, path: '/support' },
-                    { name: '⚙️ Identity Matrix', icon: <Settings size={20} />, path: '/settings' },
+                    { name: 'Field Operations', icon: <MapPin size={20} />, path: '/field-ops' },
+                    { name: 'Support Node', icon: <MessageSquare size={20} />, path: '/support' },
+                    { name: 'Identity Matrix', icon: <Settings size={20} />, path: '/settings' },
                 ]
             }
         ];
