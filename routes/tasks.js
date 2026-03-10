@@ -46,8 +46,17 @@ router.post('/', auth, async (req, res) => {
 // @access  Private
 router.get('/', auth, async (req, res) => {
     try {
-        // Admins and Managers see everything. Employees only see their own.
-        const filter = (req.user.role === 'admin' || req.user.role === 'manager') ? {} : { assignedTo: req.user._id };
+        // Adjudicate Database Isolation Hierarchy
+        let filter = {};
+        if (req.user.role === 'admin') {
+            filter = {}; // Admin sees all
+        } else if (req.user.role === 'manager') {
+            // Managers see tasks they own AND tasks they delegated to employees
+            filter = { $or: [{ assignedTo: req.user._id }, { assignedBy: req.user._id }] };
+        } else {
+            // Employees strictly see their own allocated tasks
+            filter = { assignedTo: req.user._id };
+        }
 
         const tasks = await Task.find(filter)
             .populate('assignedTo', 'name role employeeId')
