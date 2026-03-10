@@ -124,7 +124,7 @@ const SettingsPage = () => {
     ];
 
     return (
-        <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in slide-in-from-bottom-5 duration-700">
+        <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in slide-in-from-bottom-5 duration-700 bg-slate-900/50 p-6 md:p-10 rounded-[3rem] border border-white/5 shadow-2xl">
             {/* Notification Portal */}
             <AnimatePresence>
                 {notification && (
@@ -144,8 +144,8 @@ const SettingsPage = () => {
 
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-2xl font-serif italic text-gray-800">Identity Matrix</h1>
-                    <p className="text-xs text-gray-500 mt-1">Manage personnel credentials and security protocols.</p>
+                    <h1 className="text-3xl font-display font-black text-white tracking-tight uppercase">Identity<span className="text-indigo-500 italic">.Matrix</span></h1>
+                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mt-2">Manage personnel credentials and security protocols.</p>
                 </div>
             </div>
 
@@ -156,10 +156,10 @@ const SettingsPage = () => {
                         <button
                             key={tab.name}
                             onClick={() => setActiveTab(tab.name)}
-                            className={`w-full flex items-center gap-3 px-6 py-4 rounded-lg text-xs font-bold uppercase tracking-widest transition-all
+                            className={`w-full flex items-center gap-3 px-6 py-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all
                                 ${activeTab === tab.name
-                                    ? 'bg-white border-primary-500 text-primary-500 border-r-4 shadow-sm'
-                                    : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'}`}
+                                    ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/20 border border-indigo-400/20'
+                                    : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
                         >
                             {tab.icon}
                             {tab.name}
@@ -170,26 +170,26 @@ const SettingsPage = () => {
                 {/* Content Panel */}
                 <div className="md:col-span-3 space-y-6">
                     {activeTab === 'Identity' && (
-                        <div className="card-hr bg-white overflow-hidden">
-                            <div className="p-6 border-b border-gray-100 bg-gray-50/50 flex items-center gap-3">
-                                <UserCircle size={18} className="text-primary-600" />
-                                <h2 className="font-medium text-gray-700 italic">Profile <span className="not-italic">Configuration</span></h2>
+                        <div className="bg-slate-800/50 backdrop-blur-xl border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
+                            <div className="p-6 border-b border-white/5 bg-white/5 flex items-center gap-3">
+                                <UserCircle size={18} className="text-indigo-400" />
+                                <h2 className="text-xs font-black uppercase tracking-widest text-slate-400">Profile Configuration</h2>
                             </div>
                             <div className="p-10 space-y-10">
-                                <div className="flex items-center gap-8 border-b border-gray-50 pb-10">
+                                <div className="flex items-center gap-8 border-b border-white/5 pb-10">
                                     <div className="relative group">
-                                        <div className="w-24 h-24 rounded-full bg-gray-100 border-2 border-gray-100 overflow-hidden shadow-sm">
-                                            <div className="w-full h-full flex items-center justify-center text-3xl font-bold text-gray-300 uppercase">
+                                        <div className="w-24 h-24 rounded-[2rem] bg-slate-900 border border-white/10 overflow-hidden shadow-inner flex items-center justify-center">
+                                            <div className="text-3xl font-black text-slate-700 uppercase">
                                                 {user?.name?.charAt(0)}
                                             </div>
                                         </div>
-                                        <button className="absolute bottom-0 right-0 p-2 bg-white border border-gray-100 rounded-full text-gray-400 hover:text-primary-600 shadow-sm transform group-active:scale-90 transition-all">
+                                        <button className="absolute -bottom-2 -right-2 p-3 bg-indigo-600 border border-indigo-400/30 rounded-2xl text-white shadow-xl transform active:scale-90 transition-all">
                                             <Camera size={14} />
                                         </button>
                                     </div>
                                     <div>
-                                        <p className="text-sm font-bold text-gray-800 uppercase tracking-tight">{user?.name}</p>
-                                        <p className="text-[10px] text-gray-400 uppercase tracking-widest mt-1 font-mono italic">Sector Header: {user?.role}</p>
+                                        <p className="text-lg font-black text-white uppercase tracking-tight leading-none mb-2">{user?.name}</p>
+                                        <p className="text-[10px] text-indigo-400 uppercase tracking-[0.2em] font-black">Sector Header: {user?.role}</p>
                                     </div>
                                 </div>
 
@@ -204,7 +204,7 @@ const SettingsPage = () => {
                                 <button
                                     onClick={handleIdentityUpdate}
                                     disabled={loading}
-                                    className="btn-teal px-8 py-3 text-[10px] font-bold uppercase tracking-widest shadow-lg shadow-primary-500/10 active:scale-95 transition-all disabled:opacity-50"
+                                    className="px-10 py-4 bg-indigo-600 text-white text-[10px] font-black uppercase tracking-[0.2em] shadow-xl shadow-indigo-600/20 active:scale-95 transition-all disabled:opacity-50 rounded-2xl border border-indigo-400/20"
                                 >
                                     {loading ? 'Processing...' : 'Update Identity Profile'}
                                 </button>
@@ -213,10 +213,10 @@ const SettingsPage = () => {
                     )}
 
                     {activeTab === 'Security' && (
-                        <div className="card-hr bg-white overflow-hidden">
-                            <div className="p-6 border-b border-gray-100 bg-gray-50/50 flex items-center gap-3">
-                                <Shield size={18} className="text-primary-600" />
-                                <h2 className="font-medium text-gray-700 italic">Security <span className="not-italic">Protocol Update</span></h2>
+                        <div className="bg-slate-800/50 backdrop-blur-xl border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
+                            <div className="p-6 border-b border-white/5 bg-white/5 flex items-center gap-3">
+                                <Shield size={18} className="text-indigo-400" />
+                                <h2 className="text-xs font-black uppercase tracking-widest text-slate-400">Security Protocol Update</h2>
                             </div>
                             <form onSubmit={handlePasswordUpdate} className="p-10 space-y-10">
                                 <div className="space-y-8">
@@ -242,18 +242,18 @@ const SettingsPage = () => {
                                     </div>
                                 </div>
 
-                                <div className="flex items-center justify-between pt-6 border-t border-gray-50">
+                                <div className="flex items-center justify-between pt-6 border-t border-white/5">
                                     <button
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
-                                        className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2 hover:text-primary-600 transition-colors"
+                                        className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2 hover:text-white transition-colors"
                                     >
                                         {showPassword ? <EyeOff size={14} /> : <Eye size={14} />} Reveal Metrics
                                     </button>
                                     <button
                                         type="submit"
                                         disabled={loading}
-                                        className="btn-teal px-10 py-3 text-[10px] font-bold uppercase tracking-widest flex items-center gap-3 shadow-lg shadow-primary-500/10 active:scale-95 transition-all disabled:opacity-50"
+                                        className="px-10 py-4 bg-indigo-600 text-white text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-3 shadow-xl shadow-indigo-600/20 active:scale-95 transition-all disabled:opacity-50 rounded-2xl border border-indigo-400/20"
                                     >
                                         {loading ? <Smartphone className="animate-spin" size={14} /> : <Save size={14} />} Update Security Matrix
                                     </button>
@@ -263,10 +263,10 @@ const SettingsPage = () => {
                     )}
 
                     {activeTab === 'Alerts' && (
-                        <div className="card-hr bg-white overflow-hidden">
-                            <div className="p-6 border-b border-gray-100 bg-gray-50/50 flex items-center gap-3">
-                                <Bell size={18} className="text-primary-600" />
-                                <h2 className="font-medium text-gray-700 italic">Notification <span className="not-italic">Preferences</span></h2>
+                        <div className="bg-slate-800/50 backdrop-blur-xl border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
+                            <div className="p-6 border-b border-white/5 bg-white/5 flex items-center gap-3">
+                                <Bell size={18} className="text-indigo-400" />
+                                <h2 className="text-xs font-black uppercase tracking-widest text-slate-400">Notification Preferences</h2>
                             </div>
                             <div className="p-8 space-y-6">
                                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-6">Choose which alerts you want to receive</p>
@@ -287,7 +287,7 @@ const SettingsPage = () => {
                                         onChange={() => togglePref('leave')}
                                     />
                                     <TogglePreference
-                                        icon={<Bell size={16} className="text-primary-500" />}
+                                        icon={<Bell size={16} className="text-indigo-500" />}
                                         label="System Broadcasts"
                                         desc="Stay informed with company-wide announcements"
                                         checked={notificationPrefs.broadcasts}
@@ -316,13 +316,13 @@ const SettingsPage = () => {
                                     />
                                 </div>
 
-                                <div className="pt-6 border-t border-gray-50 flex items-center justify-between gap-4">
-                                    <p className="text-[10px] text-gray-400 font-medium">
+                                <div className="pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-6">
+                                    <p className="text-[9px] text-slate-600 font-black uppercase tracking-widest max-w-xs text-center sm:text-left">
                                         Preferences are saved locally. Contact admin to enable email delivery.
                                     </p>
                                     <button
                                         onClick={handleSaveAlerts}
-                                        className="btn-teal px-8 py-3 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 shadow-lg shadow-primary-500/10 active:scale-95 transition-all whitespace-nowrap"
+                                        className="px-10 py-4 bg-indigo-600 text-white text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-2 shadow-xl shadow-indigo-600/20 active:scale-95 transition-all whitespace-nowrap rounded-2xl border border-indigo-400/20"
                                     >
                                         <Save size={14} />
                                         Save Preferences
@@ -333,10 +333,10 @@ const SettingsPage = () => {
                     )}
 
                     {activeTab === 'Portal Config' && user?.email === 'admin@cctv.com' && (
-                        <div className="card-hr bg-white overflow-hidden">
-                            <div className="p-6 border-b border-gray-100 bg-gray-50/50 flex items-center gap-3">
-                                <Globe size={18} className="text-primary-600" />
-                                <h2 className="font-medium text-gray-700 italic">Portal <span className="not-italic">External Integration</span></h2>
+                        <div className="bg-slate-800/50 backdrop-blur-xl border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
+                            <div className="p-6 border-b border-white/5 bg-white/5 flex items-center gap-3">
+                                <Globe size={18} className="text-indigo-400" />
+                                <h2 className="text-xs font-black uppercase tracking-widest text-slate-400">Portal External Integration</h2>
                             </div>
                             <div className="p-10 space-y-10">
                                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Update links for external platforms and customer reviews.</p>
@@ -358,16 +358,16 @@ const SettingsPage = () => {
                                     />
                                 </div>
 
-                                <div className="pt-6 border-t border-gray-50 flex flex-col gap-4">
-                                    <div className="p-4 bg-blue-50/50 rounded-xl border border-blue-100 flex items-start gap-3">
-                                        <AlertCircle size={16} className="text-blue-500 mt-0.5" />
-                                        <p className="text-[10px] font-medium text-blue-800 uppercase tracking-tight">
+                                <div className="pt-6 border-t border-white/5 flex flex-col gap-6">
+                                    <div className="p-6 bg-indigo-500/5 rounded-[1.5rem] border border-indigo-500/10 flex items-start gap-3">
+                                        <AlertCircle size={16} className="text-indigo-400 mt-0.5" />
+                                        <p className="text-[10px] font-black text-indigo-400 uppercase tracking-tight leading-relaxed">
                                             Changes here affect the "Cx Platform" button in the Command Center and the "Share Review Link" button for field partners.
                                         </p>
                                     </div>
                                     <button
                                         onClick={handleSavePortalConfig}
-                                        className="btn-teal px-10 py-3.5 text-[10px] font-bold uppercase tracking-widest flex items-center gap-3 shadow-lg shadow-primary-500/10 active:scale-95 transition-all self-end"
+                                        className="px-10 py-5 bg-indigo-600 text-white text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-3 shadow-xl shadow-indigo-600/20 active:scale-95 transition-all self-end rounded-2xl border border-indigo-400/20"
                                     >
                                         <Save size={16} /> Update Integration Protocols
                                     </button>
@@ -378,7 +378,7 @@ const SettingsPage = () => {
                 </div>
             </div>
 
-            <div className="p-6 bg-blue-50 text-blue-800 rounded border border-blue-100 text-[10px] font-bold uppercase tracking-widest flex items-center gap-3">
+            <div className="p-6 bg-slate-950 text-slate-500 rounded-[1.5rem] border border-white/5 text-[9px] font-black uppercase tracking-[0.3em] flex items-center gap-3 justify-center shadow-inner">
                 <Server size={14} /> Secure Encryption: AES-256 Validated Node
             </div>
         </div>
@@ -386,8 +386,8 @@ const SettingsPage = () => {
 };
 
 const SettingsInput = ({ label, value, onChange, placeholder, type = "text", readOnly }) => (
-    <div className="space-y-2.5">
-        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] ml-1 font-mono">{label}</label>
+    <div className="space-y-3">
+        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">{label}</label>
         <div className="relative">
             <input
                 readOnly={readOnly}
@@ -396,9 +396,9 @@ const SettingsInput = ({ label, value, onChange, placeholder, type = "text", rea
                 value={value}
                 onChange={e => onChange?.(e.target.value)}
                 placeholder={placeholder}
-                className={`w-full bg-white border border-gray-200 rounded p-4 text-xs font-bold text-gray-600 focus:outline-none focus:border-primary-600 transition-all ${readOnly ? 'bg-gray-50/50 cursor-not-allowed text-gray-400' : ''}`}
+                className={`w-full bg-slate-900 border border-white/5 rounded-2xl p-4 text-sm font-black text-white focus:outline-none focus:border-indigo-500/50 transition-all placeholder:text-slate-800 outline-none shadow-inner uppercase tracking-tight ${readOnly ? 'bg-slate-950/50 cursor-not-allowed text-slate-600' : ''}`}
             />
-            {readOnly && <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-200"><Lock size={12} /></div>}
+            {readOnly && <div className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-800"><Lock size={12} /></div>}
         </div>
     </div>
 );
@@ -406,19 +406,19 @@ const SettingsInput = ({ label, value, onChange, placeholder, type = "text", rea
 const TogglePreference = ({ icon, label, desc, checked, onChange }) => (
     <div
         onClick={onChange}
-        className="flex items-center justify-between gap-6 p-5 bg-gray-50/50 border border-gray-100 rounded-2xl hover:border-primary-100 hover:bg-primary-50/20 transition-all cursor-pointer group"
+        className="flex items-center justify-between gap-6 p-6 bg-slate-900 border border-white/5 rounded-[2rem] hover:border-indigo-500/30 hover:bg-slate-800 transition-all cursor-pointer group shadow-inner"
     >
-        <div className="flex items-center gap-4">
-            <div className="p-2.5 bg-white rounded-xl border border-gray-100 shadow-sm group-hover:scale-105 transition-transform">
+        <div className="flex items-center gap-5">
+            <div className="p-3.5 bg-slate-800 rounded-2xl border border-white/5 shadow-xl group-hover:scale-110 transition-transform">
                 {icon}
             </div>
             <div>
-                <p className="text-xs font-black text-gray-700 uppercase tracking-wider">{label}</p>
-                <p className="text-[10px] font-medium text-gray-400 mt-0.5">{desc}</p>
+                <p className="text-xs font-black text-white uppercase tracking-wider">{label}</p>
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">{desc}</p>
             </div>
         </div>
-        <div className={`relative w-11 h-6 rounded-full transition-colors duration-300 flex-shrink-0 ${checked ? 'bg-primary-500' : 'bg-gray-200'}`}>
-            <div className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-transform duration-300 ${checked ? 'translate-x-5' : 'translate-x-0.5'}`} />
+        <div className={`relative w-12 h-6 rounded-full transition-colors duration-500 flex-shrink-0 ${checked ? 'bg-indigo-600' : 'bg-slate-800'}`}>
+            <div className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow-lg transition-transform duration-500 ${checked ? 'translate-x-6' : 'translate-x-1'}`} />
         </div>
     </div>
 );

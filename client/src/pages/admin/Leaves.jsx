@@ -115,36 +115,34 @@ const AdminLeaves = () => {
             </AnimatePresence>
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
-                    <h1 className="text-3xl font-display font-black text-slate-800 tracking-tight leading-none">Absence<span className="text-primary-500 italic">.Auth</span></h1>
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mt-3">Personnel Absence Authorization Interface</p>
+                    <h1 className="text-3xl font-display font-black text-white tracking-tight leading-none uppercase">Absence<span className="text-indigo-500 italic">.Auth</span></h1>
+                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mt-3">Personnel Absence Authorization Interface</p>
                 </div>
                 <div className="flex items-center gap-4">
-                    <div className="bg-orange-50/80 backdrop-blur-sm text-orange-500 px-6 py-3 border border-orange-100 rounded-2xl flex items-center gap-3 shadow-sm">
+                    <div className="bg-orange-500/10 backdrop-blur-sm text-orange-400 px-6 py-3 border border-orange-500/20 rounded-2xl flex items-center gap-3 shadow-sm">
                         <div className="relative">
                             <Clock size={16} className="animate-spin-slow" />
-                            <div className="absolute inset-0 bg-orange-200 blur-md opacity-20" />
                         </div>
                         <span className="text-[10px] font-black uppercase tracking-[0.15em]">{leaves.filter(l => l.status === 'Pending').length} Pending Requests</span>
                     </div>
                     <button
                         onClick={exportToCSV}
-                        className="btn-teal px-8 py-3.5 flex items-center gap-3"
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3.5 flex items-center gap-3 rounded-2xl shadow-lg shadow-indigo-600/20 transition-all font-bold active:scale-95 text-xs uppercase tracking-widest"
                     >
-                        <Download size={20} />
-                        <span className="text-xs font-black uppercase tracking-widest">Absence Matrix</span>
+                        <Download size={20} /> Absence Matrix
                     </button>
                 </div>
             </div>
 
-            <div className="card-premium flex flex-col bg-white/50 backdrop-blur-sm shadow-[0_20px_50px_rgba(0,0,0,0.03)] border-white/50">
-                <div className="p-8 border-b border-slate-100 flex items-center gap-6 bg-white/30">
+            <div className="card-premium flex flex-col shadow-2xl">
+                <div className="p-8 border-b border-white/5 flex items-center gap-6 bg-white/5">
                     <div className="relative flex-1 w-full">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
                         <input
                             placeholder="Search by personnel, type or reasoning..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full bg-white border border-slate-200 rounded-2xl py-3.5 pl-12 pr-6 text-sm focus:outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/5 transition-all text-slate-700 placeholder:text-slate-300 shadow-sm font-medium"
+                            className="w-full bg-slate-900/50 border border-white/10 rounded-2xl py-3.5 pl-12 pr-6 text-sm focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all text-slate-200 placeholder:text-slate-500 shadow-inner font-medium"
                         />
                     </div>
                 </div>
@@ -152,51 +150,51 @@ const AdminLeaves = () => {
                 <div className="overflow-x-auto min-w-full sidebar-scroll">
                     <table className="w-full text-left border-collapse min-w-[1200px]">
                         <thead>
-                            <tr className="bg-slate-50/50">
-                                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-slate-100">Personnel Node</th>
-                                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-slate-100">Absence Vector</th>
-                                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-slate-100">Temporal Range</th>
-                                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-slate-100">Registry Reason</th>
-                                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-slate-100">Auth Status</th>
-                                <th className="px-8 py-5 text-right text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-slate-100">Verification</th>
+                            <tr className="bg-white/5">
+                                <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-[0.15em] border-b border-white/5">Personnel Node</th>
+                                <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-[0.15em] border-b border-white/5">Absence Vector</th>
+                                <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-[0.15em] border-b border-white/5">Temporal Range</th>
+                                <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-[0.15em] border-b border-white/5">Registry Reason</th>
+                                <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-[0.15em] border-b border-white/5">Auth Status</th>
+                                <th className="px-8 py-5 text-right text-[10px] font-black text-slate-500 uppercase tracking-[0.15em] border-b border-white/5">Verification</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-50">
+                        <tbody className="divide-y divide-white/5">
                             {filtered.length > 0 ? filtered.map((leave) => (
                                 <tr key={leave._id} className="hover:bg-primary-50/30 transition-all group">
                                     <td className="px-8 py-6">
                                         <div className="flex items-center gap-4">
-                                            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-slate-100 to-slate-50 border border-slate-200 flex items-center justify-center font-black text-slate-400 text-sm uppercase shadow-sm group-hover:scale-105 transition-transform">
+                                            <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center font-black text-indigo-400 text-sm uppercase shadow-inner group-hover:scale-105 transition-transform">
                                                 {leave.employee?.name?.charAt(0) || '?'}
                                             </div>
                                             <div>
-                                                <p className="text-sm font-black text-slate-800 leading-none uppercase tracking-tight">{leave.employee?.name || 'Unknown'}</p>
-                                                <p className="text-[10px] text-slate-400 font-mono mt-1">{leave.employee?.employeeId || ''}</p>
+                                                <p className="text-sm font-black text-white leading-none uppercase tracking-tight">{leave.employee?.name || 'Unknown'}</p>
+                                                <p className="text-[10px] text-slate-600 font-bold mt-1 uppercase tracking-widest">ID: {leave.employee?.employeeId || ''}</p>
                                             </div>
                                         </div>
                                     </td>
                                     <td className="px-8 py-6">
-                                        <span className="text-[9px] font-black text-primary-500 bg-primary-50 px-3 py-1.5 rounded-lg border border-primary-100 uppercase tracking-[0.15em] shadow-sm">
+                                        <span className="text-[9px] font-black text-indigo-400 bg-indigo-500/10 px-3 py-1.5 rounded-lg border border-indigo-500/20 uppercase tracking-[0.15em]">
                                             {leave.leaveType}
                                         </span>
                                     </td>
                                     <td className="px-8 py-6">
-                                        <div className="text-[11px] font-black text-slate-600 flex items-center gap-3 uppercase tracking-tighter tabular-nums bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100 inline-flex">
-                                            <Calendar size={14} className="text-slate-300" />
+                                        <div className="text-[11px] font-black text-slate-400 flex items-center gap-3 uppercase tracking-tighter tabular-nums bg-white/5 px-3 py-1.5 rounded-lg border border-white/5 inline-flex">
+                                            <Calendar size={14} className="text-slate-600" />
                                             {new Date(leave.startDate).toLocaleDateString(undefined, { day: '2-digit', month: 'short' })}
-                                            <span className="text-slate-200 mx-1">—</span>
+                                            <span className="text-slate-800 mx-1">—</span>
                                             {new Date(leave.endDate).toLocaleDateString(undefined, { day: '2-digit', month: 'short', year: 'numeric' })}
                                         </div>
                                     </td>
                                     <td className="px-8 py-6">
-                                        <p className="text-[11px] font-medium text-slate-400 max-w-[250px] leading-relaxed italic border-l-2 border-slate-100 pl-4 py-1">"{leave.reason}"</p>
+                                        <p className="text-[11px] font-medium text-slate-500 max-w-[250px] leading-relaxed italic border-l-2 border-white/5 pl-4 py-1">"{leave.reason}"</p>
                                     </td>
                                     <td className="px-8 py-6">
                                         <span className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.12em] shadow-sm
-                                            ${leave.status === 'Approved' ? 'bg-emerald-50 text-emerald-500 border border-emerald-100' :
-                                                leave.status === 'Rejected' ? 'bg-red-50 text-red-500 border border-red-100' :
-                                                    'bg-orange-50 text-orange-500 border border-orange-100 shadow-orange-500/5'}`}>
-                                            <div className={`w-1.5 h-1.5 rounded-full ${leave.status === 'Approved' ? 'bg-emerald-500' : leave.status === 'Rejected' ? 'bg-red-500' : 'bg-orange-500 animate-pulse'}`} />
+                                            ${leave.status === 'Approved' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                                                leave.status === 'Rejected' ? 'bg-red-500/10 text-red-400 border border-red-500/20' :
+                                                    'bg-orange-500/10 text-orange-400 border border-orange-500/20 shadow-orange-500/5'}`}>
+                                            <div className={`w-1.5 h-1.5 rounded-full ${leave.status === 'Approved' ? 'bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : leave.status === 'Rejected' ? 'bg-red-400' : 'bg-orange-400 animate-pulse'}`} />
                                             {leave.status}
                                         </span>
                                     </td>
@@ -205,14 +203,14 @@ const AdminLeaves = () => {
                                             <div className="flex justify-end gap-3 opacity-30 group-hover:opacity-100 transition-all transform translate-x-2 group-hover:translate-x-0">
                                                 <button
                                                     onClick={() => handleAction(leave._id, 'Approved')}
-                                                    className="p-3 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-xl hover:bg-emerald-500 hover:text-white hover:shadow-xl hover:shadow-emerald-500/20 transition-all"
+                                                    className="p-3 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl hover:bg-emerald-500 hover:text-white hover:shadow-xl hover:shadow-emerald-500/20 transition-all focus:outline-none"
                                                     title="Authorize Protocol"
                                                 >
                                                     <CheckCircle size={18} />
                                                 </button>
                                                 <button
                                                     onClick={() => handleAction(leave._id, 'Rejected')}
-                                                    className="p-3 bg-red-50 text-red-600 border border-red-100 rounded-xl hover:bg-red-500 hover:text-white hover:shadow-xl hover:shadow-red-500/20 transition-all"
+                                                    className="p-3 bg-red-500/10 text-red-400 border border-red-500/20 rounded-xl hover:bg-red-500 hover:text-white hover:shadow-xl hover:shadow-red-500/20 transition-all focus:outline-none"
                                                     title="Registry Denial"
                                                 >
                                                     <XCircle size={18} />
@@ -222,7 +220,7 @@ const AdminLeaves = () => {
                                             <div className="relative">
                                                 <button
                                                     onClick={() => setActiveDropdown(activeDropdown === leave._id ? null : leave._id)}
-                                                    className="p-2.5 bg-white border border-slate-100 rounded-xl text-slate-200 hover:text-primary-500 hover:border-primary-100 shadow-sm transition-all"
+                                                    className="p-2.5 bg-white/5 border border-white/10 rounded-xl text-slate-500 hover:text-indigo-400 hover:border-indigo-500/30 shadow-sm transition-all focus:outline-none"
                                                 >
                                                     <MoreVertical size={18} />
                                                 </button>
@@ -233,7 +231,7 @@ const AdminLeaves = () => {
                                                             initial={{ opacity: 0, scale: 0.95, y: -10 }}
                                                             animate={{ opacity: 1, scale: 1, y: 0 }}
                                                             exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                                                            className="absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-2xl border border-slate-100 z-50 overflow-hidden"
+                                                            className="absolute right-0 mt-2 w-48 bg-[#1E293B] rounded-2xl shadow-2xl border border-white/10 z-50 overflow-hidden"
                                                         >
                                                             <div className="p-2 space-y-1">
                                                                 <button
@@ -241,7 +239,7 @@ const AdminLeaves = () => {
                                                                         showNotification('info', 'Registry permanently archived.');
                                                                         setActiveDropdown(null);
                                                                     }}
-                                                                    className="w-full text-left px-4 py-2.5 rounded-lg text-[10px] font-black uppercase text-slate-600 hover:bg-slate-50 transition-colors"
+                                                                    className="w-full text-left px-4 py-2.5 rounded-lg text-[10px] font-black uppercase text-slate-400 hover:bg-white/5 hover:text-indigo-400 transition-colors"
                                                                 >
                                                                     Permanent Archive
                                                                 </button>
@@ -250,7 +248,7 @@ const AdminLeaves = () => {
                                                                         handleAction(leave._id, 'Pending');
                                                                         setActiveDropdown(null);
                                                                     }}
-                                                                    className="w-full text-left px-4 py-2.5 rounded-lg text-[10px] font-black uppercase text-orange-500 hover:bg-orange-50 transition-colors"
+                                                                    className="w-full text-left px-4 py-2.5 rounded-lg text-[10px] font-black uppercase text-orange-400 hover:bg-white/5 hover:text-orange-300 transition-colors"
                                                                 >
                                                                     Revoke Auth
                                                                 </button>

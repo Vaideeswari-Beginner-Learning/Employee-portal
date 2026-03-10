@@ -80,13 +80,13 @@ const Announcements = () => {
 
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
-                    <h1 className="text-3xl font-display font-black text-white tracking-tight leading-none">Broadcast<span className="text-primary-500">.Control</span></h1>
+                    <h1 className="text-3xl font-display font-black text-white tracking-tight leading-none uppercase">Broadcast<span className="text-indigo-500">.Control</span></h1>
                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mt-3">Global Infrastructure Communications</p>
                 </div>
                 {isAdmin && (
                     <button
                         onClick={() => setShowModal(true)}
-                        className="bg-primary-500 hover:bg-primary-600 text-white px-8 py-4 rounded-2xl shadow-xl shadow-primary-500/20 transition-all font-bold active:scale-95 flex items-center gap-3"
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-2xl shadow-xl shadow-indigo-600/20 transition-all font-bold active:scale-95 flex items-center gap-3"
                     >
                         <Plus size={18} />
                         <span className="text-[10px] font-black uppercase tracking-widest">New Broadcast</span>
@@ -97,7 +97,7 @@ const Announcements = () => {
             <div className="grid grid-cols-1 gap-6">
                 {loading ? (
                     <div className="py-20 text-center flex flex-col items-center justify-center bg-slate-800/50 backdrop-blur-xl rounded-[2rem] border border-white/5 shadow-2xl">
-                        <Loader2 className="animate-spin text-primary-500 mb-4" size={32} />
+                        <Loader2 className="animate-spin text-indigo-500 mb-4" size={32} />
                         <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Scanning Communication Channels...</p>
                     </div>
                 ) : announcements.length > 0 ? (
@@ -110,7 +110,7 @@ const Announcements = () => {
                         >
                             <div className="space-y-4 flex-1">
                                 <div className="flex items-center gap-4">
-                                    <div className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${item.priority === 'high' ? 'bg-red-500/10 text-red-500 border-red-500/20' : item.priority === 'medium' ? 'bg-primary-500/10 text-primary-400 border-primary-500/20' : 'bg-slate-700 text-slate-400 border-white/10'}`}>
+                                    <div className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${item.priority === 'high' ? 'bg-red-500/10 text-red-500 border-red-500/20' : item.priority === 'medium' ? 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' : 'bg-slate-700 text-slate-400 border-white/10'}`}>
                                         {item.priority} Priority
                                     </div>
                                     <span className="text-[9px] font-bold text-slate-500 uppercase tracking-tighter flex items-center gap-2">
@@ -166,7 +166,7 @@ const Announcements = () => {
                             <form onSubmit={handleSubmit} className="p-10 space-y-8">
                                 <div className="flex items-center justify-between border-b border-white/5 pb-6">
                                     <div>
-                                        <h2 className="text-2xl font-display font-black text-white tracking-tight leading-none">Initialize <span className="text-primary-500">Broadcast</span></h2>
+                                        <h2 className="text-2xl font-display font-black text-white tracking-tight leading-none uppercase">Initialize <span className="text-indigo-500">Broadcast</span></h2>
                                         <p className="text-[9px] font-bold text-slate-500 uppercase tracking-[0.3em] mt-2">Network Layer Broadcast Registry</p>
                                     </div>
                                     <button
@@ -186,7 +186,7 @@ const Announcements = () => {
                                             type="text"
                                             value={formData.title}
                                             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                                            className="w-full px-6 py-4 bg-slate-800/50 border border-white/10 rounded-2xl text-sm font-bold text-white focus:ring-4 focus:ring-primary-500/10 focus:border-primary-500/30 transition-all outline-none placeholder:text-slate-600"
+                                            className="w-full px-6 py-4 bg-slate-800/50 border border-white/10 rounded-2xl text-sm font-bold text-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/30 transition-all outline-none placeholder:text-slate-600 shadow-inner"
                                             placeholder="Emergency Server Maintenance..."
                                         />
                                     </div>
@@ -199,7 +199,7 @@ const Announcements = () => {
                                                     key={p}
                                                     type="button"
                                                     onClick={() => setFormData({ ...formData, priority: p })}
-                                                    className={`py-3 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${formData.priority === p ? 'bg-primary-500 border-primary-500 text-white shadow-lg' : 'bg-white/5 border-white/10 text-slate-500 hover:border-primary-500/30'}`}
+                                                    className={`py-3 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${formData.priority === p ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-600/20' : 'bg-white/5 border-white/10 text-slate-500 hover:border-indigo-500/30'}`}
                                                 >
                                                     {p}
                                                 </button>
@@ -214,7 +214,7 @@ const Announcements = () => {
                                             rows={5}
                                             value={formData.content}
                                             onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                                            className="w-full px-6 py-4 bg-slate-800/50 border border-white/10 rounded-2xl text-sm font-bold text-white focus:ring-4 focus:ring-primary-500/10 focus:border-primary-500/30 transition-all outline-none placeholder:text-slate-600 resize-none"
+                                            className="w-full px-6 py-4 bg-slate-800/50 border border-white/10 rounded-2xl text-sm font-bold text-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/30 transition-all outline-none placeholder:text-slate-600 resize-none shadow-inner"
                                             placeholder="Detailed transmission data goes here..."
                                         />
                                     </div>
@@ -224,7 +224,7 @@ const Announcements = () => {
                                     <button
                                         type="submit"
                                         disabled={loading}
-                                        className="flex-1 py-5 bg-primary-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] shadow-xl shadow-primary-500/20 hover:bg-primary-600 transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3"
+                                        className="flex-1 py-5 bg-indigo-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] shadow-xl shadow-indigo-600/20 hover:bg-indigo-700 transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3"
                                     >
                                         {loading ? <Loader2 className="animate-spin" size={18} /> : <Megaphone size={18} />}
                                         Initialize Transmission

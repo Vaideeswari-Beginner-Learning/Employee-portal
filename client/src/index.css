@@ -17,7 +17,7 @@
   --color-primary-900: #312e81;
 
   --color-sidebar: #0f172a;
-  --color-accent: #22c55e;
+  --color-accent: #6366f1;
   --color-success: #22c55e;
 }
 
@@ -35,70 +35,75 @@ body {
   color: #f1f5f9;
 }
 
-/* Premium Card Style - Dark Modern Glassmorphism */
+/* Premium Card Style - Dark Modern */
 .card-premium {
   background: rgba(30, 41, 59, 0.5);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 2.5rem;
+  border-radius: 2rem;
   box-shadow:
-    0 25px 50px -12px rgba(0, 0, 0, 0.5),
-    inset 0 1px 1px rgba(255, 255, 255, 0.05);
-  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
 }
 
 .card-premium:hover {
-  transform: translateY(-8px) scale(1.01);
-  border-color: rgba(99, 102, 241, 0.4);
+  transform: translateY(-5px);
   box-shadow:
-    0 35px 60px -15px rgba(0, 0, 0, 0.6),
-    0 0 30px rgba(99, 102, 241, 0.1);
+    0 20px 25px -5px rgba(0, 0, 0, 0.2),
+    0 10px 10px -5px rgba(0, 0, 0, 0.1);
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+/* Glassmorphism - Dark Mode */
+.glass-premium {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }
 
 /* Sidebar Specifics */
 .sidebar-nav-item {
   color: #94a3b8;
-  padding: 1rem 1.5rem;
+  padding: 0.875rem 1.25rem;
   display: flex;
   align-items: center;
-  gap: 1.25rem;
-  font-size: 0.75rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  transition: all 0.3s ease;
-  border-radius: 1.25rem;
-  margin: 0.5rem 1rem;
+  gap: 1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  border-radius: 1rem;
+  margin: 0.25rem 0.75rem;
 }
 
 .sidebar-nav-item:hover {
-  background: rgba(255, 255, 255, 0.03);
-  color: white;
-  transform: translateX(6px);
+  background: rgba(255, 255, 255, 0.05);
+  color: #f1f5f9;
+  transform: translateX(4px);
 }
 
 .sidebar-nav-item.active {
   background: rgba(99, 102, 241, 0.1);
-  color: #818cf8;
+  color: #6366f1;
   border: 1px solid rgba(99, 102, 241, 0.2);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Dark Mesh Gradient Background */
+/* Dark Mesh Gradient */
 .gradient-mesh-bg {
-  background: #0f172a;
+  background-color: #0f172a;
   background-image:
-    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, rgba(124, 58, 237, 0.1) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(34, 197, 94, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.05) 0px, transparent 50%);
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -106,23 +111,23 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: #1e293b;
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: #334155;
 }
 
-/* Glass Buttons */
+/* Enterprise Buttons */
 .btn-premium {
-  @apply px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all active:scale-95;
-}
-
-.btn-teal {
-  @apply bg-emerald-500 text-white shadow-xl shadow-emerald-500/20 hover:bg-emerald-600;
+  @apply px-6 py-3 rounded-xl font-bold text-xs transition-all active:scale-95 shadow-lg;
 }
 
 .btn-indigo {
-  @apply bg-indigo-500 text-white shadow-xl shadow-indigo-500/20 hover:bg-indigo-600;
+  @apply bg-primary-500 text-white hover:bg-primary-600 shadow-primary-500/20;
+}
+
+.btn-teal {
+  @apply bg-emerald-500 text-white hover:bg-emerald-600 shadow-emerald-500/20;
 }

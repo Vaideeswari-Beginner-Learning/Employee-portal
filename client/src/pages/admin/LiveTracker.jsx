@@ -78,8 +78,8 @@ const LiveTracker = () => {
         <div className="min-h-screen bg-slate-900 p-6 md:p-10 space-y-12 animate-in fade-in slide-in-from-bottom-5 duration-1000">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 max-w-7xl mx-auto">
                 <div>
-                    <h1 className="text-5xl font-display font-black tracking-tight leading-none text-white">
-                        Operational<span className="text-primary-500">.Pulse</span>
+                    <h1 className="text-5xl font-display font-black tracking-tight leading-none text-white uppercase">
+                        Operational<span className="text-indigo-500">.Pulse</span>
                     </h1>
                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.5em] mt-5 ml-1">Central Geospatial Command Center</p>
                 </div>
@@ -100,13 +100,13 @@ const LiveTracker = () => {
                         <div className="w-px h-6 bg-white/10" />
                         <div className="flex flex-col items-center">
                             <span className="text-[9px] font-black text-slate-500 uppercase tracking-tighter leading-none">Next</span>
-                            <span className="text-[9px] font-black text-primary-400 tabular-nums mt-1">{countdown}s</span>
+                            <span className="text-[9px] font-black text-indigo-400 tabular-nums mt-1">{countdown}s</span>
                         </div>
                     </div>
                     <button
                         onClick={() => fetchActiveSessions(false)}
                         title="Refresh Now"
-                        className="bg-white/5 border border-white/10 p-4 rounded-2xl text-slate-400 hover:text-primary-400 shadow-xl hover:bg-white/10 transition-all active:scale-95"
+                        className="bg-white/5 border border-white/10 p-4 rounded-2xl text-slate-400 hover:text-indigo-400 shadow-xl hover:bg-white/10 transition-all active:scale-95"
                     >
                         <RefreshCw size={20} className={loading ? 'animate-spin' : ''} />
                     </button>
@@ -126,7 +126,7 @@ const LiveTracker = () => {
                 <MetricCard
                     label="Operational History"
                     value={activeSessions.length}
-                    icon={<Navigation className="text-primary-500" />}
+                    icon={<Navigation className="text-indigo-500" />}
                     trend="Total Sessions"
                     onClick={() => document.getElementById('deployment-registry')?.scrollIntoView({ behavior: 'smooth' })}
                     hint="View Sessions"
@@ -170,7 +170,7 @@ const LiveTracker = () => {
                             placeholder="Filter by Employee or Registry ID..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-12 pr-4 py-4 bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-2xl text-[12px] font-bold text-white focus:ring-4 focus:ring-primary-500/10 focus:border-primary-500/30 transition-all outline-none placeholder:text-slate-600"
+                            className="w-full pl-12 pr-4 py-4 bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-2xl text-[12px] font-bold text-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/30 transition-all outline-none placeholder:text-slate-600 shadow-inner"
                         />
                     </div>
                 </div>
@@ -246,10 +246,10 @@ const LiveTracker = () => {
                                                 )}
                                             </div>
                                             <div>
-                                                <h3 className="text-xl font-black text-white tracking-tight leading-none group-hover/card:text-primary-400 transition-colors">
+                                                <h3 className="text-xl font-black text-white tracking-tight leading-none group-hover/card:text-indigo-400 transition-colors uppercase">
                                                     {session.employee?.name || 'Unknown Employee'}
                                                 </h3>
-                                                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2">
+                                                <p className="text-[10px] font-bold text-slate-600 uppercase tracking-widest mt-2">
                                                     ID: {session._id.slice(-8).toUpperCase()}
                                                 </p>
                                             </div>
@@ -260,7 +260,7 @@ const LiveTracker = () => {
                                                 label="Initialization"
                                                 value={new Date(session.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                 subValue={new Date(session.startTime).toLocaleDateString()}
-                                                icon={<Clock size={16} className="text-primary-400" />}
+                                                icon={<Clock size={16} className="text-indigo-400" />}
                                             />
                                             <TrackerStat
                                                 label={isLive ? "Active Node" : "End Point"}
@@ -284,7 +284,7 @@ const LiveTracker = () => {
                                                     const url = `https://www.google.com/maps?q=${latestLocation.latitude},${latestLocation.longitude}`;
                                                     window.open(url, '_blank');
                                                 }}
-                                                className={`flex-1 sm:flex-none px-6 py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] shadow-xl transition-all flex items-center justify-center gap-3 active:scale-95 group/btn ${isLive ? 'bg-primary-500 text-white shadow-primary-500/20 hover:bg-primary-600' : 'bg-white/5 text-slate-500 border border-white/10 hover:bg-white/10 hover:text-slate-300'}`}
+                                                className={`flex-1 sm:flex-none px-6 py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] shadow-xl transition-all flex items-center justify-center gap-3 active:scale-95 group/btn ${isLive ? 'bg-indigo-600 text-white shadow-indigo-600/20 hover:bg-indigo-700' : 'bg-white/5 text-slate-500 border border-white/10 hover:bg-white/10 hover:text-slate-300'}`}
                                             >
                                                 <Navigation size={16} className="group-hover/btn:rotate-12 transition-transform" />
                                                 Watch Path
@@ -313,28 +313,28 @@ const LiveTracker = () => {
 const MetricCard = ({ label, value, icon, trend, onClick, hint }) => (
     <div
         onClick={onClick}
-        className={`bg-slate-800/50 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/5 shadow-2xl hover:shadow-primary-500/10 transition-all hover:translate-y-[-4px] group relative overflow-hidden ${onClick ? 'cursor-pointer' : ''}`}
+        className={`bg-slate-800/50 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/5 shadow-2xl hover:shadow-indigo-500/10 transition-all hover:translate-y-[-4px] group relative overflow-hidden ${onClick ? 'cursor-pointer' : ''}`}
     >
         {/* Subtle hover glow */}
         {onClick && (
-            <div className="absolute inset-0 bg-primary-500/0 group-hover:bg-primary-500/5 transition-all rounded-[2.5rem]" />
+            <div className="absolute inset-0 bg-indigo-500/0 group-hover:bg-indigo-500/5 transition-all rounded-[2.5rem]" />
         )}
         <div className="flex items-start justify-between mb-8 relative z-10">
-            <div className="p-4 bg-white/5 rounded-2xl shadow-sm text-slate-400 group-hover:bg-primary-500 group-hover:text-white transition-all duration-500 border border-white/10">
+            <div className="p-4 bg-white/5 rounded-2xl shadow-sm text-slate-400 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500 border border-white/10">
                 {icon}
             </div>
             <div className="flex flex-col items-end gap-1">
                 <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest leading-none">{trend}</span>
                 {onClick && (
                     <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-1 group-hover:translate-y-0">
-                        <span className="text-[9px] font-black text-primary-400 uppercase tracking-widest">{hint}</span>
-                        <ArrowUpRight size={12} className="text-primary-400" />
+                        <span className="text-[9px] font-black text-indigo-400 uppercase tracking-widest">{hint}</span>
+                        <ArrowUpRight size={12} className="text-indigo-400" />
                     </div>
                 )}
             </div>
         </div>
         <div className="space-y-1 relative z-10">
-            <div className="text-4xl font-display font-black text-white tracking-tighter group-hover:text-primary-400 transition-colors duration-300">{value}</div>
+            <div className="text-4xl font-display font-black text-white tracking-tighter group-hover:text-indigo-400 transition-colors duration-300 uppercase">{value}</div>
             <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">{label}</div>
         </div>
     </div>

@@ -48,7 +48,7 @@ const LeavePage = () => {
     };
 
     return (
-        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-5 duration-700">
+        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-5 duration-700 bg-slate-900 min-h-screen p-6 md:p-10">
             {/* Notification Portal */}
             <AnimatePresence>
                 {notification && (
@@ -68,70 +68,70 @@ const LeavePage = () => {
 
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-serif italic text-gray-800">Leave Terminal</h1>
-                    <p className="text-xs text-gray-500 mt-1">Manage absence requests and entitlement metrics.</p>
+                    <h1 className="text-3xl font-display font-black text-white tracking-tight uppercase">Leave<span className="text-indigo-500 italic">.Terminal</span></h1>
+                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mt-2">Manage absence requests and entitlement metrics.</p>
                 </div>
                 <button
                     onClick={() => setShowModal(true)}
-                    className="btn-teal px-6 py-2.5 text-sm flex items-center justify-center gap-2 shadow-none border-none ring-0 outline-none"
+                    className="px-6 py-2.5 bg-indigo-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-indigo-600/20 hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 border border-indigo-400/20"
                 >
                     <Plus size={16} /> New Leave Request
                 </button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <LeaveStat label="Annual Balance" value="14 Days" color="text-primary-500" />
+                <LeaveStat label="Annual Balance" value="14 Days" color="text-indigo-500" />
                 <LeaveStat label="Pending Requests" value="01 Active" color="text-orange-500" />
-                <LeaveStat label="Emergency Credit" value="03 Fixed" color="text-gray-400" />
+                <LeaveStat label="Emergency Credit" value="03 Fixed" color="text-slate-500" />
             </div>
 
-            <div className="card-hr bg-white overflow-hidden">
-                <div className="p-6 border-b border-gray-50 flex items-center justify-between bg-gray-50/50">
-                    <h2 className="font-medium text-gray-700 italic">Temporal <span className="not-italic">Absence Logs</span></h2>
-                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-white px-3 py-1 rounded border border-gray-100">Index: FY-2026</span>
+            <div className="bg-slate-800/50 backdrop-blur-xl border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
+                <div className="p-6 border-b border-white/5 bg-white/5 flex items-center justify-between">
+                    <h2 className="text-lg font-black text-white tracking-tight uppercase">Temporal <span className="text-indigo-500">Absence Logs</span></h2>
+                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest bg-slate-900 px-3 py-1 rounded-lg border border-white/5 shadow-inner">Index: FY-2026</span>
                 </div>
 
                 <div className="overflow-x-auto min-w-full">
-                    <table className="w-full text-left bg-white border-collapse">
+                    <table className="w-full text-left bg-transparent border-collapse">
                         <thead>
-                            <tr className="border-b border-gray-50 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                            <tr className="border-b border-white/5 text-[10px] font-black text-slate-500 uppercase tracking-widest">
                                 <th className="px-8 py-4">Request Identity</th>
                                 <th className="px-8 py-4">Protocol Duration</th>
                                 <th className="px-8 py-4">Status Vector</th>
                                 <th className="px-8 py-4 text-right">Registry Date</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-gray-50">
+                        <tbody className="divide-y divide-white/5">
                             {leaves.length > 0 ? leaves.map((leave, idx) => (
-                                <tr key={leave._id} className="hover:bg-gray-50/50 transition-colors group">
+                                <tr key={leave._id} className="hover:bg-white/5 transition-colors group">
                                     <td className="px-8 py-6">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-8 h-8 rounded bg-gray-50 border border-gray-100 flex items-center justify-center text-blue-500 shadow-sm">
+                                            <div className="w-8 h-8 rounded-lg bg-slate-900 border border-white/10 flex items-center justify-center text-indigo-500 shadow-inner">
                                                 <Shield size={14} />
                                             </div>
                                             <div>
-                                                <p className="text-xs font-bold text-gray-700 uppercase tracking-tight">{leave.leaveType}</p>
-                                                <p className="text-[10px] text-gray-400 truncate max-w-xs italic mt-0.5">"{leave.reason}"</p>
+                                                <p className="text-xs font-black text-white uppercase tracking-tight">{leave.leaveType}</p>
+                                                <p className="text-[10px] font-black text-slate-500 truncate max-w-xs uppercase tracking-tight mt-0.5">"{leave.reason}"</p>
                                             </div>
                                         </div>
                                     </td>
                                     <td className="px-8 py-6">
                                         <div className="flex items-center gap-3">
-                                            <Calendar size={14} className="text-primary-500" />
-                                            <span className="text-xs font-medium text-gray-600">{new Date(leave.startDate).toLocaleDateString()} — {new Date(leave.endDate).toLocaleDateString()}</span>
+                                            <Calendar size={14} className="text-indigo-500" />
+                                            <span className="text-xs font-black text-slate-400 uppercase tracking-tight">{new Date(leave.startDate).toLocaleDateString()} — {new Date(leave.endDate).toLocaleDateString()}</span>
                                         </div>
                                     </td>
                                     <td className="px-8 py-6">
-                                        <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest
-                                            ${leave.status === 'Approved' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' :
-                                                leave.status === 'Rejected' ? 'bg-red-50 text-red-600 border border-red-100' :
-                                                    'bg-orange-50 text-orange-600 border border-orange-100'}`}>
+                                        <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest
+                                            ${leave.status === 'Approved' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                                                leave.status === 'Rejected' ? 'bg-red-500/10 text-red-500 border border-red-500/20' :
+                                                    'bg-orange-500/10 text-orange-500 border border-orange-500/20'}`}>
                                             <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
                                             {leave.status}
                                         </div>
                                     </td>
                                     <td className="px-8 py-6 text-right">
-                                        <span className="text-[10px] font-bold text-gray-400 font-mono italic">
+                                        <span className="text-[10px] font-black text-slate-600 uppercase tracking-[0.2em]">
                                             {new Date(leave.createdAt).toLocaleDateString()}
                                         </span>
                                     </td>
@@ -140,8 +140,8 @@ const LeavePage = () => {
                                 <tr>
                                     <td colSpan="4" className="px-8 py-16 text-center">
                                         <div className="flex flex-col items-center gap-3">
-                                            <Plus size={40} className="text-gray-100" />
-                                            <p className="text-xs text-gray-300 font-medium uppercase tracking-[0.2em]">No absence telemetry detected</p>
+                                            <Plus size={40} className="text-slate-800" />
+                                            <p className="text-[10px] text-slate-600 font-black uppercase tracking-[0.4em]">No absence telemetry detected</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -153,52 +153,55 @@ const LeavePage = () => {
 
             <AnimatePresence>
                 {showModal && (
-                    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-6 z-[100]">
+                    <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-6 z-[100]">
                         <motion.div
                             initial={{ scale: 0.95, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.95, opacity: 0 }}
-                            className="bg-white rounded-lg w-full max-w-lg shadow-2xl relative overflow-hidden"
+                            className="bg-slate-900 border border-white/10 rounded-3xl w-full max-w-lg shadow-[0_0_100px_rgba(0,0,0,0.5)] relative overflow-hidden"
                         >
-                            <div className="p-8 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
-                                <h2 className="text-xl font-medium text-gray-800 italic flex items-center gap-3">
-                                    <FileText className="text-primary-600" size={20} />
-                                    Initiate <span className="text-primary-600 not-italic">Absence Request</span>
+                            <div className="p-8 border-b border-white/5 bg-white/5 flex justify-between items-center">
+                                <h2 className="text-xl font-black text-white uppercase tracking-tight flex items-center gap-3">
+                                    <FileText className="text-indigo-500" size={20} />
+                                    Initiate <span className="text-indigo-500 italic">Absence Request</span>
                                 </h2>
-                                <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-black transition-all rotate-45 text-3xl font-light">+</button>
+                                <button onClick={() => setShowModal(false)} className="text-slate-500 hover:text-white transition-all rotate-45 text-3xl font-light">+</button>
                             </div>
                             <form onSubmit={handleSubmit} className="p-8 space-y-8">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] ml-1">Absence Vector (Type)</label>
-                                    <select
-                                        value={formData.leaveType}
-                                        onChange={e => setFormData({ ...formData, leaveType: e.target.value })}
-                                        className="w-full bg-white border border-gray-200 rounded p-4 text-xs font-bold text-gray-600 focus:outline-none focus:border-primary-600 appearance-none cursor-pointer"
-                                    >
-                                        <option>Annual</option>
-                                        <option>Sickness</option>
-                                        <option>Emergency</option>
-                                        <option>Unpaid</option>
-                                    </select>
+                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Absence Vector (Type)</label>
+                                    <div className="relative">
+                                        <select
+                                            value={formData.leaveType}
+                                            onChange={e => setFormData({ ...formData, leaveType: e.target.value })}
+                                            className="w-full bg-slate-800 border border-white/10 rounded-xl p-4 text-xs font-black text-white focus:outline-none focus:border-indigo-500 appearance-none cursor-pointer shadow-inner"
+                                        >
+                                            <option>Annual</option>
+                                            <option>Sickness</option>
+                                            <option>Emergency</option>
+                                            <option>Unpaid</option>
+                                        </select>
+                                        <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+                                    </div>
                                 </div>
                                 <div className="grid grid-cols-2 gap-8">
                                     <LeaveInput label="Inception Date" type="date" value={formData.startDate} onChange={v => setFormData({ ...formData, startDate: v })} />
                                     <LeaveInput label="Termination Date" type="date" value={formData.endDate} onChange={v => setFormData({ ...formData, endDate: v })} />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] ml-1">Protocol Reasoning</label>
+                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Protocol Reasoning</label>
                                     <textarea
                                         required
                                         rows="3"
                                         value={formData.reason}
                                         onChange={e => setFormData({ ...formData, reason: e.target.value })}
                                         placeholder="Identify the reason for absence..."
-                                        className="w-full bg-gray-50 border border-gray-200 rounded p-4 text-xs font-bold text-gray-600 focus:outline-none focus:border-primary-600 transition-all placeholder:text-gray-300"
+                                        className="w-full bg-slate-800 border border-white/10 rounded-xl p-4 text-xs font-black text-white focus:outline-none focus:border-indigo-500 transition-all placeholder:text-slate-700 shadow-inner"
                                     />
                                 </div>
-                                <div className="flex gap-4 pt-4 border-t border-gray-50">
-                                    <button onClick={() => setShowModal(false)} type="button" className="flex-1 py-3 text-xs font-bold uppercase tracking-widest text-gray-500 bg-white border border-gray-200 rounded hover:bg-gray-50 transition-all">Abort</button>
-                                    <button type="submit" className="flex-1 py-3 text-xs font-bold uppercase tracking-widest text-white bg-primary-600 rounded hover:bg-primary-700 shadow-sm transition-all">Confirm Request</button>
+                                <div className="flex gap-4 pt-4 border-t border-white/5">
+                                    <button onClick={() => setShowModal(false)} type="button" className="flex-1 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500 bg-slate-800 border border-white/10 rounded-xl hover:bg-slate-700 transition-all">Abort</button>
+                                    <button type="submit" className="flex-1 py-4 text-[10px] font-black uppercase tracking-widest text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 shadow-xl shadow-indigo-600/20 transition-all border border-indigo-400/20">Confirm Request</button>
                                 </div>
                             </form>
                         </motion.div>
@@ -210,21 +213,21 @@ const LeavePage = () => {
 };
 
 const LeaveStat = ({ label, value, color }) => (
-    <div className="card-hr p-6 flex flex-col items-center text-center group cursor-default">
-        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 font-mono">{label}</p>
+    <div className="bg-slate-800/50 backdrop-blur-xl border border-white/5 p-6 rounded-3xl flex flex-col items-center text-center group cursor-default shadow-2xl">
+        <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">{label}</p>
         <p className={`text-2xl font-black ${color} tracking-tighter uppercase`}>{value}</p>
     </div>
 );
 
 const LeaveInput = ({ label, type, value, onChange }) => (
     <div className="space-y-2">
-        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] ml-1 font-mono">{label}</label>
+        <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">{label}</label>
         <input
             required
             type={type}
             value={value}
             onChange={e => onChange(e.target.value)}
-            className="w-full bg-white border border-gray-200 rounded p-4 text-xs font-bold text-gray-600 focus:outline-none focus:border-primary-600 transition-all"
+            className="w-full bg-slate-800 border border-white/10 rounded-xl p-4 text-xs font-black text-white focus:outline-none focus:border-indigo-500 transition-all shadow-inner"
         />
     </div>
 );

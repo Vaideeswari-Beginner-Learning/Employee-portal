@@ -184,11 +184,11 @@ const AttendancePage = () => {
 
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
-                    <h1 className="text-4xl font-display font-black text-white tracking-tight leading-none">Shift<span className="text-primary-500 italic">.Logs</span></h1>
+                    <h1 className="text-4xl font-display font-black text-white tracking-tight leading-none uppercase">Shift<span className="text-indigo-500 italic">.Logs</span></h1>
                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mt-3">High Precision Temporal Registry</p>
                 </div>
                 <div className="flex items-center gap-4 bg-white/5 shadow-2xl px-6 py-3 rounded-2xl border border-white/10 backdrop-blur-xl group">
-                    <Clock size={20} className="text-primary-500 group-hover:rotate-12 transition-transform" />
+                    <Clock size={20} className="text-indigo-500 group-hover:rotate-12 transition-transform" />
                     <div className="flex flex-col">
                         <span className="text-sm font-black text-white tracking-tighter tabular-nums leading-none">
                             {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
@@ -231,12 +231,12 @@ const AttendancePage = () => {
                                                 <button
                                                     onClick={handleAttendanceFlow}
                                                     disabled={loading}
-                                                    className="w-48 h-48 rounded-[3rem] bg-primary-500 shadow-[0_32px_64px_-16px_rgba(23,162,184,0.5)] flex flex-col items-center justify-center gap-4 text-white hover:bg-primary-600 active:scale-95 transition-all relative overflow-hidden group/btn"
+                                                    className="w-48 h-48 rounded-[3rem] bg-indigo-600 shadow-2xl shadow-indigo-600/30 flex flex-col items-center justify-center gap-4 text-white hover:bg-indigo-700 active:scale-95 transition-all relative overflow-hidden group/btn border border-indigo-400/20"
                                                 >
                                                     <div className="absolute inset-0 bg-white/10 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
                                                     {loading ? <Loader2 className="animate-spin" size={40} /> : (
                                                         <>
-                                                            <div className="p-4 bg-white/20 rounded-2xl shadow-inner">
+                                                            <div className="p-4 bg-white/20 rounded-2xl shadow-inner border border-white/10">
                                                                 <MapPin size={32} />
                                                             </div>
                                                             <span className="text-xs font-black uppercase tracking-[0.3em]">Verify GPS</span>
@@ -247,10 +247,10 @@ const AttendancePage = () => {
 
                                             {step === 2 && (
                                                 <div className="flex flex-col items-center gap-6 w-full max-w-sm">
-                                                    <div className="relative w-full aspect-square rounded-[3rem] overflow-hidden border-4 border-primary-500 shadow-2xl bg-slate-900">
+                                                    <div className="relative w-full aspect-square rounded-[3rem] overflow-hidden border-4 border-indigo-600 shadow-2xl bg-slate-900">
                                                         <video ref={videoRef} autoPlay playsInline className="w-full h-full object-cover" />
                                                         <div className="absolute inset-0 border-[40px] border-slate-900/50 pointer-events-none flex items-center justify-center">
-                                                            <div className="w-48 h-64 border-2 border-primary-500/50 rounded-[4rem] border-dashed" />
+                                                            <div className="w-48 h-64 border-2 border-indigo-500/50 rounded-[4rem] border-dashed" />
                                                         </div>
                                                     </div>
                                                     <button
@@ -327,24 +327,24 @@ const AttendancePage = () => {
                     <div className="bg-slate-800/50 backdrop-blur-xl border border-white/5 rounded-[3.5rem] flex flex-col h-full overflow-hidden shadow-2xl">
                         <div className="p-10 border-b border-white/5 bg-white/5 flex items-center justify-between">
                             <div>
-                                <h2 className="text-2xl font-display font-black text-white tracking-tight">Temporal <span className="text-primary-500">Registry</span></h2>
+                                <h2 className="text-2xl font-display font-black text-white tracking-tight uppercase">Temporal <span className="text-indigo-500">Registry</span></h2>
                                 <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mt-2">Personnel Operation Logs</p>
                             </div>
                             <div className="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-xl border border-white/10 shadow-inner">
-                                <Calendar size={16} className="text-primary-500" />
+                                <Calendar size={16} className="text-indigo-500" />
                                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Current Cycle</span>
                             </div>
                         </div>
 
                         <div className="flex-1 overflow-y-auto max-h-[600px] px-6 py-6 space-y-3 custom-scrollbar">
                             {history.length > 0 ? history.map((entry, idx) => (
-                                <div key={entry._id} className="p-6 bg-white/5 rounded-[2rem] border border-white/5 shadow-xl hover:bg-white/10 hover:border-primary-500/30 transition-all group flex items-center justify-between">
+                                <div key={entry._id} className="p-6 bg-slate-900/50 rounded-[2rem] border border-white/5 shadow-xl hover:bg-slate-800/80 hover:border-indigo-500/30 transition-all group flex items-center justify-between">
                                     <div className="flex items-center gap-8">
-                                        <div className="text-center min-w-[70px] p-4 bg-slate-900/80 rounded-2xl border border-white/5 shadow-inner group-hover:bg-primary-500/10 transition-colors">
+                                        <div className="text-center min-w-[70px] p-4 bg-slate-900/80 rounded-2xl border border-white/5 shadow-inner group-hover:bg-indigo-500/10 transition-colors">
                                             <p className="text-2xl font-display font-black text-white tracking-tighter leading-none mb-1">
                                                 {new Date(entry.date).getDate()}
                                             </p>
-                                            <p className="text-[10px] font-black text-primary-500 uppercase tracking-widest leading-none">
+                                            <p className="text-[10px] font-black text-indigo-500 uppercase tracking-widest leading-none">
                                                 {new Date(entry.date).toLocaleString('en-US', { month: 'short' })}
                                             </p>
                                         </div>
@@ -377,7 +377,7 @@ const AttendancePage = () => {
 
 const PresenceMetric = ({ label, value, unit, icon }) => (
     <div className="bg-slate-800/50 backdrop-blur-xl border border-white/5 p-8 rounded-[2.5rem] flex flex-col items-center justify-center text-center gap-2 group hover:scale-[1.02] shadow-2xl transition-all">
-        <div className="p-3 bg-white/5 border border-white/5 rounded-xl text-slate-500 group-hover:text-primary-400 group-hover:bg-primary-500/10 transition-colors shadow-inner">
+        <div className="p-3 bg-white/5 border border-white/5 rounded-xl text-slate-500 group-hover:text-indigo-400 group-hover:bg-indigo-500/10 transition-colors shadow-inner">
             {icon}
         </div>
         <div>

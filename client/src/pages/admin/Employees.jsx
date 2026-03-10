@@ -78,19 +78,19 @@ const EmployeeMgmt = () => {
         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
-                    <h1 className="text-3xl font-display font-black text-white tracking-tight leading-none">Personnel<span className="text-primary-500 italic">.Registry</span></h1>
+                    <h1 className="text-3xl font-display font-black text-white tracking-tight leading-none uppercase">Personnel<span className="text-indigo-500 italic">.Registry</span></h1>
                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mt-3">High-Resolution Human Capital Database</p>
                 </div>
                 <button
                     onClick={() => setShowModal(true)}
-                    className="bg-primary-500 hover:bg-primary-600 text-white px-8 py-3.5 flex items-center justify-center gap-3 rounded-2xl shadow-lg shadow-primary-500/20 transition-all font-bold active:scale-95"
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3.5 flex items-center justify-center gap-3 rounded-2xl shadow-lg shadow-indigo-600/20 transition-all font-bold active:scale-95"
                 >
                     <UserPlus size={20} />
                     <span className="text-xs font-black uppercase tracking-widest">Onboard Personnel</span>
                 </button>
             </div>
 
-            <div className="card-premium flex flex-col bg-slate-800/50 backdrop-blur-xl shadow-2xl border-white/5">
+            <div className="card-premium flex flex-col">
                 <div className="p-8 border-b border-white/5 flex flex-col md:flex-row items-center gap-6 bg-white/5">
                     <div className="relative flex-1 w-full">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
@@ -98,11 +98,11 @@ const EmployeeMgmt = () => {
                             placeholder="Search by name, ID or vector..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full bg-slate-900/50 border border-white/10 rounded-2xl py-3.5 pl-12 pr-6 text-sm focus:outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all text-slate-200 placeholder:text-slate-500 shadow-inner font-medium"
+                            className="w-full bg-slate-900/50 border border-white/10 rounded-2xl py-3.5 pl-12 pr-6 text-sm focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all text-slate-200 placeholder:text-slate-500 shadow-inner font-medium"
                         />
                     </div>
                     <div className="flex items-center gap-3 w-full md:w-auto">
-                        <button className="flex-1 md:flex-none p-3.5 bg-white/5 border border-white/10 rounded-2xl text-slate-500 hover:text-primary-500 hover:border-primary-500/50 transition-all shadow-sm">
+                        <button className="flex-1 md:flex-none p-3.5 bg-white/5 border border-white/10 rounded-2xl text-slate-500 hover:text-indigo-400 hover:border-indigo-500/50 transition-all shadow-sm">
                             <Filter size={20} />
                         </button>
                         <button className="flex-1 md:flex-none px-6 py-3.5 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-200 transition-all">
@@ -122,25 +122,25 @@ const EmployeeMgmt = () => {
                                 <th className="px-8 py-5 text-[10px] font-black text-slate-500 uppercase tracking-[0.15em] border-b border-white/5 text-right">Operations</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-50">
+                        <tbody className="divide-y divide-white/5">
                             {filteredEmployees.map((emp) => (
-                                <tr key={emp._id} className="hover:bg-primary-50/30 transition-all group">
+                                <tr key={emp._id} className="hover:bg-white/5 transition-all group">
                                     <td className="px-8 py-6">
                                         <div className="flex items-center gap-4">
-                                            <div className="w-12 h-12 rounded-2xl bg-slate-700 border border-white/10 flex items-center justify-center font-black text-slate-400 text-sm uppercase shadow-sm group-hover:scale-105 transition-transform">
+                                            <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center font-black text-slate-500 text-sm uppercase shadow-sm group-hover:scale-105 transition-transform">
                                                 {(emp.name || emp.email || '?').charAt(0).toUpperCase()}
                                             </div>
                                             <div>
-                                                <p className="text-sm font-black text-slate-100 leading-none mb-1.5">{emp.name}</p>
+                                                <p className="text-sm font-black text-slate-100 leading-none mb-1.5 uppercase">{emp.name}</p>
                                                 <div className="flex items-center gap-2">
                                                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-                                                    <p className="text-[11px] font-bold text-primary-400 uppercase tracking-tight">{emp.email}</p>
+                                                    <p className="text-[11px] font-bold text-slate-500 uppercase tracking-tight">{emp.email}</p>
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
                                     <td className="px-8 py-6">
-                                        <span className="px-3 py-1 bg-white/5 text-[10px] font-black text-slate-400 rounded-lg uppercase tracking-widest border border-white/10 group-hover:bg-primary-500 group-hover:text-white group-hover:border-primary-600 transition-colors">
+                                        <span className="px-3 py-1 bg-white/5 text-[10px] font-black text-slate-400 rounded-lg uppercase tracking-widest border border-white/10 group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-700 transition-colors">
                                             #{emp.employeeId}
                                         </span>
                                     </td>
@@ -149,7 +149,7 @@ const EmployeeMgmt = () => {
                                     </td>
                                     <td className="px-8 py-6 text-sm text-gray-500">
                                         <div className="flex items-center gap-2">
-                                            <span className="w-2 h-2 rounded-full bg-primary-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]" />
+                                            <span className="w-2 h-2 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]" />
                                             <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Permanent Cycle</span>
                                         </div>
                                     </td>
@@ -157,13 +157,13 @@ const EmployeeMgmt = () => {
                                         <div className="flex justify-end gap-3 opacity-30 group-hover:opacity-100 transition-opacity">
                                             <button
                                                 onClick={() => handleEdit(emp)}
-                                                className="p-2.5 bg-slate-800 border border-white/5 rounded-xl text-slate-500 hover:text-primary-400 hover:border-primary-500/30 shadow-sm transition-all"
+                                                className="p-2.5 bg-white/5 border border-white/10 rounded-xl text-slate-500 hover:text-indigo-400 hover:border-indigo-500/30 shadow-sm transition-all"
                                             >
                                                 <Edit2 size={16} />
                                             </button>
                                             <button
                                                 onClick={() => handleDelete(emp._id)}
-                                                className="p-2.5 bg-slate-800 border border-white/5 rounded-xl text-slate-500 hover:text-red-400 hover:border-red-500/30 shadow-sm transition-all"
+                                                className="p-2.5 bg-white/5 border border-white/10 rounded-xl text-slate-500 hover:text-red-400 hover:border-red-500/30 shadow-sm transition-all"
                                             >
                                                 <Trash2 size={16} />
                                             </button>
@@ -187,8 +187,8 @@ const EmployeeMgmt = () => {
                         >
                             <div className="px-10 py-8 border-b border-white/5 flex justify-between items-center bg-white/5">
                                 <div>
-                                    <h2 className="text-2xl font-display font-black text-white tracking-tight">
-                                        {editingId ? 'Update' : 'Onboard'}<span className="text-primary-500">.Node</span>
+                                    <h2 className="text-2xl font-display font-black text-white tracking-tight uppercase">
+                                        {editingId ? 'Update' : 'Onboard'}<span className="text-indigo-500">.Node</span>
                                     </h2>
                                     <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">
                                         {editingId ? 'Personnel Identity Modification' : 'Personnel Registry Initialization'}
@@ -209,9 +209,7 @@ const EmployeeMgmt = () => {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     <ModalInput label="Operational Name" value={formData.name} onChange={v => setFormData({ ...formData, name: v })} placeholder="Employee Name" icon={<User size={14} />} />
                                     <ModalInput label="Identity Code" value={formData.employeeId} onChange={v => setFormData({ ...formData, employeeId: v })} placeholder="e.g. EMP001" icon={<Hash size={14} />} />
-                                    <div className="md:col-span-2">
-                                        <ModalInput label="Communication Vector" value={formData.email} onChange={v => setFormData({ ...formData, email: v })} placeholder="employee@company.com" type="email" icon={<Mail size={14} />} />
-                                    </div>
+                                    <ModalInput label="Communication Vector" value={formData.email} onChange={v => setFormData({ ...formData, email: v })} placeholder="employee@company.com" type="email" icon={<Mail size={14} />} />
                                     <ModalInput label="Contact Node" value={formData.phone} onChange={v => setFormData({ ...formData, phone: v })} placeholder="+91 XXXXX XXXXX" icon={<Phone size={14} />} />
                                     <div className="space-y-2.5">
                                         <label className="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
@@ -220,7 +218,7 @@ const EmployeeMgmt = () => {
                                         <select
                                             value={formData.role}
                                             onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                                            className="w-full bg-slate-800/50 border border-white/10 rounded-2xl px-5 py-3.5 text-sm focus:outline-none focus:border-primary-500 focus:bg-slate-800 focus:ring-4 focus:ring-primary-500/10 transition-all text-slate-100 font-bold appearance-none cursor-pointer"
+                                            className="w-full bg-slate-900 border border-white/10 rounded-2xl px-5 py-3.5 text-sm focus:outline-none focus:border-indigo-500 focus:bg-slate-900 focus:ring-4 focus:ring-indigo-500/10 transition-all text-slate-100 font-bold appearance-none cursor-pointer"
                                         >
                                             <option value="employee">Field Employee</option>
                                             <option value="manager">Operations Manager</option>
@@ -252,11 +250,10 @@ const EmployeeMgmt = () => {
                                                             setFormData({ ...formData, expertise: newExpertise });
                                                         }}
                                                         className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border flex items-center gap-2 ${isSelected
-                                                            ? 'bg-primary-500 text-white border-primary-600 shadow-lg shadow-primary-500/20'
+                                                            ? 'bg-indigo-600 text-white border-indigo-700 shadow-lg shadow-indigo-600/20'
                                                             : 'bg-white/5 text-slate-500 border-white/10 hover:bg-white/10'
                                                             }`}
                                                     >
-                                                        <span>{emoji}</span>
                                                         {skill}
                                                     </button>
                                                 );
@@ -276,7 +273,7 @@ const EmployeeMgmt = () => {
                                     >
                                         Abort Sync
                                     </button>
-                                    <button type="submit" className="flex-1 py-4 text-[10px] font-black text-white bg-primary-500 shadow-xl shadow-primary-500/20 rounded-2xl hover:bg-primary-600 transition-all uppercase tracking-[0.2em] active:scale-95">
+                                    <button type="submit" className="flex-1 py-4 text-[10px] font-black text-white bg-indigo-600 shadow-xl shadow-indigo-600/20 rounded-2xl hover:bg-indigo-700 transition-all uppercase tracking-[0.2em] active:scale-95">
                                         {editingId ? 'Save Changes' : 'Finalize Onboarding'}
                                     </button>
                                 </div>
@@ -301,7 +298,7 @@ const ModalInput = ({ label, value, onChange, placeholder, icon, type = "text" }
                 value={value}
                 onChange={e => onChange(e.target.value)}
                 placeholder={placeholder}
-                className="w-full bg-slate-800/50 border border-white/10 rounded-2xl px-5 py-3.5 text-sm focus:outline-none focus:border-primary-500 focus:bg-slate-800 focus:ring-4 focus:ring-primary-500/10 transition-all text-slate-100 placeholder:text-slate-600 font-bold"
+                className="w-full bg-slate-900 border border-white/10 rounded-2xl px-5 py-3.5 text-sm focus:outline-none focus:border-indigo-500 focus:bg-slate-900 focus:ring-4 focus:ring-indigo-500/10 transition-all text-slate-100 placeholder:text-slate-600 font-bold"
             />
         </div>
     </div>

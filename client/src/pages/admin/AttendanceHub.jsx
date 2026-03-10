@@ -37,8 +37,8 @@ const AttendanceHub = () => {
             desc: "Access the unified leave management system for internal administrative use.",
             icon: <Clock size={32} />,
             path: "/leave",
-            color: "from-primary-500 to-primary-600",
-            shadow: "shadow-primary-500/20",
+            color: "from-indigo-500 to-indigo-600",
+            shadow: "shadow-indigo-500/20",
             metric: "Terminal.Active"
         }
     ];
@@ -48,18 +48,18 @@ const AttendanceHub = () => {
             {/* Header Section */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
-                    <h1 className="text-4xl font-display font-black text-slate-800 tracking-tight leading-none">
-                        Absence<span className="text-primary-500 italic">.Registry</span>
+                    <h1 className="text-4xl font-display font-black text-white tracking-tight leading-none uppercase">
+                        Absence<span className="text-indigo-500 italic">.Registry</span>
                     </h1>
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mt-4 flex items-center gap-2">
-                        <Shield size={12} className="text-primary-500" />
+                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mt-4 flex items-center gap-2">
+                        <Shield size={12} className="text-indigo-500" />
                         Personnel Operational Management Hub
                     </p>
                 </div>
-                <div className="hidden lg:flex items-center gap-6 px-6 py-3 bg-white/50 backdrop-blur-sm rounded-2xl border border-white/50 shadow-sm">
+                <div className="hidden lg:flex items-center gap-6 px-6 py-3 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 shadow-sm">
                     <div className="flex flex-col">
-                        <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">System Status</span>
-                        <span className="text-xs font-bold text-emerald-500 flex items-center gap-1.5">
+                        <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest leading-none">System Status</span>
+                        <span className="text-xs font-bold text-emerald-500 flex items-center gap-1.5 mt-1">
                             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                             Secure Node
                         </span>
@@ -81,31 +81,31 @@ const AttendanceHub = () => {
                         {/* Shadow Glow */}
                         <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-0 group-hover:opacity-5 blur-2xl transition-opacity duration-500`} />
 
-                        <div className="card-premium h-full p-8 flex flex-col bg-white/60 backdrop-blur-md border border-white relative z-10 hover:translate-y-[-4px] transition-all duration-500">
+                        <div className="card-premium h-full p-8 flex flex-col relative z-10 hover:translate-y-[-4px] transition-all duration-500">
                             <div className="flex justify-between items-start mb-8">
                                 <div className={`p-5 rounded-2xl bg-gradient-to-br ${item.color} text-white shadow-lg ${item.shadow} group-hover:scale-110 transition-transform duration-500`}>
                                     {item.icon}
                                 </div>
                                 <div className="text-right">
-                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">{item.metric}</p>
+                                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1">{item.metric}</p>
                                     <div className="flex justify-end gap-1">
                                         {[1, 2, 3].map(i => (
-                                            <div key={i} className={`w-1 h-1 rounded-full ${i === 1 ? 'bg-primary-500' : 'bg-slate-200'}`} />
+                                            <div key={i} className={`w-1 h-1 rounded-full ${i === 1 ? 'bg-indigo-500' : 'bg-slate-700'}`} />
                                         ))}
                                     </div>
                                 </div>
                             </div>
 
-                            <h3 className="text-xl font-display font-black text-slate-800 mb-3 group-hover:text-primary-500 transition-colors">
+                            <h3 className="text-xl font-display font-black text-white mb-3 group-hover:text-indigo-400 transition-colors uppercase">
                                 {item.title}
                             </h3>
                             <p className="text-xs font-medium text-slate-500 leading-relaxed mb-8 flex-1">
                                 {item.desc}
                             </p>
 
-                            <div className="pt-6 flex items-center justify-between">
-                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest group-hover:text-primary-500 transition-colors">Launch Module</span>
-                                <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-300 group-hover:bg-primary-500 group-hover:text-white transition-all transform group-hover:translate-x-1">
+                            <div className="pt-6 flex items-center justify-between border-t border-white/5">
+                                <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest group-hover:text-indigo-400 transition-colors">Launch Module</span>
+                                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-500 group-hover:bg-indigo-600 group-hover:text-white transition-all transform group-hover:translate-x-1 shadow-inner">
                                     <ArrowRight size={18} />
                                 </div>
                             </div>

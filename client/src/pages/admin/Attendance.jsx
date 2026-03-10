@@ -80,7 +80,7 @@ const AdminAttendance = () => {
                                 <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Identity Verification Frame</p>
                                 <button
                                     onClick={() => setSelectedPhoto(null)}
-                                    className="mt-6 px-8 py-3 bg-primary-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-primary-600 transition-all shadow-lg shadow-primary-500/20"
+                                    className="mt-6 px-8 py-3 bg-indigo-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20"
                                 >
                                     Close Terminal
                                 </button>
@@ -109,22 +109,20 @@ const AdminAttendance = () => {
 
             <motion.div variants={itemVariants} className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
-                    <h1 className="text-3xl font-display font-black text-white tracking-tight leading-none">Duty<span className="text-primary-500 italic">.Logs</span></h1>
+                    <h1 className="text-3xl font-display font-black text-white tracking-tight leading-none uppercase">Duty<span className="text-indigo-500 italic">.Logs</span></h1>
                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mt-3">Global Attendance Telemetry & Persistence</p>
                 </div>
                 <div className="flex items-center gap-4">
-                    <button className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black text-slate-400 hover:text-primary-400 hover:border-primary-500/30 transition-all flex items-center gap-2 shadow-sm">
-                        <Calendar size={16} />
-                        <span className="uppercase tracking-widest">Temporal Buffer</span>
+                    <button className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black text-slate-400 hover:text-indigo-400 hover:border-indigo-500/30 transition-all flex items-center gap-2 shadow-sm uppercase tracking-widest">
+                        <Calendar size={16} /> Temporal Buffer
                     </button>
-                    <button className="bg-primary-500 hover:bg-primary-600 text-white px-8 py-3.5 flex items-center gap-3 rounded-2xl shadow-lg shadow-primary-500/20 transition-all font-bold active:scale-95">
-                        <Download size={20} />
-                        <span className="text-xs font-black uppercase tracking-widest">Export Core</span>
+                    <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3.5 flex items-center gap-3 rounded-2xl shadow-lg shadow-indigo-600/20 transition-all font-bold active:scale-95 text-xs uppercase tracking-widest">
+                        <Download size={20} /> Export Core
                     </button>
                 </div>
             </motion.div>
 
-            <motion.div variants={itemVariants} className="card-premium flex flex-col bg-slate-800/50 backdrop-blur-xl shadow-2xl border-white/5">
+            <motion.div variants={itemVariants} className="card-premium flex flex-col shadow-2xl">
                 <div className="p-8 border-b border-white/5 flex items-center gap-6 bg-white/5">
                     <div className="relative flex-1">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
@@ -132,7 +130,7 @@ const AdminAttendance = () => {
                             placeholder="Search by personnel name or identity node..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full bg-slate-900/50 border border-white/10 rounded-2xl py-3.5 pl-12 pr-6 text-sm focus:outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all text-slate-200 placeholder:text-slate-500 shadow-inner font-medium"
+                            className="w-full bg-slate-900/50 border border-white/10 rounded-2xl py-3.5 pl-12 pr-6 text-sm focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all text-slate-200 placeholder:text-slate-500 shadow-inner font-medium"
                         />
                     </div>
                 </div>
@@ -155,7 +153,7 @@ const AdminAttendance = () => {
                                 <motion.tr variants={itemVariants} key={record._id} className="hover:bg-primary-50/30 transition-all group">
                                     <td className="px-8 py-6">
                                         <div className="flex items-center gap-4">
-                                            <div className="w-12 h-12 rounded-2xl bg-slate-700 border border-white/10 flex items-center justify-center font-black text-slate-400 text-sm uppercase shadow-sm group-hover:scale-105 transition-transform">
+                                            <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center font-black text-indigo-400 text-sm uppercase shadow-inner group-hover:scale-105 transition-transform">
                                                 {record.employee?.name?.charAt(0) || '?'}
                                             </div>
                                             <div>
@@ -198,7 +196,7 @@ const AdminAttendance = () => {
                                                 onClick={() => setSelectedPhoto(record.biometricPhoto)}
                                                 className="w-14 h-14 rounded-xl overflow-hidden border-2 border-white/10 cursor-pointer hover:border-primary-500 transition-all shadow-sm group/bio"
                                             >
-                                                <img src={record.biometricPhoto} alt="Bio" className="w-full h-full object-cover group-hover/bio:scale-110 transition-transform" />
+                                                <img src={record.biometricPhoto} alt="Bio" className="w-full h-full object-cover group-hover/bio:scale-110 transition-transform blur-[2px] hover:blur-none" title="Biometric ID Photo" />
                                             </div>
                                         ) : (
                                             <span className="text-[9px] font-black text-slate-300 uppercase">No Visual ID</span>
@@ -214,7 +212,7 @@ const AdminAttendance = () => {
                                     <td className="px-8 py-6 text-right relative">
                                         <button
                                             onClick={() => setOpenMenuId(openMenuId === record._id ? null : record._id)}
-                                            className="p-2.5 bg-slate-800 border border-white/5 rounded-xl text-slate-500 hover:text-primary-400 hover:border-primary-500/30 shadow-sm transition-all focus:outline-none"
+                                            className="p-2.5 bg-white/5 border border-white/10 rounded-xl text-slate-500 hover:text-indigo-400 hover:border-indigo-500/30 shadow-sm transition-all focus:outline-none"
                                         >
                                             <MoreHorizontal size={18} />
                                         </button>
@@ -224,35 +222,34 @@ const AdminAttendance = () => {
                                                     initial={{ opacity: 0, y: 10, scale: 0.95 }}
                                                     animate={{ opacity: 1, y: 0, scale: 1 }}
                                                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                                    className="absolute right-8 top-16 w-48 bg-slate-900 rounded-2xl shadow-2xl border border-white/10 py-2 z-50 text-left overflow-hidden"
+                                                    className="absolute right-8 top-16 w-48 bg-[#1E293B] rounded-2xl shadow-2xl border border-white/10 py-2 z-50 text-left overflow-hidden"
                                                 >
                                                     <button
                                                         onClick={() => {
                                                             setOpenMenuId(null);
-                                                            showNotification('success', 'View Details action triggered');
+                                                            showNotification('success', 'Full Telemetry Analyzed');
                                                         }}
-                                                        className="w-full px-4 py-2.5 text-xs font-bold text-slate-400 hover:bg-white/5 hover:text-primary-400 text-left transition-colors flex items-center gap-2"
+                                                        className="w-full px-4 py-2.5 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:bg-white/5 hover:text-indigo-400 text-left transition-colors flex items-center gap-2"
                                                     >
-                                                        View Full Details
-                                                    </button>
-                                                    <button
-                                                        onClick={() => {
-                                                            setOpenMenuId(null);
-                                                            showNotification('success', 'Edit Record action triggered');
-                                                        }}
-                                                        className="w-full px-4 py-2.5 text-xs font-bold text-slate-400 hover:bg-white/5 hover:text-orange-400 text-left transition-colors flex items-center gap-2"
-                                                    >
-                                                        Edit Record
+                                                        Deep Analysis
                                                     </button>
                                                     <div className="h-px bg-white/5 my-1 w-full" />
                                                     <button
-                                                        onClick={() => {
+                                                        onClick={async () => {
+                                                            if (window.confirm('Confirm permanent deletion of this shift record?')) {
+                                                                try {
+                                                                    await api.delete(`admin/attendance/${record._id}`);
+                                                                    setAttendance(prev => prev.filter(a => a._id !== record._id));
+                                                                    showNotification('success', 'Shift Record Purged');
+                                                                } catch (err) {
+                                                                    showNotification('error', 'Purge Failed');
+                                                                }
+                                                            }
                                                             setOpenMenuId(null);
-                                                            showNotification('error', 'Delete Record action triggered');
                                                         }}
-                                                        className="w-full px-4 py-2.5 text-xs font-bold text-red-500 hover:bg-red-500/10 text-left transition-colors flex items-center gap-2"
+                                                        className="w-full px-4 py-2.5 text-[10px] font-black uppercase tracking-widest text-red-500 hover:bg-red-500/10 text-left transition-colors flex items-center gap-2"
                                                     >
-                                                        Delete Record
+                                                        Purge Record
                                                     </button>
                                                 </motion.div>
                                             )}
