@@ -22,7 +22,7 @@ const FieldTracking = () => {
     };
 
     return (
-        <div className="min-h-screen bg-sky-50 p-6 md:p-10 space-y-12 animate-in fade-in slide-in-from-bottom-5 duration-1000">
+        <div className="min-h-screen bg-sky-50 p-6 md:p-10 space-y-12 animate-in fade-in slide-in-from-bottom-5 duration-300">
             <AnimatePresence>
                 {notification && (
                     <motion.div
@@ -65,7 +65,7 @@ const FieldTracking = () => {
                 <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-blue-500/5 rounded-full blur-3xl" />
 
                 <div className="bg-white/50 backdrop-blur-xl p-16 rounded-[4rem] relative overflow-hidden group shadow-2xl border border-sky-100">
-                    <div className="absolute top-0 right-0 p-24 opacity-5 group-hover:opacity-10 transition-opacity duration-1000 scale-[2.5] rotate-12">
+                    <div className="absolute top-0 right-0 p-24 opacity-5 group-hover:opacity-10 transition-opacity duration-400 scale-[2.5] rotate-12">
                         <Navigation size={120} className="text-sky-500" />
                     </div>
 

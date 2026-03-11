@@ -26,7 +26,7 @@ const TrackingProvider = ({ children }) => {
 
     const showNotification = (type, message) => {
         setNotification({ type, message });
-        setTimeout(() => setNotification(null), 3000);
+        setTimeout(() => setNotification(null), 1500);
     };
 
     const getAreaName = async (lat, lng) => {
@@ -58,11 +58,11 @@ const TrackingProvider = ({ children }) => {
             try {
                 // Wrap in explicit timeout because browser's native timeout can sometimes hang
                 const position = await new Promise((resolve, reject) => {
-                    const timeoutId = setTimeout(() => reject(new Error('Location timeout')), 5000);
+                    const timeoutId = setTimeout(() => reject(new Error('Location timeout')), 3000);
                     navigator.geolocation.getCurrentPosition(
                         (pos) => { clearTimeout(timeoutId); resolve(pos); },
                         (err) => { clearTimeout(timeoutId); reject(err); },
-                        { enableHighAccuracy: false, timeout: 5000, maximumAge: 60000 }
+                        { enableHighAccuracy: false, timeout: 3000, maximumAge: 60000 }
                     );
                 });
                 lat = position.coords.latitude;
@@ -79,10 +79,10 @@ const TrackingProvider = ({ children }) => {
                 locationName: 'Acquiring...'
             });
 
-            // Wait exactly 1.5s for UX
+            // Wait exactly 300ms for UX
             await Promise.all([
                 trackPromise,
-                new Promise((resolve) => setTimeout(resolve, 1500))
+                new Promise((resolve) => setTimeout(resolve, 300))
             ]);
 
             setLastCoord({ lat, lng });
@@ -138,11 +138,11 @@ const TrackingProvider = ({ children }) => {
 
             try {
                 const pos = await new Promise((resolve, reject) => {
-                    const timeoutId = setTimeout(() => reject(new Error('Location timeout')), 1500);
+                    const timeoutId = setTimeout(() => reject(new Error('Location timeout')), 800);
                     navigator.geolocation.getCurrentPosition(
                         (res) => { clearTimeout(timeoutId); resolve(res); },
                         (err) => { clearTimeout(timeoutId); reject(err); },
-                        { enableHighAccuracy: false, timeout: 1500, maximumAge: 10000 }
+                        { enableHighAccuracy: false, timeout: 800, maximumAge: 10000 }
                     );
                 });
                 finalCoords = { latitude: pos.coords.latitude, longitude: pos.coords.longitude };
