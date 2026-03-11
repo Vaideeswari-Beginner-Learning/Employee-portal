@@ -30,13 +30,16 @@ const SettingsPage = () => {
     const [loading, setLoading] = useState(false);
     const [notification, setNotification] = useState(null);
     const [message, setMessage] = useState('');
-    const [notificationPrefs, setNotificationPrefs] = useState({
-        attendance: true,
-        leave: true,
-        broadcasts: true,
-        reports: false,
-        fieldOps: true,
-        security: true,
+    const [notificationPrefs, setNotificationPrefs] = useState(() => {
+        const saved = localStorage.getItem('notificationPrefs');
+        return saved ? JSON.parse(saved) : {
+            attendance: true,
+            leave: true,
+            broadcasts: true,
+            reports: false,
+            fieldOps: true,
+            security: true,
+        };
     });
 
     const [portalConfig, setPortalConfig] = useState({
@@ -62,6 +65,7 @@ const SettingsPage = () => {
     };
 
     const handleSaveAlerts = () => {
+        localStorage.setItem('notificationPrefs', JSON.stringify(notificationPrefs));
         showNotification('success', 'Notification Preferences Saved Successfully.');
     };
 

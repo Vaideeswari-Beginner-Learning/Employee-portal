@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Bell, User, LogOut, Menu } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import api from '../utils/api';
 
 const MainLayout = () => {
@@ -17,6 +18,40 @@ const MainLayout = () => {
             api.get('announcements')
                 .then(res => setAnnouncementsCount(res.data.length))
                 .catch(err => console.error('Error fetching announcements:', err));
+
+            // Evening Report Reminder Logic
+            const checkEveningReminder = () => {
+                const now = new Date();
+                const currentHour = now.getHours();
+                const today = now.toLocaleDateString();
+                const lastReminder = localStorage.getItem('lastEveningReportReminder');
+
+                // Get prefs from localStorage
+                const savedPrefs = localStorage.getItem('notificationPrefs');
+                const prefs = savedPrefs ? JSON.parse(savedPrefs) : { reports: false };
+
+                if (currentHour >= 18 && prefs.reports && lastReminder !== today) {
+                    toast('📋 Reporting Protocol: Data Entry Pending', {
+                        icon: '⚠️',
+                        duration: 6000,
+                        style: {
+                            borderRadius: '16px',
+                            background: '#0ea5e9',
+                            color: '#fff',
+                            fontWeight: 'black',
+                            textTransform: 'uppercase',
+                            fontSize: '10px',
+                            letterSpacing: '0.1em'
+                        },
+                    });
+                    localStorage.setItem('lastEveningReportReminder', today);
+                }
+            };
+
+            // Run check on mount and then every 30 minutes
+            checkEveningReminder();
+            const interval = setInterval(checkEveningReminder, 1800000); // 30 mins
+            return () => clearInterval(interval);
         }
     }, [user]);
 
