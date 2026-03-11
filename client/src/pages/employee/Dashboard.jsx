@@ -13,27 +13,36 @@ import {
     Settings,
     Shield,
     LayoutDashboard,
-    Activity
+    Activity,
+    Flag,
+    Building2,
+    Gift,
+    X
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../utils/api';
 import TaskStatusChart from '../../components/TaskStatusChart';
+import { AnimatePresence } from 'framer-motion';
 
 const EmployeeDashboard = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const [announcements, setAnnouncements] = useState([]);
     const [tasks, setTasks] = useState([]);
+    const [holidays, setHolidays] = useState([]);
+    const [selectedHoliday, setSelectedHoliday] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [annRes, tasksRes] = await Promise.all([
+                const [annRes, tasksRes, holidayRes] = await Promise.all([
                     api.get('announcements'),
-                    api.get('tasks')
+                    api.get('tasks'),
+                    api.get('admin/holidays')
                 ]);
                 setAnnouncements(annRes.data);
                 setTasks(tasksRes.data);
+                setHolidays(holidayRes.data);
             } catch (err) {
                 console.error('Fetch error:', err);
             }
@@ -42,7 +51,53 @@ const EmployeeDashboard = () => {
     }, []);
 
     return (
-        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700 bg-sky-50 min-h-screen p-6 md:p-10">
+        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700 bg-sky-50 min-h-screen p-6 md:p-10 relative">
+            {/* Holiday Detail Modal */}
+            <AnimatePresence>
+                {selectedHoliday && (
+                    <motion.div
+                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                        onClick={() => setSelectedHoliday(null)}
+                        className="fixed inset-0 z-[500] bg-black/40 backdrop-blur-md flex items-center justify-center p-6"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.85, y: 30 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.85, y: 30 }}
+                            onClick={e => e.stopPropagation()}
+                            className="bg-white rounded-[2.5rem] shadow-2xl border border-sky-100 w-full max-w-md overflow-hidden"
+                        >
+                            <div className="h-24 bg-gradient-to-r from-sky-500 to-blue-600 flex items-center justify-between px-8">
+                                <div>
+                                    <h2 className="text-lg font-black text-white uppercase tracking-tight">Holiday Purpose</h2>
+                                    <p className="text-[10px] text-sky-100 font-bold uppercase tracking-widest">{selectedHoliday.title}</p>
+                                </div>
+                                <button onClick={() => setSelectedHoliday(null)} className="p-2 bg-white/20 hover:bg-white/30 rounded-xl text-white transition-all">
+                                    <X size={18} />
+                                </button>
+                            </div>
+                            <div className="p-8 space-y-6">
+                                <div className="p-5 bg-sky-50 rounded-2xl border border-sky-100">
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Description</p>
+                                    <p className="text-sm font-bold text-slate-700 leading-relaxed">
+                                        {selectedHoliday.description || "The management has assigned this day as a holiday for the respective purpose mentioned above. All employees are advised to plan accordingly."}
+                                    </p>
+                                </div>
+                                <div className="flex items-center gap-4">
+                                    <div className="flex-1 p-4 bg-sky-50 rounded-2xl border border-sky-100 text-center">
+                                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Date</p>
+                                        <p className="text-xs font-black text-slate-800">{new Date(selectedHoliday.date).toLocaleDateString(undefined, { day: '2-digit', month: 'short', year: 'numeric' })}</p>
+                                    </div>
+                                    <div className="flex-1 p-4 bg-sky-50 rounded-2xl border border-sky-100 text-center">
+                                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Type</p>
+                                        <p className="text-xs font-black text-sky-600 uppercase tracking-widest">{selectedHoliday.type}</p>
+                                    </div>
+                                </div>
+                                <button onClick={() => setSelectedHoliday(null)} className="w-full py-4 bg-sky-500 text-white font-black text-[10px] uppercase tracking-widest rounded-2xl shadow-xl shadow-sky-300/40">Acknowledge</button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             {/* Header / Company Title */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
@@ -157,43 +212,55 @@ const EmployeeDashboard = () => {
                         </div>
                     </div>
 
-                    {/* Lower Sections */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                        {/* Modules Section */}
-                        <div className="bg-white/50 backdrop-blur-xl border border-sky-100 rounded-[2.5rem] overflow-hidden shadow-2xl">
-                            <div className="p-6 border-b border-sky-100 bg-sky-50 flex items-center gap-3">
-                                <div className="p-2 bg-sky-500/10 rounded-xl text-sky-500 border border-sky-500/20">
-                                    <LayoutDashboard size={18} />
+                    {/* Holiday Section */}
+                    <div className="bg-white/50 backdrop-blur-xl border border-sky-100 rounded-[2.5rem] overflow-hidden shadow-2xl">
+                        <div className="p-6 border-b border-sky-100 bg-sky-50 flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <div className="p-2 bg-rose-500/10 rounded-xl text-rose-500 border border-rose-500/20">
+                                    <Calendar size={18} />
                                 </div>
-                                <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">Active Protocols</h3>
+                                <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">Holiday Registry</h3>
                             </div>
-                            <div className="p-6 grid grid-cols-2 gap-4">
-                                <ModuleBadge color="bg-amber-400" name="Briefing" onClick={() => navigate('/attendance')} />
-                                <ModuleBadge color="bg-rose-500" name="Absence" onClick={() => navigate('/leave')} />
-                                <ModuleBadge color="bg-orange-500" name="Inventory" onClick={() => navigate('/reports')} />
-                                <ModuleBadge color="bg-emerald-500" name="Hierarchy" onClick={() => navigate('/settings')} />
-                            </div>
+                            <span className="text-[9px] font-black text-sky-500 uppercase tracking-widest">Year: {new Date().getFullYear()}</span>
                         </div>
-
-                        {/* Custom Fields */}
-                        <div className="bg-white/50 backdrop-blur-xl border border-sky-100 rounded-[2.5rem] overflow-hidden shadow-2xl">
-                            <div className="p-6 border-b border-sky-100 bg-sky-50 flex items-center gap-3">
-                                <div className="p-2 bg-emerald-500/10 rounded-xl text-emerald-400 border border-emerald-500/20">
-                                    <FileText size={18} />
-                                </div>
-                                <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">System Metadata</h3>
-                            </div>
-                            <div className="p-8">
-                                <div className="p-5 bg-sky-50/80 rounded-2xl border border-sky-100 shadow-inner overflow-hidden relative">
-                                    <div className="absolute top-0 right-0 p-4 opacity-5">
-                                        <Activity size={40} className="text-slate-800" />
+                        <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {[
+                                { type: 'government', label: 'Government', icon: Flag, color: 'text-red-500', bg: 'bg-red-50', border: 'border-red-100' },
+                                { type: 'company', label: 'Company', icon: Building2, color: 'text-sky-500', bg: 'bg-sky-50', border: 'border-sky-100' },
+                            ].map(t => {
+                                const latest = holidays.filter(h => h.type === t.type).sort((a, b) => new Date(a.date) - new Date(b.date))[0];
+                                return (
+                                    <div
+                                        key={t.type}
+                                        onClick={() => latest && setSelectedHoliday(latest)}
+                                        className={`p-5 rounded-2xl border ${t.bg} ${t.border} flex items-center justify-between cursor-pointer hover:shadow-lg transition-all active:scale-95 group`}
+                                    >
+                                        <div className="flex items-center gap-4">
+                                            <div className={`p-3 bg-white rounded-xl shadow-sm ${t.color}`}>
+                                                <t.icon size={20} />
+                                            </div>
+                                            <div>
+                                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">{t.label} Holiday</p>
+                                                <p className="text-xs font-black text-slate-800 uppercase tracking-tight">{latest ? latest.title : 'No Upcoming'}</p>
+                                            </div>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="text-[14px] font-black text-slate-700 leading-none">{latest ? new Date(latest.date).getDate() : '--'}</p>
+                                            <p className="text-[8px] font-black text-slate-400 uppercase">{latest ? new Date(latest.date).toLocaleString('default', { month: 'short' }) : 'N/A'}</p>
+                                        </div>
                                     </div>
-                                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Field Classification</p>
-                                    <div className="flex items-center justify-between gap-4">
-                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-tight">Deployment Logic:</p>
-                                        <span className="px-3 py-1 bg-primary-500/10 text-primary-400 text-[9px] font-black rounded-lg uppercase tracking-widest border border-primary-500/20 shadow-lg">Remote Synced</span>
+                                );
+                            })}
+                        </div>
+                        <div className="px-6 pb-6 space-y-3">
+                            <div className="p-4 bg-sky-50/50 rounded-2xl border border-sky-100 flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2 bg-amber-500/10 rounded-xl text-amber-500">
+                                        <Gift size={16} />
                                     </div>
+                                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Optional Leave Protocol</p>
                                 </div>
+                                <span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-lg text-[9px] font-black uppercase tracking-widest border border-amber-200">Active</span>
                             </div>
                         </div>
                     </div>

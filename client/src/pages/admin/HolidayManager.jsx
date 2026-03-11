@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../../utils/api';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Trash2, Calendar, X, Building2, Flag, Gift, CheckCircle, AlertCircle } from 'lucide-react';
+import { Plus, Trash2, Calendar, X, Building2, Flag, Gift, CheckCircle, AlertCircle, LayoutGrid, List } from 'lucide-react';
 
 const HOLIDAY_TYPES = [
     { value: 'government', label: 'Government Holiday', icon: Flag, color: 'text-red-600', bg: 'bg-red-50', border: 'border-red-200', badge: 'bg-red-100 text-red-700 border-red-200' },
@@ -15,6 +15,8 @@ const HolidayManager = () => {
     const [showForm, setShowForm] = useState(false);
     const [notification, setNotification] = useState(null);
     const [form, setForm] = useState({ title: '', date: '', type: 'government', description: '' });
+    const [viewMode, setViewMode] = useState('list'); // 'list' or 'calendar'
+    const [hoverHoliday, setHoverHoliday] = useState(null);
 
     useEffect(() => {
         fetchHolidays();
@@ -168,27 +170,48 @@ const HolidayManager = () => {
                         Manage company and government holidays — visible to all employees
                     </p>
                 </div>
-                <motion.button
-                    whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-                    onClick={() => setShowForm(true)}
-                    className="flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-sky-500 to-blue-600 text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-sky-300/40 hover:from-sky-600 hover:to-blue-700 transition-all"
-                >
-                    <Plus size={18} /> Add Holiday
-                </motion.button>
+                <div className="flex items-center gap-3">
+                    <div className="bg-white p-1 rounded-xl shadow-inner border border-sky-100 flex">
+                        <button
+                            onClick={() => setViewMode('list')}
+                            className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-sky-500 text-white shadow-md' : 'text-slate-400 hover:text-sky-500'}`}
+                        >
+                            <List size={18} />
+                        </button>
+                        <button
+                            onClick={() => setViewMode('calendar')}
+                            className={`p-2 rounded-lg transition-all ${viewMode === 'calendar' ? 'bg-sky-500 text-white shadow-md' : 'text-slate-400 hover:text-sky-500'}`}
+                        >
+                            <LayoutGrid size={18} />
+                        </button>
+                    </div>
+                    <motion.button
+                        whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+                        onClick={() => setShowForm(true)}
+                        className="flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-sky-500 to-blue-600 text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-sky-300/40 hover:from-sky-600 hover:to-blue-700 transition-all"
+                    >
+                        <Plus size={18} /> Add Holiday
+                    </motion.button>
+                </div>
             </div>
 
             {/* Summary badges */}
-            <div className="grid grid-cols-3 gap-4">
+            <div className="flex flex-wrap gap-4">
                 {HOLIDAY_TYPES.map(t => {
                     const count = holidays.filter(h => h.type === t.value).length;
                     return (
-                        <div key={t.value} className={`p-5 rounded-2xl border ${t.bg} ${t.border} flex items-center gap-4`}>
-                            <div className={`p-3 rounded-xl ${t.color} bg-white shadow-sm`}>
-                                <t.icon size={20} />
+                        <div key={t.value} className={`flex-1 min-w-[240px] p-5 rounded-2xl border ${t.bg} ${t.border} flex items-center justify-between gap-4 group hover:shadow-lg hover:shadow-sky-200/20 transition-all`}>
+                            <div className="flex items-center gap-4">
+                                <div className={`p-3 rounded-xl ${t.color} bg-white shadow-sm border border-sky-50 group-hover:scale-110 transition-transform`}>
+                                    <t.icon size={20} />
+                                </div>
+                                <div className="space-y-0.5">
+                                    <p className="text-2xl font-black text-slate-800 leading-none">{count}</p>
+                                    <p className={`text-[9px] font-black uppercase tracking-widest ${t.color}`}>{t.label}</p>
+                                </div>
                             </div>
-                            <div>
-                                <p className="text-2xl font-black text-slate-800">{count}</p>
-                                <p className={`text-[9px] font-black uppercase tracking-widest ${t.color}`}>{t.label}</p>
+                            <div className={`w-8 h-8 rounded-full ${t.bg} border-2 ${t.border} flex items-center justify-center text-[10px] font-black ${t.color}`}>
+                                {Math.round((count / (holidays.length || 1)) * 100)}%
                             </div>
                         </div>
                     );
@@ -201,12 +224,12 @@ const HolidayManager = () => {
                     <div className="w-10 h-10 rounded-full border-4 border-sky-200 border-t-sky-500 animate-spin" />
                 </div>
             ) : holidays.length === 0 ? (
-                <div className="text-center py-24 bg-white rounded-[2.5rem] border border-sky-100">
-                    <Calendar size={48} className="mx-auto text-sky-200 mb-4" />
+                <div className="text-center py-24 bg-white rounded-[2.5rem] border border-sky-100 shadow-sm">
+                    <Calendar size={48} className="mx-auto text-sky-200 mb-4 animate-float" />
                     <p className="text-slate-400 font-black text-[10px] uppercase tracking-widest">No holidays added yet</p>
                     <p className="text-slate-300 text-xs mt-2">Click "Add Holiday" to add government or company holidays</p>
                 </div>
-            ) : (
+            ) : viewMode === 'list' ? (
                 <div className="space-y-6">
                     {Object.entries(grouped).map(([month, items]) => (
                         <div key={month} className="bg-white rounded-[2rem] border border-sky-100 overflow-hidden shadow-sm">
@@ -253,6 +276,71 @@ const HolidayManager = () => {
                             </div>
                         </div>
                     ))}
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 relative">
+                    {/* Hover Tooltip Overlay */}
+                    <AnimatePresence>
+                        {hoverHoliday && (
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.95 }}
+                                className="fixed z-[500] pointer-events-none"
+                                style={{ top: hoverHoliday.y - 80, left: hoverHoliday.x - 100 }}
+                            >
+                                <div className="bg-slate-900 border border-slate-800 px-4 py-2 rounded-xl shadow-2xl text-white">
+                                    <p className="text-[10px] font-black uppercase tracking-widest text-sky-400 mb-1">{hoverHoliday.title}</p>
+                                    <p className="text-[8px] font-bold text-slate-400 uppercase tracking-tighter">{hoverHoliday.type}</p>
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
+                    {Array.from({ length: 12 }).map((_, mIdx) => {
+                        const year = new Date().getFullYear();
+                        const date = new Date(year, mIdx, 1);
+                        const monthName = date.toLocaleString('default', { month: 'long' });
+                        const daysInMonth = new Date(year, mIdx + 1, 0).getDate();
+                        const firstDay = new Date(year, mIdx, 1).getDay();
+
+                        return (
+                            <motion.div
+                                key={monthName}
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: mIdx * 0.05 }}
+                                className="bg-white rounded-[2rem] border border-sky-100 p-6 shadow-sm hover:shadow-md transition-all"
+                            >
+                                <p className="text-[10px] font-black text-slate-800 uppercase tracking-[0.3em] mb-4 text-center">{monthName}</p>
+                                <div className="grid grid-cols-7 gap-1">
+                                    {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(d => (
+                                        <span key={d} className="text-[8px] font-black text-slate-300 text-center py-1">{d}</span>
+                                    ))}
+                                    {Array.from({ length: firstDay }).map((_, i) => (
+                                        <div key={`empty-${i}`} />
+                                    ))}
+                                    {Array.from({ length: daysInMonth }).map((_, i) => {
+                                        const d = i + 1;
+                                        const dayDate = new Date(year, mIdx, d).toISOString().split('T')[0];
+                                        const h = holidays.find(hol => hol.date.split('T')[0] === dayDate);
+                                        const typeInfo = h ? getTypeInfo(h.type) : null;
+
+                                        return (
+                                            <div
+                                                key={d}
+                                                onMouseEnter={(e) => h && setHoverHoliday({ ...h, x: e.clientX, y: e.clientY })}
+                                                onMouseLeave={() => setHoverHoliday(null)}
+                                                className={`aspect-square flex items-center justify-center rounded-lg text-[10px] font-black transition-all ${h ? `${typeInfo.bg} ${typeInfo.color} border ${typeInfo.border} cursor-pointer scale-110 shadow-sm z-10 hover:scale-125` : 'text-slate-400 hover:bg-sky-50'}`}
+                                            >
+                                                {d}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </motion.div>
+                        );
+                    })}
                 </div>
             )}
         </div>

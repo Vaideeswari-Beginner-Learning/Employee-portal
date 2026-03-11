@@ -132,7 +132,7 @@ const AdminAttendance = () => {
                                         </div>
                                         <p className="text-xl font-black text-slate-800 tabular-nums">
                                             {selectedRecord.checkIn
-                                                ? new Date(selectedRecord.checkIn).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })
+                                                ? new Date(selectedRecord.checkIn).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' })
                                                 : '--:--'}
                                         </p>
                                     </div>
@@ -143,7 +143,7 @@ const AdminAttendance = () => {
                                         </div>
                                         <p className="text-xl font-black text-slate-800 tabular-nums">
                                             {selectedRecord.checkOut
-                                                ? new Date(selectedRecord.checkOut).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })
+                                                ? new Date(selectedRecord.checkOut).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' })
                                                 : '--:--'}
                                         </p>
                                     </div>
@@ -300,13 +300,13 @@ const AdminAttendance = () => {
                                                 <div className="p-1.5 bg-emerald-500/10 text-emerald-400 rounded-lg border border-emerald-500/20">
                                                     <Clock size={12} />
                                                 </div>
-                                                <p className="text-xs font-black text-slate-700 tabular-nums">In: {record.checkIn ? new Date(record.checkIn).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' }) : '--:--'}</p>
+                                                <p className="text-xs font-black text-slate-700 tabular-nums">In: {record.checkIn ? new Date(record.checkIn).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '--:--'}</p>
                                             </div>
                                             <div className="flex items-center gap-3">
                                                 <div className="p-1.5 bg-orange-500/10 text-orange-400 rounded-lg border border-orange-500/20">
                                                     <Clock size={12} />
                                                 </div>
-                                                <p className="text-xs font-black text-slate-700 tabular-nums">Out: {record.checkOut ? new Date(record.checkOut).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' }) : '--:--'}</p>
+                                                <p className="text-xs font-black text-slate-700 tabular-nums">Out: {record.checkOut ? new Date(record.checkOut).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '--:--'}</p>
                                             </div>
                                         </div>
                                     </td>
