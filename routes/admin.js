@@ -159,7 +159,20 @@ router.get('/leaves', async (req, res) => {
         res.status(500).send(e);
     }
 });
-
+// Create a leave for an employee (Admin/Manager assigned)
+router.post('/leaves', async (req, res) => {
+    try {
+        const leave = new Leave({
+            ...req.body,
+            status: 'Approved',
+            isAdminEntered: true
+        });
+        await leave.save();
+        res.status(201).send(leave);
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
 // Leave Management (Support both PUT and PATCH)
 router.route('/leaves/:id').put(async (req, res) => {
     try {

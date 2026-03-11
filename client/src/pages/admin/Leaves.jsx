@@ -13,7 +13,10 @@ import {
     AlertCircle,
     Download,
     ChevronDown,
-    MoreVertical
+    MoreVertical,
+    Plus,
+    X,
+    FileText
 } from 'lucide-react';
 
 const AdminLeaves = () => {
@@ -22,10 +25,29 @@ const AdminLeaves = () => {
     const [loading, setLoading] = useState(true);
     const [notification, setNotification] = useState(null);
     const [activeDropdown, setActiveDropdown] = useState(null);
+    const [showAssignModal, setShowAssignModal] = useState(false);
+    const [employees, setEmployees] = useState([]);
+    const [assignForm, setAssignForm] = useState({
+        employee: '',
+        leaveType: 'Annual',
+        startDate: '',
+        endDate: '',
+        reason: ''
+    });
 
     useEffect(() => {
         fetchLeaves();
+        fetchEmployees();
     }, []);
+
+    const fetchEmployees = async () => {
+        try {
+            const res = await api.get('admin/employees');
+            setEmployees(res.data.filter(u => u.role === 'employee'));
+        } catch (err) {
+            console.error('Fetch employees error:', err);
+        }
+    };
 
 
     const showNotification = (type, message) => {
@@ -52,6 +74,20 @@ const AdminLeaves = () => {
         } catch (err) {
             const msg = err.response?.data?.error || err.response?.data?.message || err.message;
             showNotification('error', 'Action failed: ' + msg);
+        }
+    };
+
+    const handleAssignSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await api.post('admin/leaves', assignForm);
+            showNotification('success', 'Personnel absence protocol initialized.');
+            setShowAssignModal(false);
+            setAssignForm({ employee: '', leaveType: 'Annual', startDate: '', endDate: '', reason: '' });
+            fetchLeaves();
+        } catch (err) {
+            const msg = err.response?.data?.error || err.response?.data?.message || err.message;
+            showNotification('error', 'Initialization failed: ' + msg);
         }
     };
 
@@ -127,9 +163,15 @@ const AdminLeaves = () => {
                     </div>
                     <button
                         onClick={exportToCSV}
+                        className="bg-white hover:bg-sky-50 text-slate-400 px-6 py-3.5 flex items-center gap-3 rounded-2xl border border-sky-100 transition-all font-bold active:scale-95 text-[10px] uppercase tracking-widest"
+                    >
+                        <Download size={16} /> Matrix
+                    </button>
+                    <button
+                        onClick={() => setShowAssignModal(true)}
                         className="bg-sky-500 hover:bg-sky-700 text-slate-800 px-8 py-3.5 flex items-center gap-3 rounded-2xl shadow-lg shadow-sky-600/20 transition-all font-bold active:scale-95 text-xs uppercase tracking-widest"
                     >
-                        <Download size={20} /> Absence Matrix
+                        <Plus size={20} /> Assign Leave
                     </button>
                 </div>
             </div>
@@ -269,6 +311,98 @@ const AdminLeaves = () => {
                     </table>
                 </div>
             </div>
+
+            <AnimatePresence>
+                {showAssignModal && (
+                    <div className="fixed inset-0 bg-white/60 backdrop-blur-md flex items-center justify-center p-6 z-[100]">
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.95, opacity: 0 }}
+                            className="bg-sky-50 border border-sky-100 rounded-[2.5rem] w-full max-w-lg shadow-[0_0_100px_rgba(14,165,233,0.15)] relative overflow-hidden"
+                        >
+                            <div className="p-8 border-b border-sky-100 bg-sky-50/50 flex justify-between items-center">
+                                <div>
+                                    <h2 className="text-xl font-black text-slate-800 uppercase tracking-tight flex items-center gap-3">
+                                        <FileText className="text-sky-500" size={20} />
+                                        Assign <span className="text-sky-500 italic">Personnel Leave</span>
+                                    </h2>
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">Direct Operational Absence Entry</p>
+                                </div>
+                                <button onClick={() => setShowAssignModal(false)} className="w-10 h-10 rounded-xl bg-white border border-sky-100 text-slate-400 hover:text-red-400 transition-all flex items-center justify-center">
+                                    <X size={20} />
+                                </button>
+                            </div>
+                            <form onSubmit={handleAssignSubmit} className="p-8 space-y-6">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Target Personnel</label>
+                                    <div className="relative">
+                                        <select
+                                            required
+                                            value={assignForm.employee}
+                                            onChange={e => setAssignForm({ ...assignForm, employee: e.target.value })}
+                                            className="w-full bg-white border border-sky-100 rounded-xl p-4 text-xs font-black text-slate-800 focus:outline-none focus:border-sky-500 appearance-none cursor-pointer shadow-inner"
+                                        >
+                                            <option value="">Select Employee...</option>
+                                            {employees.map(emp => (
+                                                <option key={emp._id} value={emp._id}>{emp.name}</option>
+                                            ))}
+                                        </select>
+                                        <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Absence Vector (Type)</label>
+                                    <div className="relative">
+                                        <select
+                                            value={assignForm.leaveType}
+                                            onChange={e => setAssignForm({ ...assignForm, leaveType: e.target.value })}
+                                            className="w-full bg-white border border-sky-100 rounded-xl p-4 text-xs font-black text-slate-800 focus:outline-none focus:border-sky-500 appearance-none cursor-pointer shadow-inner"
+                                        >
+                                            <option>Annual</option>
+                                            <option>Sickness</option>
+                                            <option>Emergency</option>
+                                            <option>Unpaid</option>
+                                        </select>
+                                        <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-6">
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Inception</label>
+                                        <input
+                                            required type="date" value={assignForm.startDate}
+                                            onChange={e => setAssignForm({ ...assignForm, startDate: e.target.value })}
+                                            className="w-full bg-white border border-sky-100 rounded-xl p-4 text-xs font-black text-slate-800 focus:outline-none focus:border-sky-500 shadow-inner"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Termination</label>
+                                        <input
+                                            required type="date" value={assignForm.endDate}
+                                            onChange={e => setAssignForm({ ...assignForm, endDate: e.target.value })}
+                                            className="w-full bg-white border border-sky-100 rounded-xl p-4 text-xs font-black text-slate-800 focus:outline-none focus:border-sky-500 shadow-inner"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Official Reasoning</label>
+                                    <textarea
+                                        required rows="2" value={assignForm.reason}
+                                        onChange={e => setAssignForm({ ...assignForm, reason: e.target.value })}
+                                        placeholder="Identify reason for assignment..."
+                                        className="w-full bg-white border border-sky-100 rounded-xl p-4 text-xs font-black text-slate-800 focus:outline-none focus:border-sky-500 transition-all placeholder:text-slate-300 shadow-inner"
+                                    />
+                                </div>
+                                <div className="flex gap-4 pt-4 border-t border-sky-100">
+                                    <button onClick={() => setShowAssignModal(false)} type="button" className="flex-1 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400 bg-white border border-sky-100 rounded-xl hover:bg-slate-700 transition-all">Abort</button>
+                                    <button type="submit" className="flex-1 py-4 text-[10px] font-black uppercase tracking-widest text-slate-800 bg-sky-500 rounded-xl hover:bg-sky-700 shadow-xl shadow-sky-600/20 transition-all border border-sky-400/20">Finalize Absence</button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };

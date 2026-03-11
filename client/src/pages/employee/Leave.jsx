@@ -52,7 +52,7 @@ const LeavePage = () => {
     };
 
     return (
-        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-5 duration-700 bg-sky-50 min-h-screen p-6 md:p-10">
+        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-5 duration-700 bg-sky-50 min-h-screen p-4 sm:p-6 md:p-10">
             {/* Notification Portal */}
             <AnimatePresence>
                 {notification && (
@@ -77,9 +77,9 @@ const LeavePage = () => {
                 </div>
                 <button
                     onClick={() => setShowModal(true)}
-                    className="px-6 py-2.5 bg-sky-500 text-slate-800 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-sky-600/20 hover:bg-sky-700 transition-all flex items-center justify-center gap-2 border border-sky-400/20"
+                    className="w-full md:w-auto px-6 py-2.5 bg-sky-500 text-slate-800 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-sky-600/20 hover:bg-sky-700 transition-all flex items-center justify-center gap-2 border border-sky-400/20"
                 >
-                    <Plus size={16} /> New Leave Request
+                    <Plus size={16} /> New Request
                 </button>
             </div>
 
@@ -143,7 +143,7 @@ const LeavePage = () => {
                         <p className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.3em] mt-1">Official Corporate Absence Nodes</p>
                     </div>
 
-                    <div className="p-8 space-y-4 max-h-[400px] overflow-y-auto custom-scrollbar">
+                    <div className="p-4 sm:p-8 space-y-4 max-h-[400px] overflow-y-auto custom-scrollbar">
                         {adminLeaves.length > 0 ? adminLeaves.map((leave) => (
                             <motion.div
                                 initial={{ x: 20, opacity: 0 }}
