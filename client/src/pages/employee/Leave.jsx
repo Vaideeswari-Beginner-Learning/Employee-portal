@@ -5,6 +5,7 @@ import { Plus, Clock, CheckCircle, AlertCircle, Calendar, Hash, X, Shield, FileT
 
 const LeavePage = () => {
     const [leaves, setLeaves] = useState([]);
+    const [adminLeaves, setAdminLeaves] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [notification, setNotification] = useState(null);
     const [formData, setFormData] = useState({
@@ -27,7 +28,10 @@ const LeavePage = () => {
     const fetchLeaves = async () => {
         try {
             const res = await api.get('employee/leave');
-            setLeaves(res.data);
+            // Filter admin leaves vs personal requests
+            // Assuming admin leaves have a specific flag or are just distinct in the response
+            setLeaves(res.data.filter(l => !l.isAdminEntered));
+            setAdminLeaves(res.data.filter(l => l.isAdminEntered));
         } catch (err) {
             console.error('Fetch leaves error:', err.response?.data || err.message);
         }
@@ -85,69 +89,90 @@ const LeavePage = () => {
                 <LeaveStat label="Emergency Credit" value="03 Fixed" color="text-slate-400" />
             </div>
 
-            <div className="bg-white/50 backdrop-blur-xl border border-sky-100 rounded-[2.5rem] overflow-hidden shadow-2xl">
-                <div className="p-6 border-b border-sky-100 bg-sky-50 flex items-center justify-between">
-                    <h2 className="text-lg font-black text-slate-800 tracking-tight uppercase">Temporal <span className="text-sky-500">Absence Logs</span></h2>
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest bg-sky-50 px-3 py-1 rounded-lg border border-sky-100 shadow-inner">Index: FY-2026</span>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="bg-white/50 backdrop-blur-xl border border-sky-100 rounded-[2.5rem] overflow-hidden shadow-2xl">
+                    <div className="p-6 border-b border-sky-100 bg-sky-50 flex items-center justify-between">
+                        <h2 className="text-lg font-black text-slate-800 tracking-tight uppercase">Temporal <span className="text-sky-500">Absence Logs</span></h2>
+                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest bg-sky-50 px-3 py-1 rounded-lg border border-sky-100 shadow-inner">Index: FY-2026</span>
+                    </div>
+
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left bg-transparent border-collapse">
+                            <thead>
+                                <tr className="border-b border-sky-100 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                    <th className="px-6 py-4">Protocol</th>
+                                    <th className="px-6 py-4">Duration</th>
+                                    <th className="px-6 py-4">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-sky-100">
+                                {leaves.length > 0 ? leaves.map((leave) => (
+                                    <tr key={leave._id} className="hover:bg-sky-50 transition-colors group">
+                                        <td className="px-6 py-6">
+                                            <p className="text-xs font-black text-slate-800 uppercase tracking-tight">{leave.leaveType}</p>
+                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-tight mt-0.5 truncate max-w-[150px]">"{leave.reason}"</p>
+                                        </td>
+                                        <td className="px-6 py-6">
+                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-tight">{new Date(leave.startDate).toLocaleDateString()}</span>
+                                        </td>
+                                        <td className="px-6 py-6">
+                                            <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest
+                                                ${leave.status === 'Approved' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                                                    leave.status === 'Rejected' ? 'bg-red-500/10 text-red-500 border border-red-500/20' :
+                                                        'bg-orange-500/10 text-orange-500 border border-orange-500/20'}`}>
+                                                {leave.status}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )) : (
+                                    <tr>
+                                        <td colSpan="3" className="px-6 py-12 text-center text-[10px] text-slate-400 font-black uppercase tracking-widest">No requests detected</td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
-                <div className="overflow-x-auto min-w-full">
-                    <table className="w-full text-left bg-transparent border-collapse">
-                        <thead>
-                            <tr className="border-b border-sky-100 text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                                <th className="px-8 py-4">Request Identity</th>
-                                <th className="px-8 py-4">Protocol Duration</th>
-                                <th className="px-8 py-4">Status Vector</th>
-                                <th className="px-8 py-4 text-right">Registry Date</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-sky-100">
-                            {leaves.length > 0 ? leaves.map((leave, idx) => (
-                                <tr key={leave._id} className="hover:bg-sky-50 transition-colors group">
-                                    <td className="px-8 py-6">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-8 h-8 rounded-lg bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-500 shadow-inner">
-                                                <Shield size={14} />
-                                            </div>
-                                            <div>
-                                                <p className="text-xs font-black text-slate-800 uppercase tracking-tight">{leave.leaveType}</p>
-                                                <p className="text-[10px] font-black text-slate-400 truncate max-w-xs uppercase tracking-tight mt-0.5">"{leave.reason}"</p>
-                                            </div>
+                <div className="bg-slate-900 border border-slate-800 rounded-[2.5rem] overflow-hidden shadow-2xl relative">
+                    <div className="absolute top-0 right-0 p-8">
+                        <div className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" />
+                    </div>
+                    <div className="p-8 border-b border-slate-800 bg-slate-900/50">
+                        <h2 className="text-lg font-black text-white tracking-tight uppercase">Admin Assigned <span className="text-sky-500 italic">Leaves</span></h2>
+                        <p className="text-[9px] font-bold text-slate-500 uppercase tracking-[0.3em] mt-1">Official Corporate Absence Nodes</p>
+                    </div>
+
+                    <div className="p-8 space-y-4 max-h-[400px] overflow-y-auto custom-scrollbar">
+                        {adminLeaves.length > 0 ? adminLeaves.map((leave) => (
+                            <motion.div
+                                initial={{ x: 20, opacity: 0 }}
+                                animate={{ x: 0, opacity: 1 }}
+                                key={leave._id}
+                                className="p-5 bg-slate-800/50 border border-slate-700 rounded-2xl flex items-center justify-between group hover:border-sky-500/30 transition-all"
+                            >
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/20 flex flex-col items-center justify-center text-sky-400">
+                                        <span className="text-[10px] font-black leading-none">{new Date(leave.startDate).toLocaleDateString('en-US', { month: 'short' })}</span>
+                                        <span className="text-lg font-black leading-none tracking-tighter">{new Date(leave.startDate).getDate()}</span>
+                                    </div>
+                                    <div>
+                                        <p className="text-xs font-black text-white uppercase tracking-tight">{leave.leaveType}</p>
+                                        <div className="flex items-center gap-3 mt-1 text-[9px] font-bold text-slate-500 uppercase tracking-widest">
+                                            <span className="flex items-center gap-1"><Clock size={10} className="text-sky-500" /> {new Date(leave.startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                            <span className="flex items-center gap-1"><Hash size={10} className="text-sky-500" /> REF: {leave._id?.slice(-4).toUpperCase()}</span>
                                         </div>
-                                    </td>
-                                    <td className="px-8 py-6">
-                                        <div className="flex items-center gap-3">
-                                            <Calendar size={14} className="text-sky-500" />
-                                            <span className="text-xs font-black text-slate-400 uppercase tracking-tight">{new Date(leave.startDate).toLocaleDateString()} â€” {new Date(leave.endDate).toLocaleDateString()}</span>
-                                        </div>
-                                    </td>
-                                    <td className="px-8 py-6">
-                                        <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest
-                                            ${leave.status === 'Approved' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
-                                                leave.status === 'Rejected' ? 'bg-red-500/10 text-red-500 border border-red-500/20' :
-                                                    'bg-orange-500/10 text-orange-500 border border-orange-500/20'}`}>
-                                            <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
-                                            {leave.status}
-                                        </div>
-                                    </td>
-                                    <td className="px-8 py-6 text-right">
-                                        <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">
-                                            {new Date(leave.createdAt).toLocaleDateString()}
-                                        </span>
-                                    </td>
-                                </tr>
-                            )) : (
-                                <tr>
-                                    <td colSpan="4" className="px-8 py-16 text-center">
-                                        <div className="flex flex-col items-center gap-3">
-                                            <Plus size={40} className="text-slate-800" />
-                                            <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.4em]">No absence telemetry detected</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
+                                    </div>
+                                </div>
+                                <Shield size={16} className="text-slate-700 group-hover:text-sky-500 transition-colors" />
+                            </motion.div>
+                        )) : (
+                            <div className="py-12 text-center">
+                                <Calendar size={32} className="text-slate-800 mx-auto mb-3" />
+                                <p className="text-[10px] text-slate-600 font-black uppercase tracking-[0.4em]">No scheduled company absence</p>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 

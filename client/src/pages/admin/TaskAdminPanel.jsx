@@ -175,7 +175,7 @@ const AdminTaskPanel = () => {
                 {/* Main Table Area */}
                 <div className="xl:col-span-2 space-y-8">
                     {/* Active Tasks List */}
-                    <div className="card-premium flex flex-col h-[400px]">
+                    <div className="card-premium p-8 flex flex-col h-[400px]">
                         <div className="flex items-center justify-between mb-8 shrink-0">
                             <div>
                                 <h3 className="text-lg font-black text-slate-800 uppercase">Active Tasks</h3>
@@ -194,15 +194,15 @@ const AdminTaskPanel = () => {
 
                                 return (
                                     <div key={emp._id} className="space-y-3">
-                                        <div className="flex items-center gap-2 mb-2 sticky top-0 bg-sky-500 backdrop-blur-md py-1 z-10 px-2 rounded-lg">
-                                            <div className="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse" />
-                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{emp.name}'s Queue</span>
+                                        <div className="flex items-center gap-2 mb-4 sticky top-0 bg-sky-500 backdrop-blur-md py-4 z-10 px-6 rounded-[1.5rem] shadow-lg border border-sky-400/30">
+                                            <div className="w-2.5 h-2.5 rounded-full bg-white animate-pulse shadow-[0_0_12px_rgba(255,255,255,0.9)]" />
+                                            <span className="text-[12px] font-black text-white uppercase tracking-[0.25em]">{emp.name}'s Queue</span>
                                         </div>
                                         {activeTasks.map(task => (
                                             <div
                                                 key={task._id}
                                                 onClick={() => handleReview(task)}
-                                                className="stagger-item p-5 bg-sky-50 border border-sky-100 shadow-sm hover:shadow-xl rounded-[1.5rem] flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer transition-all hover:bg-sky-100 group"
+                                                className="stagger-item p-6 bg-white/60 backdrop-blur-sm border border-sky-100 shadow-sm hover:shadow-xl rounded-[2rem] flex flex-col sm:flex-row sm:items-center justify-between gap-6 cursor-pointer transition-all hover:bg-white group"
                                             >
                                                 <div>
                                                     <div className="flex items-center gap-3 mb-1">
@@ -211,20 +211,20 @@ const AdminTaskPanel = () => {
                                                             <span className="px-2 py-0.5 rounded-md bg-sky-500/10 text-sky-500 text-[9px] font-black uppercase tracking-widest border border-sky-500/20">Self-Task</span>
                                                         )}
                                                     </div>
-                                                    <p className="text-xs font-medium text-slate-400 flex items-center gap-2 uppercase tracking-wide">
-                                                        <span className="px-2 py-0.5 bg-sky-50 rounded text-slate-400 font-bold">{task.taskType}</span>
-                                                        <span>•</span>
-                                                        <span>{task.location}</span>
-                                                    </p>
+                                                    <div className="flex items-center gap-2 mt-2">
+                                                        <span className="px-2.5 py-1 bg-sky-500/5 text-sky-600 text-[10px] font-black rounded-lg border border-sky-500/10 uppercase tracking-wider">{task.taskType}</span>
+                                                        <span className="text-slate-300">•</span>
+                                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none drop-shadow-sm">{task.location}</span>
+                                                    </div>
                                                     {task.startLocation && (
                                                         <span className="text-[10px] font-bold text-emerald-400 flex items-center gap-1 mt-2 bg-emerald-500/10 w-max px-2 py-1 rounded-md border border-emerald-500/20">
                                                             <MapPin size={10} /> Live GPS Tracked
                                                         </span>
                                                     )}
                                                 </div>
-                                                <span className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider self-start sm:self-auto ${task.status === 'In Progress' ? 'bg-sky-500/10 text-sky-500 border border-sky-500/20 shadow-sm' : 'bg-sky-50 text-slate-400 border border-sky-100'}`}>
+                                                <div className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.15em] self-start sm:self-auto shadow-sm border ${task.status === 'In Progress' ? 'bg-sky-500 text-white border-sky-400 font-black' : 'bg-slate-50 text-slate-400 border-slate-100 font-bold'}`}>
                                                     {task.status}
-                                                </span>
+                                                </div>
                                             </div>
                                         ))}
                                     </div>

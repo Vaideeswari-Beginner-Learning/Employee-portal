@@ -10,6 +10,7 @@ import api from '../utils/api';
 const MainLayout = () => {
     const { user, loading, logout } = useAuth();
     const [announcementsCount, setAnnouncementsCount] = useState(0);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     useEffect(() => {
         if (user) {
@@ -50,7 +51,7 @@ const MainLayout = () => {
             </div>
 
             {/* Sidebar */}
-            <Sidebar />
+            <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
             <div className="flex-1 lg:ml-[240px] flex flex-col relative z-10">
                 {/* Top Navbar */}
@@ -58,10 +59,13 @@ const MainLayout = () => {
                     initial={{ y: -20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ duration: 0.5, ease: 'easeOut' }}
-                    className="h-20 bg-white/80 backdrop-blur-xl border-b border-sky-100 fixed top-0 right-0 left-0 lg:left-[240px] z-40 px-8 flex items-center justify-between shadow-sm shadow-sky-100/50"
+                    className="h-20 bg-white/80 backdrop-blur-xl border-b border-sky-100 fixed top-0 right-0 left-0 lg:left-[240px] z-40 px-4 md:px-8 flex items-center justify-between shadow-sm shadow-sky-100/50"
                 >
-                    <div className="flex-1 flex justify-center items-center px-4">
-                        <button className="lg:hidden p-2 hover:bg-sky-50 rounded-xl transition-colors text-sky-600 mr-4">
+                    <div className="flex-1 flex items-center px-0 md:px-4">
+                        <button
+                            onClick={() => setIsSidebarOpen(true)}
+                            className="lg:hidden p-2 hover:bg-sky-50 rounded-xl transition-colors text-sky-600 mr-2 md:mr-4"
+                        >
                             <Menu size={20} />
                         </button>
                         <div className="relative max-w-xl w-full">
@@ -105,7 +109,7 @@ const MainLayout = () => {
                 </motion.header>
 
                 {/* Main Content Area */}
-                <main className="p-10 max-w-[1600px] mx-auto w-full flex-grow mt-20">
+                <main className="p-4 sm:p-6 md:p-8 lg:p-10 max-w-[1600px] mx-auto w-full flex-grow mt-20">
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={typeof window !== 'undefined' ? window.location.pathname : ''}

@@ -285,7 +285,7 @@ const PerformanceHub = () => {
                                     </div>
                                 </div>
 
-                                <div className="space-y-3">
+                                <div className="space-y-3 pb-10">
                                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                         <FileText size={12} /> Operational Feedback
                                     </label>
@@ -299,17 +299,17 @@ const PerformanceHub = () => {
                                     ></textarea>
                                 </div>
 
-                                <div className="flex gap-4 pt-4">
+                                <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t border-sky-50 sticky bottom-0 bg-white pb-2 mt-auto">
                                     <button
                                         type="button"
                                         onClick={() => setShowRateModal(false)}
-                                        className="flex-1 py-4 text-[10px] font-black text-slate-400 bg-sky-50 border border-sky-100 rounded-2xl uppercase tracking-widest hover:bg-sky-100"
+                                        className="flex-1 py-4 text-[10px] font-black text-slate-400 bg-sky-50 border border-sky-100 rounded-2xl uppercase tracking-widest hover:bg-sky-100 transition-colors"
                                     >
                                         Abort Cycle
                                     </button>
                                     <button
                                         type="submit"
-                                        className="flex-1 py-4 text-[10px] font-black text-slate-800 bg-sky-500 rounded-2xl uppercase tracking-widest shadow-xl shadow-sky-600/20 hover:bg-sky-700 transition-all active:scale-95"
+                                        className="flex-1 py-4 text-[10px] font-black text-white bg-sky-500 rounded-2xl uppercase tracking-widest shadow-xl shadow-sky-600/20 hover:bg-sky-600 transition-all active:scale-95"
                                     >
                                         Sync Merit
                                     </button>
