@@ -89,6 +89,7 @@ const SupportChat = () => {
                     key={activeTab}
                     employeeId={roomId}
                     roomLabel={currentTab?.roomLabel}
+                    recipient={activeTab}
                 />
             </div>
         </div>

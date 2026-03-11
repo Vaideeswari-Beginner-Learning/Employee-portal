@@ -4,7 +4,7 @@ import api from '../utils/api';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 
-const GlobalChat = ({ employeeId, roomLabel }) => {
+const GlobalChat = ({ employeeId, roomLabel, recipient }) => {
     const { user } = useAuth();
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
@@ -128,6 +128,10 @@ const GlobalChat = ({ employeeId, roomLabel }) => {
             } else if (audioBlob) {
                 formData.append('attachment', audioBlob, 'voicenote.webm');
                 formData.append('attachmentType', 'voice');
+            }
+
+            if (recipient) {
+                formData.append('recipient', recipient);
             }
 
             const res = await api.post(`chat/${employeeId}`, formData, {

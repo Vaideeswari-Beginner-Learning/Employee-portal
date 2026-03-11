@@ -131,6 +131,7 @@ const ManagerComms = () => {
                                 <GlobalChat
                                     employeeId={selectedEmployee._id}
                                     roomLabel={selectedEmployee.isTeam ? 'Team Channel' : selectedEmployee.name}
+                                    recipient={selectedEmployee.isTeam ? 'team' : 'manager'}
                                 />
                             </div>
                         </div>

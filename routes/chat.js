@@ -51,7 +51,17 @@ router.get('/:employeeId', auth, async (req, res) => {
         }
 
         console.log(`[ChatFetch] Node ${req.user.name} accessing room ${targetId === TEAM_ID ? 'TEAM' : targetId}`);
-        const messages = await Message.find({ employeeId: targetId })
+
+        // Filter by visibleTo if the field exists (for new messages) or allow all for legacy messages
+        const query = {
+            employeeId: targetId,
+            $or: [
+                { visibleTo: { $exists: false } },
+                { visibleTo: req.user.role }
+            ]
+        };
+
+        const messages = await Message.find(query)
             .sort({ createdAt: 1 })
             .populate('sender', 'name role profilePhoto');
         res.json(messages);
@@ -100,13 +110,26 @@ router.post('/:employeeId', auth, upload.single('attachment'), async (req, res) 
 
         const senderNameStr = req.user.name || (req.user.role === 'admin' ? 'Admin Support' : 'Employee');
 
+        // Determine visibility based on recipient and sender role
+        let visibleTo = ['admin', 'employee']; // Always visible to Admin and the Employee room owner
+        const recipient = req.body.recipient;
+
+        if (targetId === TEAM_ID) {
+            visibleTo = ['admin', 'manager', 'employee'];
+        } else if (req.user.role === 'manager' || recipient === 'manager') {
+            visibleTo = ['admin', 'manager', 'employee'];
+        } else if (req.user.role === 'admin' || recipient === 'admin') {
+            visibleTo = ['admin', 'employee'];
+        }
+
         const newMessage = new Message({
             employeeId: targetId,
             sender: req.user._id,
             senderName: senderNameStr,
             content: content || '',
             attachmentUrl,
-            attachmentType: finalAttachmentType
+            attachmentType: finalAttachmentType,
+            visibleTo
         });
 
         console.log(`[ChatPost] Creating message from ${req.user.name} (${req.user._id}) for room ${targetId}`);

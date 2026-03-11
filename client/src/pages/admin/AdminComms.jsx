@@ -140,7 +140,7 @@ const AdminComms = () => {
                             </div>
                             {/* Pass selectedEmployee._id to the global chat, and don't render its own inner header inside it */}
                             <div className="flex-1 overflow-hidden [&>div]:h-full [&>div>div:first-child]:hidden">
-                                <GlobalChat employeeId={selectedEmployee._id} />
+                                <GlobalChat employeeId={selectedEmployee._id} recipient="admin" />
                             </div>
                         </div>
                     ) : (
