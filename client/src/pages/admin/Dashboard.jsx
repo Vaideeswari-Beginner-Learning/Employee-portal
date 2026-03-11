@@ -27,6 +27,7 @@ const AdminDashboard = () => {
         todayReports: 0
     });
     const [tasks, setTasks] = useState([]);
+    const [employees, setEmployees] = useState([]);
     const [isExporting, setIsExporting] = useState(false);
     const containerRef = useRef();
 
@@ -49,12 +50,14 @@ const AdminDashboard = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [statsRes, tasksRes] = await Promise.all([
+                const [statsRes, tasksRes, employeesRes] = await Promise.all([
                     api.get('admin/dashboard-stats'),
-                    api.get('tasks')
+                    api.get('tasks'),
+                    api.get('admin/employees')
                 ]);
                 setStats(statsRes.data);
                 setTasks(tasksRes.data);
+                setEmployees(employeesRes.data);
             } catch (err) {
                 console.error('Error fetching dashboard data:', err);
             }
@@ -164,8 +167,29 @@ const AdminDashboard = () => {
                 </div>
                 <div className="flex items-center gap-6">
                     <div className="flex -space-x-3">
-                        {[1, 2, 3, 4].map(i => (
-                            <div key={i} className="w-12 h-12 rounded-2xl border-4 border-white bg-sky-50 overflow-hidden shadow-md flex items-center justify-center" title="Active Monitoring Node">
+                        {employees.slice(0, 4).map((emp, i) => (
+                            <div
+                                key={emp._id}
+                                onClick={() => navigate('/admin/employees')}
+                                className="w-12 h-12 rounded-2xl border-4 border-white bg-sky-50 overflow-hidden shadow-md flex items-center justify-center cursor-pointer hover:scale-110 hover:z-20 transition-all active:scale-95 group"
+                                title={`Personnel: ${emp.name}`}
+                            >
+                                <div className="text-[10px] font-black text-sky-400 uppercase leading-none group-hover:text-sky-600 transition-colors">
+                                    {(emp.name || 'U').charAt(0)}{i + 1}
+                                </div>
+                            </div>
+                        ))}
+                        {employees.length > 4 && (
+                            <div
+                                onClick={() => navigate('/admin/employees')}
+                                className="w-12 h-12 rounded-2xl border-4 border-white bg-sky-500 overflow-hidden shadow-md flex items-center justify-center cursor-pointer hover:scale-110 hover:z-20 transition-all active:scale-95 group"
+                                title={`View all ${employees.length} employees`}
+                            >
+                                <div className="text-[10px] font-black text-white uppercase leading-none">+{employees.length - 4}</div>
+                            </div>
+                        )}
+                        {employees.length === 0 && [1, 2, 3, 4].map(i => (
+                            <div key={i} className="w-12 h-12 rounded-2xl border-4 border-white bg-sky-50 overflow-hidden shadow-md flex items-center justify-center opacity-40">
                                 <div className="text-[10px] font-black text-sky-400 uppercase leading-none">U{i}</div>
                             </div>
                         ))}
