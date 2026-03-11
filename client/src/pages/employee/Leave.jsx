@@ -134,13 +134,13 @@ const LeavePage = () => {
                     </div>
                 </div>
 
-                <div className="bg-slate-900 border border-slate-800 rounded-[2.5rem] overflow-hidden shadow-2xl relative">
+                <div className="bg-white/50 backdrop-blur-xl border border-sky-100 rounded-[2.5rem] overflow-hidden shadow-2xl relative">
                     <div className="absolute top-0 right-0 p-8">
-                        <div className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" />
+                        <div className="w-2 h-2 rounded-full bg-sky-500 animate-pulse shadow-[0_0_10px_rgba(14,165,233,0.5)]" />
                     </div>
-                    <div className="p-8 border-b border-slate-800 bg-slate-900/50">
-                        <h2 className="text-lg font-black text-white tracking-tight uppercase">Admin Assigned <span className="text-sky-500 italic">Leaves</span></h2>
-                        <p className="text-[9px] font-bold text-slate-500 uppercase tracking-[0.3em] mt-1">Official Corporate Absence Nodes</p>
+                    <div className="p-8 border-b border-sky-100 bg-sky-50">
+                        <h2 className="text-lg font-black text-slate-800 tracking-tight uppercase">Admin Assigned <span className="text-sky-500 italic">Leaves</span></h2>
+                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.3em] mt-1">Official Corporate Absence Nodes</p>
                     </div>
 
                     <div className="p-8 space-y-4 max-h-[400px] overflow-y-auto custom-scrollbar">
@@ -149,27 +149,27 @@ const LeavePage = () => {
                                 initial={{ x: 20, opacity: 0 }}
                                 animate={{ x: 0, opacity: 1 }}
                                 key={leave._id}
-                                className="p-5 bg-slate-800/50 border border-slate-700 rounded-2xl flex items-center justify-between group hover:border-sky-500/30 transition-all"
+                                className="p-5 bg-white border border-sky-50 rounded-2xl flex items-center justify-between group hover:border-sky-500/30 transition-all shadow-sm"
                             >
                                 <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/20 flex flex-col items-center justify-center text-sky-400">
+                                    <div className="w-12 h-12 rounded-xl bg-sky-50 border border-sky-100 flex flex-col items-center justify-center text-sky-500">
                                         <span className="text-[10px] font-black leading-none">{new Date(leave.startDate).toLocaleDateString('en-US', { month: 'short' })}</span>
                                         <span className="text-lg font-black leading-none tracking-tighter">{new Date(leave.startDate).getDate()}</span>
                                     </div>
                                     <div>
-                                        <p className="text-xs font-black text-white uppercase tracking-tight">{leave.leaveType}</p>
-                                        <div className="flex items-center gap-3 mt-1 text-[9px] font-bold text-slate-500 uppercase tracking-widest">
+                                        <p className="text-xs font-black text-slate-800 uppercase tracking-tight">{leave.leaveType}</p>
+                                        <div className="flex items-center gap-3 mt-1 text-[9px] font-bold text-slate-400 uppercase tracking-widest">
                                             <span className="flex items-center gap-1"><Clock size={10} className="text-sky-500" /> {new Date(leave.startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                                             <span className="flex items-center gap-1"><Hash size={10} className="text-sky-500" /> REF: {leave._id?.slice(-4).toUpperCase()}</span>
                                         </div>
                                     </div>
                                 </div>
-                                <Shield size={16} className="text-slate-700 group-hover:text-sky-500 transition-colors" />
+                                <Shield size={16} className="text-sky-100 group-hover:text-sky-500 transition-colors" />
                             </motion.div>
                         )) : (
                             <div className="py-12 text-center">
-                                <Calendar size={32} className="text-slate-800 mx-auto mb-3" />
-                                <p className="text-[10px] text-slate-600 font-black uppercase tracking-[0.4em]">No scheduled company absence</p>
+                                <Calendar size={32} className="text-sky-100 mx-auto mb-3" />
+                                <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.4em]">No scheduled company absence</p>
                             </div>
                         )}
                     </div>
