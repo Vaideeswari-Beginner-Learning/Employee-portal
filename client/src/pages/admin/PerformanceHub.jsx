@@ -220,12 +220,12 @@ const PerformanceHub = () => {
 
             <AnimatePresence>
                 {showRateModal && selectedEmployee && (
-                    <div className="fixed inset-0 bg-white/80 backdrop-blur-md flex items-center justify-center p-6 z-[100]">
+                    <div className="fixed inset-0 bg-white/80 backdrop-blur-md flex items-center justify-center p-4 md:p-8 z-[100]">
                         <motion.div
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.9, opacity: 0 }}
-                            className="bg-white rounded-[2.5rem] w-full max-w-lg p-10 shadow-2xl overflow-hidden relative border border-sky-100"
+                            className="bg-white rounded-[2.5rem] w-full max-w-lg p-8 md:p-10 shadow-2xl border border-sky-100 max-h-[90vh] overflow-y-auto custom-scrollbar relative"
                         >
                             <h2 className="text-2xl font-black text-slate-800 mb-1">Initiate Review Cycle</h2>
                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-8">Node: {selectedEmployee.name}</p>

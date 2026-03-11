@@ -213,7 +213,7 @@ const AdminTaskPanel = () => {
                                                     </div>
                                                     <p className="text-xs font-medium text-slate-400 flex items-center gap-2 uppercase tracking-wide">
                                                         <span className="px-2 py-0.5 bg-sky-50 rounded text-slate-400 font-bold">{task.taskType}</span>
-                                                        <span>â€¢</span>
+                                                        <span>•</span>
                                                         <span>{task.location}</span>
                                                     </p>
                                                     {task.startLocation && (
@@ -350,7 +350,7 @@ const AdminTaskPanel = () => {
                                     </div>
                                     <h4 className="text-sm font-black text-slate-800 uppercase mb-1 group-hover:text-sky-500 transition-colors">{approval.clientName}</h4>
                                     <p className="text-[11px] text-slate-400 uppercase font-bold tracking-tight mb-4">
-                                        {approval.taskType} â€¢ {approval.assignedTo?.name}
+                                        {approval.taskType} • {approval.assignedTo?.name}
                                         {approval.assignedBy?._id === approval.assignedTo?._id && (
                                             <span className="ml-2 text-[9px] text-sky-500 font-black tracking-tighter">[SELF]</span>
                                         )}
@@ -455,7 +455,7 @@ const AdminTaskPanel = () => {
                                         ))
                                         .map(emp => (
                                             <option key={emp._id} value={emp._id}>
-                                                â€¢ {emp.name || emp.email?.split('@')[0] || 'Unknown'}
+                                                • {emp.name || emp.email?.split('@')[0] || 'Unknown'}
                                                 {emp.expertise?.length > 0 ? ` [${emp.expertise.join(', ')}]` : ' [No set expertise]'}
                                             </option>
                                         ))
@@ -468,7 +468,7 @@ const AdminTaskPanel = () => {
                                     exp === newTask.taskType || (newTask.taskType === 'Repair' && exp === 'Service')
                                 )).length === 0 && employees.length > 0 && (
                                         <p className="text-[10px] text-amber-600 font-bold mt-2 ml-1 flex items-center gap-1">
-                                            <ShieldCheck size={12} /> No exact matches â€” assigning to general pool
+                                            <ShieldCheck size={12} /> No exact matches — assigning to general pool
                                         </p>
                                     )}
                             </div>
@@ -545,7 +545,7 @@ const AdminTaskPanel = () => {
                         <h2 className="text-2xl font-black text-slate-800 mb-2 uppercase tracking-tight">
                             {selectedApproval.status === 'Awaiting Approval' ? 'Review Task Log' : 'Task Details & Chat'}
                         </h2>
-                        <p className="text-[10px] font-black text-slate-400 mb-6 uppercase tracking-widest">Task ID: {selectedApproval.taskId} â€¢ {selectedApproval.clientName}</p>
+                        <p className="text-[10px] font-black text-slate-400 mb-6 uppercase tracking-widest">Task ID: {selectedApproval.taskId} • {selectedApproval.clientName}</p>
 
                         <div className="space-y-4">
                             <div className="p-4 bg-sky-50 border border-sky-100 rounded-2xl">

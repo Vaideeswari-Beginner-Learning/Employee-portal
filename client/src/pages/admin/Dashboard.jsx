@@ -11,7 +11,7 @@ import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import api from '../../utils/api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import TaskStatusChart from '../../components/TaskStatusChart';
 
@@ -189,10 +189,10 @@ const AdminDashboard = () => {
 
             {/* Stats Overview */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <WavyStatCard title="Active Personnel" value={stats.totalEmployees || 0} icon={Users} percentage={12} trend="up" color="sky" />
-                <WavyStatCard title="Today's Check-ins" value={stats.todayAttendance || 0} icon={ShieldCheck} percentage={4} trend="up" color="emerald" />
-                <WavyStatCard title="Active Field Tasks" value={stats.todayReports || 0} icon={Zap} percentage={28} trend="up" color="purple" />
-                <WavyStatCard title="Pending Verifications" value={stats.pendingLeaves || 0} icon={Briefcase} percentage={2} trend="down" color="sky" />
+                <WavyStatCard title="Active Personnel" value={stats.totalEmployees || 0} icon={Users} percentage={12} trend="up" color="sky" linkTo="/admin/employees" />
+                <WavyStatCard title="Today's Check-ins" value={stats.todayAttendance || 0} icon={ShieldCheck} percentage={4} trend="up" color="emerald" linkTo="/admin/attendance" />
+                <WavyStatCard title="Active Field Tasks" value={stats.todayReports || 0} icon={Zap} percentage={28} trend="up" color="purple" linkTo="/admin/tasks" />
+                <WavyStatCard title="Pending Verifications" value={stats.pendingLeaves || 0} icon={Briefcase} percentage={2} trend="down" color="sky" linkTo="/admin/leaves" />
             </div>
 
             {/* Main Content Grid */}
@@ -338,7 +338,7 @@ const HealthBar = ({ label, percentage, color }) => (
     </div>
 );
 
-const WavyStatCard = ({ title, value, icon: Icon, percentage, trend, color }) => {
+const WavyStatCard = ({ title, value, icon: Icon, percentage, trend, color, linkTo }) => {
     const isPositive = trend === 'up';
     const chartColor = color === 'emerald' ? '#10b981' : color === 'sky' ? '#0ea5e9' : '#0ea5e9';
     const bgGrad = color === 'emerald'
@@ -355,8 +355,8 @@ const WavyStatCard = ({ title, value, icon: Icon, percentage, trend, color }) =>
         { v: 40 }, { v: 30 }, { v: 65 }, { v: 45 }, { v: 90 }, { v: 70 }
     ];
 
-    return (
-        <div className={`bg-gradient-to-br ${bgGrad} border p-8 rounded-[2rem] group relative overflow-hidden shadow-sm transition-all hover:scale-[1.02] hover:shadow-lg`}>
+    const CardContent = (
+        <div className={`bg-gradient-to-br ${bgGrad} border p-8 rounded-[2rem] group relative overflow-hidden shadow-sm transition-all hover:scale-[1.02] hover:shadow-lg h-full cursor-pointer`}>
             <div className="flex justify-between items-start relative z-10 mb-8">
                 <div className={`p-4 rounded-2xl ${iconColor} shadow-sm transition-transform group-hover:-translate-y-1`}>
                     <Icon size={24} />
@@ -389,6 +389,8 @@ const WavyStatCard = ({ title, value, icon: Icon, percentage, trend, color }) =>
             </div>
         </div>
     );
+
+    return linkTo ? <Link to={linkTo} className="block h-full">{CardContent}</Link> : CardContent;
 };
 
 const GaugeCard = ({ title, value, color }) => {

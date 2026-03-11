@@ -68,7 +68,7 @@ const AdminAttendance = () => {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={() => setSelectedRecord(null)}
-                        className="fixed inset-0 z-[400] bg-black/40 backdrop-blur-md flex items-center justify-center p-6"
+                        className="fixed inset-0 z-[400] bg-black/40 backdrop-blur-md flex items-center justify-center p-4 md:p-8"
                     >
                         <motion.div
                             initial={{ scale: 0.85, opacity: 0, y: 30 }}
@@ -76,7 +76,7 @@ const AdminAttendance = () => {
                             exit={{ scale: 0.85, opacity: 0, y: 30 }}
                             transition={{ type: 'spring', damping: 20, stiffness: 300 }}
                             onClick={e => e.stopPropagation()}
-                            className="relative max-w-lg w-full bg-white rounded-[3rem] overflow-hidden shadow-2xl border border-sky-100"
+                            className="relative max-w-lg w-full bg-white rounded-[3rem] shadow-2xl border border-sky-100 max-h-[90vh] overflow-y-auto custom-scrollbar"
                         >
                             {/* Header gradient banner */}
                             <div className="h-40 bg-gradient-to-br from-sky-400 to-blue-600 relative flex items-end p-8">
