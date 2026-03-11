@@ -148,7 +148,7 @@ const EmployeeDashboard = () => {
 
                     <div className="space-y-6 pt-2">
                         <div className="space-y-3 pt-10">
-                            <InfoLine label="Tenure Status" value="Full Cycle" />
+                            <InfoLine label="Tenure Status" value="PERMANENT CYCLE" />
                             <InfoLine label="Sync Period" value="Aug 2023 - Present" />
                             <InfoLine label="Efficiency" value="98.4%" />
                         </div>
@@ -157,7 +157,7 @@ const EmployeeDashboard = () => {
                     <div className="flex flex-col justify-between items-end gap-6 text-right">
                         <div>
                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 leading-none">Administrative Core</p>
-                            <h3 className="text-2xl font-display font-black text-slate-200 uppercase tracking-tight">Operations</h3>
+                            <h3 className="text-2xl font-display font-black text-slate-800 uppercase tracking-tight">Operations</h3>
                             <p className="text-[10px] font-black text-sky-500 mt-2 flex items-center gap-2 justify-end uppercase tracking-widest">
                                 <MapPin size={12} /> Regional Hub Alpha
                             </p>
@@ -285,7 +285,7 @@ const EmployeeDashboard = () => {
                                             {new Date(ann.createdAt).toLocaleDateString()}
                                         </span>
                                     </div>
-                                    <h4 className="text-xs font-black text-slate-200 mb-1">{ann.title}</h4>
+                                    <h4 className="text-xs font-black text-slate-800 mb-1">{ann.title}</h4>
                                     <p className="text-[10px] text-slate-400 line-clamp-2 leading-relaxed">{ann.content}</p>
                                 </div>
                             )) : (
@@ -302,7 +302,7 @@ const EmployeeDashboard = () => {
                             <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-sky-50 shadow-inner" />
 
                             <ActivityCard
-                                type="Absence Synced"
+                                type="PERMANENT CYCLE"
                                 color="bg-rose-500"
                                 icon={<Calendar size={12} />}
                                 title="Operation: Reset"

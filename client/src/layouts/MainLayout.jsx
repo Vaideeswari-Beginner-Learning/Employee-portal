@@ -60,63 +60,47 @@ const MainLayout = () => {
                     transition={{ duration: 0.5, ease: 'easeOut' }}
                     className="h-20 bg-white/80 backdrop-blur-xl border-b border-sky-100 fixed top-0 right-0 left-0 lg:left-[240px] z-40 px-8 flex items-center justify-between shadow-sm shadow-sky-100/50"
                 >
-                    <div className="flex items-center gap-6 flex-1">
-                        <button className="lg:hidden p-2 hover:bg-sky-50 rounded-xl transition-colors text-sky-600">
+                    <div className="flex-1 flex justify-center items-center px-4">
+                        <button className="lg:hidden p-2 hover:bg-sky-50 rounded-xl transition-colors text-sky-600 mr-4">
                             <Menu size={20} />
                         </button>
-                        <div className="relative max-w-lg w-full">
+                        <div className="relative max-w-xl w-full">
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-sky-400 pointer-events-none" size={18} />
                             <input
                                 type="text"
                                 placeholder="Search everything..."
-                                className="w-full pl-12 pr-4 py-2.5 bg-sky-50 border border-sky-200 rounded-2xl text-sm text-slate-700 focus:bg-white focus:border-sky-400 focus:ring-4 focus:ring-sky-100 transition-all placeholder-slate-400 outline-none"
+                                className="w-full pl-12 pr-4 py-2.5 bg-sky-50 border border-sky-200 rounded-2xl text-sm text-slate-700 focus:bg-white focus:border-sky-400 focus:ring-4 focus:ring-sky-100 transition-all placeholder-slate-400 outline-none shadow-inner"
                             />
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-8">
-                        <div className="flex items-center gap-5 pr-8 border-r border-sky-100">
-                            <motion.div
-                                whileHover={{ scale: 1.1, rotate: 10 }}
-                                whileTap={{ scale: 0.95 }}
-                                className="relative cursor-pointer text-sky-500 hover:text-sky-600 transition-colors"
-                            >
-                                <Bell size={22} />
-                                {announcementsCount > 0 && (
-                                    <motion.span
-                                        initial={{ scale: 0 }}
-                                        animate={{ scale: 1 }}
-                                        className="absolute -top-1 -right-1 w-5 h-5 bg-sky-500 text-white text-[10px] font-black flex items-center justify-center rounded-full border-2 border-white shadow-sm"
-                                    >
-                                        {announcementsCount}
-                                    </motion.span>
-                                )}
-                            </motion.div>
-                        </div>
+                    <div className="flex items-center gap-4">
+                        <motion.div
+                            whileHover={{ scale: 1.1, rotate: 10 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="relative cursor-pointer text-sky-500 hover:text-sky-600 transition-colors bg-sky-50 p-2.5 rounded-xl border border-sky-100"
+                        >
+                            <Bell size={22} />
+                            {announcementsCount > 0 && (
+                                <motion.span
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    className="absolute -top-1 -right-1 w-5 h-5 bg-sky-500 text-white text-[10px] font-black flex items-center justify-center rounded-full border-2 border-white shadow-sm"
+                                >
+                                    {announcementsCount}
+                                </motion.span>
+                            )}
+                        </motion.div>
 
-                        <div className="flex items-center gap-6">
-                            <motion.div
-                                whileHover={{ y: -2 }}
-                                className="flex items-center gap-3 cursor-pointer group"
-                            >
-                                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-400 to-blue-500 flex items-center justify-center text-white font-bold shadow-md shadow-sky-200">
-                                    <User size={20} />
-                                </div>
-                                <div className="hidden sm:block">
-                                    <p className="text-sm font-bold text-slate-800 leading-tight">Workspace</p>
-                                    <p className="text-[10px] font-bold text-sky-500 uppercase tracking-widest">{user?.role}</p>
-                                </div>
-                            </motion.div>
-                            <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                onClick={logout}
-                                className="p-2.5 text-slate-400 hover:text-red-400 hover:bg-red-50 rounded-xl transition-all border border-transparent hover:border-red-100"
-                                title="Logout"
-                            >
-                                <LogOut size={20} />
-                            </motion.button>
-                        </div>
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={logout}
+                            className="p-2.5 text-slate-400 hover:text-red-400 hover:bg-red-50 rounded-xl transition-all border border-sky-100 bg-white"
+                            title="Logout"
+                        >
+                            <LogOut size={20} />
+                        </motion.button>
                     </div>
                 </motion.header>
 

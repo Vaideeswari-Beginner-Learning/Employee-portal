@@ -76,10 +76,10 @@ const AdminAttendance = () => {
                             exit={{ scale: 0.85, opacity: 0, y: 30 }}
                             transition={{ type: 'spring', damping: 20, stiffness: 300 }}
                             onClick={e => e.stopPropagation()}
-                            className="relative max-w-md w-full bg-white rounded-[2.5rem] overflow-hidden shadow-2xl border border-sky-100"
+                            className="relative max-w-lg w-full bg-white rounded-[3rem] overflow-hidden shadow-2xl border border-sky-100"
                         >
                             {/* Header gradient banner */}
-                            <div className="h-32 bg-gradient-to-br from-sky-400 to-blue-600 relative flex items-end p-6">
+                            <div className="h-40 bg-gradient-to-br from-sky-400 to-blue-600 relative flex items-end p-8">
                                 <button
                                     onClick={() => setSelectedRecord(null)}
                                     className="absolute top-4 right-4 p-2 bg-white/20 hover:bg-white/30 rounded-xl text-white transition-all"
@@ -265,14 +265,14 @@ const AdminAttendance = () => {
                 <div className="overflow-x-auto min-w-full sidebar-scroll">
                     <table className="w-full text-left border-collapse min-w-[1200px]">
                         <thead>
-                            <tr className="bg-sky-50">
-                                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-sky-100">Personnel Node</th>
-                                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-sky-100">Date Matrix</th>
-                                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-sky-100">Inception</th>
-                                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-sky-100">GPS Node</th>
-                                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-sky-100">Biometric ID</th>
-                                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-sky-100">Verification</th>
-                                <th className="px-8 py-5 text-right text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-sky-100">Ops</th>
+                            <tr className="bg-sky-500">
+                                <th className="px-8 py-6 text-[11px] font-black text-white uppercase tracking-[0.2em] border-b border-sky-600 rounded-tl-2xl">Personnel Node</th>
+                                <th className="px-8 py-6 text-[11px] font-black text-white uppercase tracking-[0.2em] border-b border-sky-600">Date Matrix</th>
+                                <th className="px-8 py-6 text-[11px] font-black text-white uppercase tracking-[0.2em] border-b border-sky-600">Inception</th>
+                                <th className="px-8 py-6 text-[11px] font-black text-white uppercase tracking-[0.2em] border-b border-sky-600">GPS Node</th>
+                                <th className="px-8 py-6 text-[11px] font-black text-white uppercase tracking-[0.2em] border-b border-sky-600">Biometric ID</th>
+                                <th className="px-8 py-6 text-[11px] font-black text-white uppercase tracking-[0.2em] border-b border-sky-600">Verification</th>
+                                <th className="px-8 py-6 text-right text-[11px] font-black text-white uppercase tracking-[0.2em] border-b border-sky-600 rounded-tr-2xl">Ops</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-50">
@@ -289,8 +289,8 @@ const AdminAttendance = () => {
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="px-8 py-6">
-                                        <p className="text-xs font-black text-slate-400 uppercase tracking-widest bg-sky-50 px-3 py-1 rounded-lg border border-sky-100 inline-block">
+                                    <td className="px-8 py-6 align-middle">
+                                        <p className="text-[11px] font-black text-sky-600 uppercase tracking-widest bg-sky-50 px-4 py-2 rounded-xl border border-sky-100 inline-block shadow-sm">
                                             {new Date(record.date).toLocaleDateString(undefined, { day: '2-digit', month: 'short', year: 'numeric' })}
                                         </p>
                                     </td>

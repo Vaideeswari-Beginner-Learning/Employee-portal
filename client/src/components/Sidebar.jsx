@@ -102,7 +102,6 @@ const Sidebar = () => {
                 </motion.div>
                 <div>
                     <span className="font-display font-black text-slate-800 tracking-widest text-sm block leading-none uppercase">SK Technology</span>
-                    <span className="text-[10px] font-bold text-sky-500 uppercase tracking-[0.2em] mt-1 block">Admin Portal</span>
                 </div>
             </div>
 
