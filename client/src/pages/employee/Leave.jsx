@@ -27,13 +27,29 @@ const LeavePage = () => {
 
     const fetchLeaves = async () => {
         try {
-            const res = await api.get('employee/leave');
-            // Filter admin leaves vs personal requests
-            // Assuming admin leaves have a specific flag or are just distinct in the response
-            setLeaves(res.data.filter(l => !l.isAdminEntered));
-            setAdminLeaves(res.data.filter(l => l.isAdminEntered));
+            const [leaveRes, holidayRes] = await Promise.all([
+                api.get('employee/leave'),
+                api.get('employee/holidays')
+            ]);
+
+            // Personal requests
+            setLeaves(leaveRes.data.filter(l => !l.isAdminEntered));
+
+            // Combine admin-assigned leaves with global holidays
+            const combinedAdminItems = [
+                ...leaveRes.data.filter(l => l.isAdminEntered),
+                ...holidayRes.data.map(h => ({
+                    ...h,
+                    isHoliday: true,
+                    startDate: h.date,
+                    leaveType: `${h.type.toUpperCase()}: ${h.title}`,
+                    reason: h.description || 'Global Protocol'
+                }))
+            ].sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+
+            setAdminLeaves(combinedAdminItems);
         } catch (err) {
-            console.error('Fetch leaves error:', err.response?.data || err.message);
+            console.error('Fetch data error:', err.response?.data || err.message);
         }
     };
 
@@ -152,19 +168,19 @@ const LeavePage = () => {
                                 className="p-5 bg-white border border-sky-50 rounded-2xl flex items-center justify-between group hover:border-sky-500/30 transition-all shadow-sm"
                             >
                                 <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-xl bg-sky-50 border border-sky-100 flex flex-col items-center justify-center text-sky-500">
+                                    <div className={`w-12 h-12 rounded-xl border flex flex-col items-center justify-center transition-colors ${leave.isHoliday ? 'bg-amber-50 border-amber-100 text-amber-600' : 'bg-sky-50 border-sky-100 text-sky-500'}`}>
                                         <span className="text-[10px] font-black leading-none">{new Date(leave.startDate).toLocaleDateString('en-US', { month: 'short' })}</span>
                                         <span className="text-lg font-black leading-none tracking-tighter">{new Date(leave.startDate).getDate()}</span>
                                     </div>
-                                    <div>
-                                        <p className="text-xs font-black text-slate-800 uppercase tracking-tight">{leave.leaveType}</p>
+                                    <div className="min-w-0 flex-1">
+                                        <p className="text-xs font-black text-slate-800 uppercase tracking-tight truncate">{leave.leaveType}</p>
                                         <div className="flex items-center gap-3 mt-1 text-[9px] font-bold text-slate-400 uppercase tracking-widest">
-                                            <span className="flex items-center gap-1"><Clock size={10} className="text-sky-500" /> {new Date(leave.startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                                            <span className="flex items-center gap-1"><Hash size={10} className="text-sky-500" /> REF: {leave._id?.slice(-4).toUpperCase()}</span>
+                                            <span className="flex items-center gap-1"><Clock size={10} className="text-sky-500" /> {leave.isHoliday ? 'ALL DAY' : new Date(leave.startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                            {!leave.isHoliday && <span className="flex items-center gap-1"><Hash size={10} className="text-sky-500" /> REF: {leave._id?.slice(-4).toUpperCase()}</span>}
                                         </div>
                                     </div>
                                 </div>
-                                <Shield size={16} className="text-sky-100 group-hover:text-sky-500 transition-colors" />
+                                {leave.isHoliday ? <AlertCircle size={16} className="text-amber-300 group-hover:text-amber-500 transition-colors" /> : <Shield size={16} className="text-sky-100 group-hover:text-sky-500 transition-colors" />}
                             </motion.div>
                         )) : (
                             <div className="py-12 text-center">

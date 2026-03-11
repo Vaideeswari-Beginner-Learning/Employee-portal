@@ -4,6 +4,7 @@ const User = require('../models/User');
 const Attendance = require('../models/Attendance');
 const Leave = require('../models/Leave');
 const Report = require('../models/Report');
+const Holiday = require('../models/Holiday');
 const { auth } = require('../middleware/auth');
 const multer = require('multer');
 const path = require('path');
@@ -108,6 +109,16 @@ router.get('/leave', async (req, res) => {
     try {
         const leaves = await Leave.find({ employee: req.user._id }).sort({ createdAt: -1 });
         res.send(leaves);
+    } catch (e) {
+        res.status(500).send(e);
+    }
+});
+
+// Get Global Holidays
+router.get('/holidays', async (req, res) => {
+    try {
+        const holidays = await Holiday.find().sort({ date: 1 });
+        res.send(holidays);
     } catch (e) {
         res.status(500).send(e);
     }
