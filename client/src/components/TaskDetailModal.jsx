@@ -1,8 +1,35 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { X, Clock, UploadCloud, MapPin, FileText, CheckCircle, Image as ImageIcon, Camera, Share2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
+
+const FileUploadArea = ({ label, type, currentFile, icon, accept, onUpload }) => (
+    <label className="flex-1 relative group cursor-pointer">
+        <input
+            type="file"
+            className="hidden"
+            accept={accept}
+            onChange={(e) => onUpload(e, type)}
+        />
+        <div className={`h-32 rounded-2xl border-2 border-dashed flex flex-col items-center justify-center gap-3 transition-all ${currentFile ? 'border-emerald-500/30 bg-emerald-50' : 'border-slate-200 bg-slate-50/50 hover:border-blue-400 hover:bg-blue-50/50'}`}>
+            {currentFile ? (
+                <>
+                    <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center">
+                        <CheckCircle size={20} />
+                    </div>
+                    <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest text-center px-4 truncate w-full">{currentFile.substring(currentFile.lastIndexOf('/') + 1) || 'File Uploaded'}</span>
+                </>
+            ) : (
+                <>
+                    <div className="w-10 h-10 rounded-full bg-white border border-slate-200 text-slate-400 group-hover:border-blue-200 group-hover:bg-blue-50 group-hover:text-blue-500 flex items-center justify-center transition-all shadow-sm">
+                        {icon}
+                    </div>
+                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest group-hover:text-blue-600 transition-colors">{label}</span>
+                </>
+            )}
+        </div>
+    </label>
+);
 
 const TaskDetailModal = ({ isOpen, onClose, task, onTaskUpdate }) => {
     const [isTiming, setIsTiming] = useState(task?.status === 'In Progress');
@@ -21,25 +48,31 @@ const TaskDetailModal = ({ isOpen, onClose, task, onTaskUpdate }) => {
 
     // Synchronize isTiming state with task.status updates from parent/backend
     useEffect(() => {
-        setIsTiming(task?.status === 'In Progress');
-        setTimeElapsed(task?.timeElapsed || 0);
-    }, [task]);
+        const matchingStatus = task?.status === 'In Progress';
+        if (isTiming !== matchingStatus) {
+            queueMicrotask(() => setIsTiming(matchingStatus));
+        }
+        if (timeElapsed !== (task?.timeElapsed || 0)) {
+            queueMicrotask(() => setTimeElapsed(task?.timeElapsed || 0));
+        }
+    }, [task, isTiming, timeElapsed]);
 
     // Live Timer Effect
     useEffect(() => {
         let interval;
         if (isTiming && task?.lastStartTime) {
             const start = new Date(task.lastStartTime);
-            interval = setInterval(() => {
+
+            const updateTimer = () => {
                 const now = new Date();
                 const diffMs = now - start;
-                setLiveSessionMinutes(Math.floor(diffMs / 1000)); // Storing seconds
-            }, 1000); // 1 second frequency
+                queueMicrotask(() => setLiveSessionMinutes(Math.floor(diffMs / 1000)));
+            };
 
-            const diffMs = new Date() - start;
-            setLiveSessionMinutes(Math.floor(diffMs / 1000));
+            updateTimer();
+            interval = setInterval(updateTimer, 1000);
         } else {
-            setLiveSessionMinutes(0);
+            queueMicrotask(() => setLiveSessionMinutes(0));
         }
         return () => clearInterval(interval);
     }, [isTiming, task?.lastStartTime]);
@@ -150,34 +183,6 @@ const TaskDetailModal = ({ isOpen, onClose, task, onTaskUpdate }) => {
         toast.success("Review link generated and opened in WhatsApp!");
     };
 
-    const FileUploadArea = ({ label, type, currentFile, icon, accept }) => (
-        <label className="flex-1 relative group cursor-pointer">
-            <input
-                type="file"
-                className="hidden"
-                accept={accept}
-                onChange={(e) => handleFileUpload(e, type)}
-            />
-            <div className={`h-32 rounded-2xl border-2 border-dashed flex flex-col items-center justify-center gap-3 transition-all ${currentFile ? 'border-emerald-500/30 bg-emerald-50' : 'border-slate-200 bg-slate-50/50 hover:border-blue-400 hover:bg-blue-50/50'}`}>
-                {currentFile ? (
-                    <>
-                        <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center">
-                            <CheckCircle size={20} />
-                        </div>
-                        <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest text-center px-4 truncate w-full">{currentFile.substring(currentFile.lastIndexOf('/') + 1) || 'File Uploaded'}</span>
-                    </>
-                ) : (
-                    <>
-                        <div className="w-10 h-10 rounded-full bg-white border border-slate-200 text-slate-400 group-hover:border-blue-200 group-hover:bg-blue-50 group-hover:text-blue-500 flex items-center justify-center transition-all shadow-sm">
-                            {icon}
-                        </div>
-                        <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest group-hover:text-blue-600 transition-colors">{label}</span>
-                    </>
-                )}
-            </div>
-        </label>
-    );
-
     return (
         <AnimatePresence>
             <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
@@ -269,6 +274,7 @@ const TaskDetailModal = ({ isOpen, onClose, task, onTaskUpdate }) => {
                                         currentFile={beforeImage}
                                         icon={<Camera size={24} />}
                                         accept="image/*"
+                                        onUpload={handleFileUpload}
                                     />
                                     <FileUploadArea
                                         label="After Service Photo"
@@ -276,6 +282,7 @@ const TaskDetailModal = ({ isOpen, onClose, task, onTaskUpdate }) => {
                                         currentFile={afterImage}
                                         icon={<ImageIcon size={24} />}
                                         accept="image/*"
+                                        onUpload={handleFileUpload}
                                     />
                                 </div>
                             </section>
@@ -291,6 +298,7 @@ const TaskDetailModal = ({ isOpen, onClose, task, onTaskUpdate }) => {
                                         currentFile={afterImage}
                                         icon={<Camera size={24} />}
                                         accept="image/*"
+                                        onUpload={handleFileUpload}
                                     />
                                 </div>
                             </section>
@@ -335,6 +343,7 @@ const TaskDetailModal = ({ isOpen, onClose, task, onTaskUpdate }) => {
                                     currentFile={reportFile}
                                     icon={<FileText size={24} />}
                                     accept=".pdf,.doc,.docx"
+                                    onUpload={handleFileUpload}
                                 />
                                 <div className="flex-1 flex flex-col gap-3 justify-end">
                                     <button

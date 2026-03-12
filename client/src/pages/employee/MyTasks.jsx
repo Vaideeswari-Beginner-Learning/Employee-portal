@@ -18,10 +18,6 @@ const MyTasks = () => {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const containerRef = useRef();
 
-    useEffect(() => {
-        fetchMyTasks();
-    }, []);
-
     const fetchMyTasks = async () => {
         try {
             const res = await api.get('tasks');
@@ -31,6 +27,13 @@ const MyTasks = () => {
             toast.error('Failed to load your tasks');
         }
     };
+
+    useEffect(() => {
+        const load = async () => {
+            await fetchMyTasks();
+        };
+        load();
+    }, []);
 
     const filteredTasks = filter === 'All' ? tasks : tasks.filter(t => t.status === filter);
 

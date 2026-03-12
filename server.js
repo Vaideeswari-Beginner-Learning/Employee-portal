@@ -7,6 +7,11 @@ const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 5001;
+// Simple Request Logger
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    next();
+});
 
 // Ensure uploads directory exists
 const uploadsDir = path.join(process.cwd(), 'uploads');
@@ -65,14 +70,23 @@ app.use('/api/announcements', require('./routes/announcement'));
 app.use('/api/tasks', require('./routes/tasks'));
 app.use('/api/chat', require('./routes/chat'));
 
+// Health check endpoint for Render
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
 // --- THE NEW MONOLITHIC REACT INTEGRATION ---
 // Serve the static files from the React app
 app.use(express.static(path.join(process.cwd(), 'client', 'dist')));
 
 // Any request that doesn't match an API route above will be sent back to React's index.html
 // Using app.use() as a catch-all to avoid argument-type issues in Express 5
-app.use((req, res) => {
-    res.sendFile(path.join(process.cwd(), 'client', 'dist', 'index.html'));
+app.use((req, res, next) => {
+    // Only handle GET requests for the SPA fallback
+    if (req.method === 'GET' && !req.path.startsWith('/api')) {
+        return res.sendFile(path.join(process.cwd(), 'client', 'dist', 'index.html'));
+    }
+    next();
 });
 
 // Global Error Handler
@@ -80,12 +94,13 @@ app.use((err, req, res, next) => {
     if (err.type === 'entity.too.large') {
         return res.status(413).send({ message: 'Identity data too large for current bandwidth.' });
     }
-    res.status(err.status || 500).send({ message: err.message || 'Internal Node Failure' });
-});
-
-// Health check endpoint for Render
-app.get('/health', (req, res) => {
-    res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+    console.error('Global Error:', err);
+    // Provide stack trace in development mode
+    res.status(err.status || 500).send({ 
+        message: err.message || 'Internal Node Failure',
+        error: process.env.NODE_ENV === 'development' ? err : {},
+        stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+    });
 });
 
 app.listen(PORT, '0.0.0.0', () => {

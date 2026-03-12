@@ -1,7 +1,7 @@
 ﻿import { useState, useEffect } from 'react';
 import api from '../../utils/api';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Megaphone, Plus, Trash2, Clock, User, CheckCircle, AlertCircle, Loader2, X } from 'lucide-react';
+import { Megaphone, Plus, Trash2, Clock, CheckCircle, AlertCircle, Loader2, X } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const Announcements = () => {
@@ -26,8 +26,8 @@ const Announcements = () => {
         try {
             const res = await api.get('announcements');
             setAnnouncements(res.data);
-        } catch (err) {
-            console.error(err);
+        } catch (_err) {
+            console.error(_err);
         } finally {
             setLoading(false);
         }
@@ -42,7 +42,7 @@ const Announcements = () => {
             setShowModal(false);
             setFormData({ title: '', content: '', priority: 'medium' });
             fetchAnnouncements();
-        } catch (err) {
+        } catch (_err) {
             showNotify('error', 'Transmission failed.');
         } finally {
             setLoading(false);
@@ -55,13 +55,13 @@ const Announcements = () => {
             await api.delete(`/announcements/${id}`);
             showNotify('success', 'Broadcast terminated.');
             fetchAnnouncements();
-        } catch (err) {
+        } catch (_err) {
             showNotify('error', 'Termination failed.');
         }
     };
 
     return (
-        <div className="min-h-screen bg-sky-50 p-6 md:p-10 space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700">
+        <div className="min-h-screen bg-sky-50 p-4 sm:p-6 md:p-10 space-y-6 sm:space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700">
             <AnimatePresence>
                 {notification && (
                     <motion.div
@@ -106,7 +106,7 @@ const Announcements = () => {
                             key={item._id}
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
-                            className="bg-white/50 backdrop-blur-xl p-8 rounded-[2rem] border border-sky-100 shadow-2xl group hover:border-primary-500/50 transition-all flex flex-col md:flex-row gap-8 items-start justify-between"
+                            className="bg-white/50 backdrop-blur-xl p-6 sm:p-8 rounded-[2rem] border border-sky-100 shadow-2xl group hover:border-primary-500/50 transition-all flex flex-col md:flex-row gap-6 sm:gap-8 items-start justify-between"
                         >
                             <div className="space-y-4 flex-1">
                                 <div className="flex items-center gap-4">
@@ -161,9 +161,9 @@ const Announcements = () => {
                             initial={{ scale: 0.9, opacity: 0, y: 20 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                            className="bg-sky-50 rounded-[2.5rem] w-full max-w-2xl shadow-2xl relative z-10 overflow-hidden border border-sky-100"
+                            className="bg-sky-50 rounded-[2rem] sm:rounded-[2.5rem] w-full max-w-2xl shadow-2xl relative z-10 overflow-hidden border border-sky-100"
                         >
-                            <form onSubmit={handleSubmit} className="p-10 space-y-8">
+                            <form onSubmit={handleSubmit} className="p-6 sm:p-10 space-y-6 sm:space-y-8">
                                 <div className="flex items-center justify-between border-b border-sky-100 pb-6">
                                     <div>
                                         <h2 className="text-2xl font-display font-black text-slate-800 tracking-tight leading-none uppercase">Initialize <span className="text-sky-500">Broadcast</span></h2>

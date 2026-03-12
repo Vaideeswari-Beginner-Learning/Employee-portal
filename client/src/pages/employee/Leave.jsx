@@ -15,15 +15,10 @@ const LeavePage = () => {
         reason: ''
     });
 
-    useEffect(() => {
-        fetchLeaves();
-    }, []);
-
     const showNotification = (type, message) => {
         setNotification({ type, message });
         setTimeout(() => setNotification(null), 3500);
     };
-
 
     const fetchLeaves = async () => {
         try {
@@ -40,18 +35,28 @@ const LeavePage = () => {
                 ...leaveRes.data.filter(l => l.isAdminEntered),
                 ...holidayRes.data.map(h => ({
                     ...h,
-                    isHoliday: true,
+                    isGlobalHoliday: true,
+                    type: h.type,
                     startDate: h.date,
-                    leaveType: `${h.type.toUpperCase()}: ${h.title}`,
-                    reason: h.description || 'Global Protocol'
+                    endDate: h.date,
+                    leaveType: h.title,
+                    reason: h.description
                 }))
-            ].sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+            ].sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
 
             setAdminLeaves(combinedAdminItems);
         } catch (err) {
-            console.error('Fetch data error:', err.response?.data || err.message);
+            console.error('Error fetching leaves:', err);
+            showNotification('error', 'Failed to synchronize absence logs');
         }
     };
+
+    useEffect(() => {
+        const load = async () => {
+            await fetchLeaves();
+        };
+        load();
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -99,7 +104,7 @@ const LeavePage = () => {
                 </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
                 <LeaveStat label="Annual Balance" value="14 Days" color="text-sky-500" />
                 <LeaveStat label="Pending Requests" value="01 Active" color="text-orange-500" />
                 <LeaveStat label="Emergency Credit" value="03 Fixed" color="text-slate-400" />
@@ -199,16 +204,16 @@ const LeavePage = () => {
                             initial={{ scale: 0.95, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.95, opacity: 0 }}
-                            className="bg-sky-50 border border-sky-100 rounded-3xl w-full max-w-lg shadow-[0_0_100px_rgba(0,0,0,0.5)] relative overflow-hidden"
+                            className="bg-sky-50 border border-sky-100 rounded-[2rem] sm:rounded-3xl w-full max-w-lg shadow-[0_0_100px_rgba(0,0,0,0.5)] relative overflow-hidden"
                         >
-                            <div className="p-8 border-b border-sky-100 bg-sky-50 flex justify-between items-center">
-                                <h2 className="text-xl font-black text-slate-800 uppercase tracking-tight flex items-center gap-3">
+                            <div className="p-6 sm:p-8 border-b border-sky-100 bg-sky-50 flex justify-between items-center">
+                                <h2 className="text-lg sm:text-xl font-black text-slate-800 uppercase tracking-tight flex items-center gap-3">
                                     <FileText className="text-sky-500" size={20} />
-                                    Initiate <span className="text-sky-500 italic">Absence Request</span>
+                                    Initiate <span className="text-sky-500 italic">Absence</span>
                                 </h2>
-                                <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-800 transition-all rotate-45 text-3xl font-light">+</button>
+                                <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-800 transition-all rotate-45 text-2xl font-light">+</button>
                             </div>
-                            <form onSubmit={handleSubmit} className="p-8 space-y-8">
+                            <form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-6 sm:space-y-8">
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Absence Vector (Type)</label>
                                     <div className="relative">
@@ -225,7 +230,7 @@ const LeavePage = () => {
                                         <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-2 gap-8">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
                                     <LeaveInput label="Inception Date" type="date" value={formData.startDate} onChange={v => setFormData({ ...formData, startDate: v })} />
                                     <LeaveInput label="Termination Date" type="date" value={formData.endDate} onChange={v => setFormData({ ...formData, endDate: v })} />
                                 </div>
@@ -254,9 +259,9 @@ const LeavePage = () => {
 };
 
 const LeaveStat = ({ label, value, color }) => (
-    <div className="bg-white/50 backdrop-blur-xl border border-sky-100 p-6 rounded-3xl flex flex-col items-center text-center group cursor-default shadow-2xl">
-        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">{label}</p>
-        <p className={`text-2xl font-black ${color} tracking-tighter uppercase`}>{value}</p>
+    <div className="bg-white/50 backdrop-blur-xl border border-sky-100 p-4 sm:p-6 rounded-[1.5rem] sm:rounded-3xl flex flex-col items-center text-center group cursor-default shadow-2xl">
+        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 sm:mb-2">{label}</p>
+        <p className={`text-xl sm:text-2xl font-black ${color} tracking-tighter uppercase leading-tight`}>{value}</p>
     </div>
 );
 

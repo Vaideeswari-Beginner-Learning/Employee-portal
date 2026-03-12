@@ -119,6 +119,16 @@ body {
   background: #7dd3fc;
 }
 
+.sidebar-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #bae6fd #f0f9ff;
+}
+
+.sidebar-scroll::-webkit-scrollbar {
+  height: 4px;
+  width: 4px;
+}
+
 /* Enterprise Buttons */
 .btn-premium {
   @apply px-6 py-3 rounded-xl font-bold text-xs transition-all active:scale-95 shadow-lg;

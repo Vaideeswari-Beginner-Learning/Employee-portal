@@ -10,10 +10,6 @@ const AdminComms = () => {
     const [selectedEmployee, setSelectedEmployee] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        fetchEmployees();
-    }, []);
-
     const fetchEmployees = async () => {
         try {
             const res = await api.get('admin/employees');
@@ -26,21 +22,28 @@ const AdminComms = () => {
         }
     };
 
+    useEffect(() => {
+        const load = async () => {
+            await fetchEmployees();
+        };
+        load();
+    }, []);
+
     const filteredEmployees = employees.filter(emp =>
         (emp.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
         emp.email.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
-        <div className="flex flex-col h-[calc(100vh-100px)]">
+        <div className="flex flex-col h-[calc(100vh-100px)] p-4 sm:p-0">
             <div className="mb-6 shrink-0">
-                <h1 className="text-3xl font-display font-black text-slate-800 tracking-tight uppercase">Comms<span className="text-sky-500">.Center</span></h1>
+                <h1 className="text-2xl sm:text-3xl font-display font-black text-slate-800 tracking-tight uppercase">Comms<span className="text-sky-500">.Center</span></h1>
                 <p className="text-[10px] font-black text-slate-400 mt-2 uppercase tracking-[0.4em]">Global Support & Direct Messaging</p>
             </div>
 
-            <div className="flex-1 min-h-0 bg-white/50 backdrop-blur-xl border border-sky-100 rounded-[2rem] shadow-2xl flex overflow-hidden">
+            <div className="flex-1 min-h-0 bg-white/50 backdrop-blur-xl border border-sky-100 rounded-[2rem] shadow-2xl flex overflow-hidden relative">
                 {/* Left Pane - Roster */}
-                <div className="w-1/3 min-w-[300px] max-w-[400px] border-r border-sky-100 bg-sky-50/30 flex flex-col h-full">
+                <div className={`${selectedEmployee ? 'hidden md:flex' : 'flex'} w-full md:w-1/3 md:min-w-[300px] md:max-w-[400px] border-r border-sky-100 bg-sky-50/30 flex-col h-full`}>
                     <div className="p-4 border-b border-sky-100 bg-sky-50/50 z-10">
                         <div className="relative">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
@@ -117,11 +120,16 @@ const AdminComms = () => {
                     </div>
                 </div>
 
-                {/* Right Pane - Chat Hub */}
-                <div className="flex-1 h-full bg-sky-50 relative">
+                <div className={`${selectedEmployee ? 'flex' : 'hidden md:flex'} flex-1 h-full bg-sky-50 relative overflow-hidden`}>
                     {selectedEmployee ? (
                         <div className="h-full flex flex-col relative w-full pt-16">
                             <div className="absolute top-0 left-0 w-full bg-sky-50/50 backdrop-blur-xl border-b border-sky-100 p-4 shrink-0 flex items-center gap-3 z-20 h-16">
+                                <button
+                                    onClick={() => setSelectedEmployee(null)}
+                                    className="md:hidden p-2 -ml-2 text-slate-400 hover:text-sky-500 transition-colors"
+                                >
+                                    <Users size={20} />
+                                </button>
                                 {(() => {
                                     const displayName = selectedEmployee.name?.trim() || selectedEmployee.email?.split('@')[0] || 'Unknown';
                                     const initial = displayName.charAt(0).toUpperCase();
@@ -130,9 +138,9 @@ const AdminComms = () => {
                                             <div className="w-8 h-8 bg-sky-500/10 text-sky-500 border border-sky-500/20 rounded-lg flex items-center justify-center font-black">
                                                 {initial}
                                             </div>
-                                            <div>
-                                                <h3 className="text-sm font-black text-slate-800 leading-tight uppercase tracking-tight">{displayName}</h3>
-                                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mt-1">{selectedEmployee.email}</p>
+                                            <div className="min-w-0">
+                                                <h3 className="text-sm font-black text-slate-800 leading-tight uppercase tracking-tight truncate">{displayName}</h3>
+                                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mt-1 truncate">{selectedEmployee.email}</p>
                                             </div>
                                         </>
                                     );

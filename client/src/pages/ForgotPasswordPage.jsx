@@ -16,7 +16,8 @@ const ForgotPasswordPage = () => {
     const [email, setEmail] = useState('');
     const [status, setStatus] = useState({ type: '', message: '' });
     const [isLoading, setIsLoading] = useState(false);
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();

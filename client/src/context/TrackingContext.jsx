@@ -187,4 +187,5 @@ const TrackingProvider = ({ children }) => {
         </TrackingContext.Provider>
     );
 };
+// eslint-disable-next-line react-refresh/only-export-components
 export { TrackingProvider, useTracking };

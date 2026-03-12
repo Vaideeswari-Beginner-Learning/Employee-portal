@@ -12,11 +12,24 @@ router.use(managerAuth);
 // Create Employee
 router.post('/employees', managerAuth, async (req, res) => {
     try {
-        const user = new User(req.body);
+        const body = { ...req.body };
+        // Auto-generate employeeId if not provided, to avoid unique index conflicts
+        if (!body.employeeId || body.employeeId.trim() === '') {
+            body.employeeId = 'EMP-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+        }
+        const user = new User(body);
         await user.save();
         res.status(201).send(user);
     } catch (e) {
-        res.status(400).send(e);
+        if (e.name === 'ValidationError') {
+            const errors = Object.values(e.errors).map(err => err.message);
+            return res.status(400).send({ error: errors.join(', ') });
+        }
+        if (e.code === 11000) {
+            const field = Object.keys(e.keyPattern || {})[0] || 'field';
+            return res.status(400).send({ error: `Duplicate value: ${field} already exists. Please use a unique email or employee ID.` });
+        }
+        res.status(400).send({ error: e.message });
     }
 });
 

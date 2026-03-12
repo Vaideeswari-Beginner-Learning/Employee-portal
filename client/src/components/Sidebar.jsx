@@ -18,8 +18,7 @@ import {
     Star,
     Layers,
     CalendarDays,
-    X,
-    Clock
+    X
 } from 'lucide-react';
 
 const Sidebar = ({ isOpen, onClose }) => {
@@ -116,7 +115,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                 <div className="absolute inset-0 bg-gradient-to-b from-sky-50/50 to-white pointer-events-none" />
 
                 {/* Logo Section */}
-                <div className="p-8 flex items-center justify-between relative z-10">
+                <div className="p-6 lg:p-8 flex items-center justify-between relative z-10">
                     <div className="flex items-center gap-3">
                         <motion.div
                             whileHover={{ scale: 1.1, rotate: 5 }}
@@ -160,9 +159,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                                                 onClose();
                                             }}
                                             className={`w-full group px-4 py-3 rounded-xl flex items-center gap-4 text-[12px] font-bold transition-all duration-200 relative
-                                            ${isActive
-                                                    ? 'bg-gradient-to-r from-sky-500 to-blue-500 text-white shadow-lg shadow-sky-300/40'
-                                                    : 'text-slate-500 hover:text-sky-600 hover:bg-sky-50'}`}
+                                            ${isActive ? 'bg-gradient-to-r from-sky-500 to-blue-500 text-white shadow-lg shadow-sky-300/40' : 'text-slate-500 hover:text-sky-600 hover:bg-sky-50'}`}
                                         >
                                             {isActive && (
                                                 <motion.div
@@ -237,7 +234,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                             initial={{ scale: 0.9, opacity: 0, y: 20 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                            className="relative w-full max-w-lg bg-white rounded-[2.5rem] shadow-2xl p-10 overflow-hidden my-auto"
+                            className="relative w-full max-w-lg bg-white rounded-[2.5rem] shadow-2xl p-6 sm:p-10 overflow-hidden my-auto"
                         >
                             <div className="flex justify-between items-start mb-8">
                                 <div>

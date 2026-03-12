@@ -21,10 +21,6 @@ const PerformanceHub = () => {
         }
     });
 
-    useEffect(() => {
-        fetchEmployees();
-    }, []);
-
     const fetchEmployees = async () => {
         try {
             const res = await api.get('admin/employees');
@@ -36,6 +32,13 @@ const PerformanceHub = () => {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        const load = async () => {
+            await fetchEmployees();
+        };
+        load();
+    }, []);
 
     const fetchHistory = async (empId) => {
         try {
@@ -89,10 +92,10 @@ const PerformanceHub = () => {
     };
 
     return (
-        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-5 duration-700 pb-20 p-6 md:p-10 uppercase">
+        <div className="space-y-6 sm:space-y-8 animate-in fade-in slide-in-from-bottom-5 duration-700 pb-20 p-4 sm:p-6 md:p-10 uppercase">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
-                    <h1 className="text-4xl font-display font-black tracking-tight text-slate-800 mb-2 uppercase">
+                    <h1 className="text-2xl sm:text-4xl font-display font-black tracking-tight text-slate-800 mb-2 uppercase">
                         Performance<span className="text-sky-500 italic">.Hub</span>
                     </h1>
                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mt-3">Employee Analytics & Merit Sync</p>
@@ -100,7 +103,7 @@ const PerformanceHub = () => {
                 {selectedEmployee && reviews.length > 0 && (
                     <button
                         onClick={exportToCSV}
-                        className="flex items-center gap-2 px-6 py-3 bg-sky-50 border border-sky-100 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:bg-sky-100 hover:border-sky-500/30 transition-all shadow-xl"
+                        className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-sky-50 border border-sky-100 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:bg-sky-100 hover:border-sky-500/30 transition-all shadow-xl"
                     >
                         <Download size={16} /> Export Monthly Report
                     </button>
@@ -225,7 +228,7 @@ const PerformanceHub = () => {
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.9, opacity: 0 }}
-                            className="bg-white rounded-[2.5rem] w-full max-w-lg p-8 md:p-10 shadow-2xl border border-sky-100 max-h-[90vh] overflow-y-auto custom-scrollbar relative"
+                            className="bg-white rounded-[2rem] sm:rounded-[2.5rem] w-full max-w-lg p-6 sm:p-10 shadow-2xl border border-sky-100 max-h-[90vh] overflow-y-auto custom-scrollbar relative"
                         >
                             <h2 className="text-2xl font-black text-slate-800 mb-1">Initiate Review Cycle</h2>
                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-8">Node: {selectedEmployee.name}</p>

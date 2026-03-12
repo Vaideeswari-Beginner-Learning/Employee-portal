@@ -12,10 +12,6 @@ const EmployeeMgmt = () => {
         name: '', email: '', password: '', phone: '', employeeId: '', role: 'employee', expertise: []
     });
 
-    useEffect(() => {
-        fetchEmployees();
-    }, []);
-
     const fetchEmployees = async () => {
         try {
             const res = await api.get('admin/employees');
@@ -24,6 +20,13 @@ const EmployeeMgmt = () => {
             console.error('Employees fetch error:', err.response?.data || err.message);
         }
     };
+
+    useEffect(() => {
+        const load = async () => {
+            await fetchEmployees();
+        };
+        load();
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -75,15 +78,15 @@ const EmployeeMgmt = () => {
     );
 
     return (
-        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700">
+        <div className="space-y-6 sm:space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700 p-4 sm:p-0">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
-                    <h1 className="text-3xl font-display font-black text-slate-800 tracking-tight leading-none uppercase">Personnel<span className="text-sky-500 italic">.Registry</span></h1>
+                    <h1 className="text-2xl sm:text-3xl font-display font-black text-slate-800 tracking-tight leading-none uppercase">Personnel<span className="text-sky-500 italic">.Registry</span></h1>
                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mt-3">High-Resolution Human Capital Database</p>
                 </div>
                 <button
                     onClick={() => setShowModal(true)}
-                    className="bg-sky-500 hover:bg-sky-700 text-slate-800 px-8 py-3.5 flex items-center justify-center gap-3 rounded-2xl shadow-lg shadow-sky-600/20 transition-all font-bold active:scale-95"
+                    className="w-full md:w-auto bg-sky-500 hover:bg-sky-700 text-slate-800 px-8 py-3.5 flex items-center justify-center gap-3 rounded-2xl shadow-lg shadow-sky-600/20 transition-all font-bold active:scale-95"
                 >
                     <UserPlus size={20} />
                     <span className="text-xs font-black uppercase tracking-widest">Onboard Personnel</span>
@@ -183,11 +186,11 @@ const EmployeeMgmt = () => {
                             initial={{ scale: 0.9, opacity: 0, y: 20 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                            className="bg-sky-50 rounded-[2.5rem] w-full max-w-xl shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)] relative overflow-hidden border border-sky-100"
+                            className="bg-sky-50 rounded-[2rem] sm:rounded-[2.5rem] w-full max-w-xl shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)] relative overflow-hidden border border-sky-100"
                         >
-                            <div className="px-10 py-8 border-b border-sky-100 flex justify-between items-center bg-sky-50">
+                            <div className="px-6 sm:px-10 py-6 sm:py-8 border-b border-sky-100 flex justify-between items-center bg-sky-50">
                                 <div>
-                                    <h2 className="text-2xl font-display font-black text-slate-800 tracking-tight uppercase">
+                                    <h2 className="text-xl sm:text-2xl font-display font-black text-slate-800 tracking-tight uppercase">
                                         {editingId ? 'Update' : 'Onboard'}<span className="text-sky-500">.Node</span>
                                     </h2>
                                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
@@ -205,7 +208,7 @@ const EmployeeMgmt = () => {
                                     <X size={24} className="group-hover:rotate-90 transition-transform" />
                                 </button>
                             </div>
-                            <form onSubmit={handleSubmit} className="p-10 space-y-8">
+                            <form onSubmit={handleSubmit} className="p-6 sm:p-10 space-y-6 sm:space-y-8 max-h-[70vh] overflow-y-auto">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     <ModalInput label="Operational Name" value={formData.name} onChange={v => setFormData({ ...formData, name: v })} placeholder="Employee Name" icon={<User size={14} />} />
                                     <ModalInput label="Identity Code" value={formData.employeeId} onChange={v => setFormData({ ...formData, employeeId: v })} placeholder="e.g. EMP001" icon={<Hash size={14} />} />
@@ -298,7 +301,7 @@ const ModalInput = ({ label, value, onChange, placeholder, icon, type = "text" }
                 value={value}
                 onChange={e => onChange(e.target.value)}
                 placeholder={placeholder}
-                className="w-full bg-sky-50 border border-sky-100 rounded-2xl px-5 py-3.5 text-sm focus:outline-none focus:border-sky-500 focus:bg-sky-50 focus:ring-4 focus:ring-sky-500/10 transition-all text-slate-700 placeholder:text-slate-500 font-bold"
+                className="w-full bg-sky-50 border border-sky-100 rounded-xl sm:rounded-2xl px-5 py-3.5 text-sm focus:outline-none focus:border-sky-500 focus:bg-sky-50 focus:ring-4 focus:ring-sky-500/10 transition-all text-slate-700 placeholder:text-slate-500 font-bold"
             />
         </div>
     </div>

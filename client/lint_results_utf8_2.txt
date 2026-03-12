@@ -1,0 +1,256 @@
+﻿
+> frontend@0.0.0 lint
+> eslint .
+
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\components\ErrorBoundary.jsx
+  9:37  error  'error' is defined but never used  no-unused-vars
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\components\GlobalChat.jsx
+  31:8  warning  React Hook useEffect has a missing dependency: 'fetchMessages'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\components\Sidebar.jsx
+  4:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\components\TaskCard.jsx
+  2:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\components\TaskChat.jsx
+  28:8  warning  React Hook useEffect has a missing dependency: 'fetchMessages'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\components\TaskDetailModal.jsx
+   2:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            no-unused-vars
+  54:13  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  52 |         const matchingStatus = task?.status === 'In Progress';
+  53 |         if (isTiming !== matchingStatus) {
+> 54 |             setIsTiming(matchingStatus);
+     |             ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  55 |         }
+  56 |         if (timeElapsed !== (task?.timeElapsed || 0)) {
+  57 |             setTimeElapsed(task?.timeElapsed || 0);  react-hooks/set-state-in-effect
+  76:13  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  74 |             interval = setInterval(updateTimer, 1000);
+  75 |         } else {
+> 76 |             setLiveSessionMinutes(0);
+     |             ^^^^^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  77 |         }
+  78 |         return () => clearInterval(interval);
+  79 |     }, [isTiming, task?.lastStartTime]);                                                  react-hooks/set-state-in-effect
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\context\AuthContext.jsx
+  75:24  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\context\TrackingContext.jsx
+  168:18  error  'err' is defined but never used                                                                                                 no-unused-vars
+  190:28  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\layouts\MainLayout.jsx
+  5:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\pages\ForgotPasswordPage.jsx
+   3:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u             no-unused-vars
+  19:11  error  'navigate' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\pages\LoginPage.jsx
+  4:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\pages\ResetPasswordPage.jsx
+  3:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\pages\admin\AdminComms.jsx
+  26:9  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  24 |
+  25 |     useEffect(() => {
+> 26 |         fetchEmployees();
+     |         ^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  27 |     }, []);
+  28 |
+  29 |     const filteredEmployees = employees.filter(emp =>  react-hooks/set-state-in-effect
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\pages\admin\Announcements.jsx
+   3:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  45:18  error  'err' is defined but never used                                                no-unused-vars
+  58:18  error  'err' is defined but never used                                                no-unused-vars
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\pages\admin\Attendance.jsx
+    3:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u            no-unused-vars
+   22:12  error  'loading' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  371:74  error  'err' is defined but never used                                                          no-unused-vars
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\pages\admin\AttendanceHub.jsx
+  1:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\pages\admin\Dashboard.jsx
+   10:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  365:45  error  'Icon' is defined but never used                                               no-unused-vars
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\pages\admin\Employees.jsx
+    2:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      no-unused-vars
+   25:9   error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  23 |
+  24 |     useEffect(() => {
+> 25 |         fetchEmployees();
+     |         ^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  26 |     }, []);
+  27 |
+  28 |     const handleSubmit = async (e) => {  react-hooks/set-state-in-effect
+  240:61  error  'emoji' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  no-unused-vars
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\pages\admin\HolidayManager.jsx
+   3:10  error    'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                     no-unused-vars
+  23:8   warning  React Hook useEffect has a missing dependency: 'fetchHolidays'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  29:18  error    'err' is defined but never used                                                                                   no-unused-vars
+  49:18  error    'err' is defined but never used                                                                                   no-unused-vars
+  60:18  error    'err' is defined but never used                                                                                   no-unused-vars
+  66:15  error    'year' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                              no-unused-vars
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\pages\admin\Leaves.jsx
+   3:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u            no-unused-vars
+  25:12  error  'loading' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\pages\admin\LiveTracker.jsx
+  4:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\pages\admin\ManagerComms.jsx
+  26:9  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  24 |
+  25 |     useEffect(() => {
+> 26 |         fetchEmployees();
+     |         ^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  27 |     }, []);
+  28 |
+  29 |     const filteredEmployees = employees.filter(emp =>  react-hooks/set-state-in-effect
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\pages\admin\ManagerDashboard.jsx
+  18:13  error  'user' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\pages\admin\PerformanceHub.jsx
+   5:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          no-unused-vars
+  11:12  error  'loading' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                no-unused-vars
+  37:9   error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  35 |
+  36 |     useEffect(() => {
+> 37 |         fetchEmployees();
+     |         ^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  38 |     }, []);
+  39 |
+  40 |     const fetchHistory = async (empId) => {  react-hooks/set-state-in-effect
+  62:18  error  'error' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      no-unused-vars
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\pages\admin\Reports.jsx
+   3:10  error    'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                    no-unused-vars
+  23:12  error    'loading' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u                          no-unused-vars
+  42:8   warning  React Hook useEffect has a missing dependency: 'fetchReports'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\pages\employee\Attendance.jsx
+    3:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u            no-unused-vars
+   13:13  error  'user' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u     no-unused-vars
+   50:18  error  'err' is defined but never used                                                          no-unused-vars
+  122:72  error  'state' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u    no-unused-vars
+  122:79  error  'country' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  158:22  error  'err' is defined but never used                                                          no-unused-vars
+  340:71  error  'idx' is defined but never used                                                          no-unused-vars
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\pages\employee\Dashboard.jsx
+  3:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\pages\employee\FieldTracking.jsx
+  1:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\pages\employee\Leave.jsx
+   3:10  error    'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                no-unused-vars
+  55:9   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  53 |
+  54 |     useEffect(() => {
+> 55 |         fetchLeaves();
+     |         ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  56 |     }, []);
+  57 |
+  58 |     const handleSubmit = async (e) => {  react-hooks/set-state-in-effect
+  56:8   warning  React Hook useEffect has a missing dependency: 'fetchLeaves'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               react-hooks/exhaustive-deps
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\pages\employee\MyTasks.jsx
+  32:9  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  30 |
+  31 |     useEffect(() => {
+> 32 |         fetchMyTasks();
+     |         ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  33 |     }, []);
+  34 |
+  35 |     const filteredTasks = filter === 'All' ? tasks : tasks.filter(t => t.status === filter);  react-hooks/set-state-in-effect
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\pages\employee\Reports.jsx
+  2:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\src\pages\employee\Settings.jsx
+    3:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u                        no-unused-vars
+   32:12  error  'message' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u              no-unused-vars
+   32:21  error  'setMessage' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u           no-unused-vars
+   83:25  error  'setProfileData' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u       no-unused-vars
+  107:11  error  'handleRequestAccess' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+  116:18  error  'err' is defined but never used                                                                      no-unused-vars
+
+C:\Users\Forge India Connect\Documents\Employee-portal\client\vite.config.js
+  19:28  error  'options' is defined but never used  no-unused-vars
+  20:35  error  'req' is defined but never used      no-unused-vars
+  20:40  error  'res' is defined but never used      no-unused-vars
+  23:48  error  'res' is defined but never used      no-unused-vars
+
+Γ£û 71 problems (66 errors, 5 warnings)
+
