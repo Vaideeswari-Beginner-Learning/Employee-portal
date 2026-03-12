@@ -130,6 +130,21 @@ body {
   scrollbar-color: #bae6fd #f0f9ff;
 }
 
+@layer utilities {
+    .animate-scanline {
+        animation: scanline 3s linear infinite;
+    }
+}
+
+@keyframes scanline {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(400%);
+    }
+}
+
 .sidebar-scroll::-webkit-scrollbar {
   height: 4px;
   width: 4px;
