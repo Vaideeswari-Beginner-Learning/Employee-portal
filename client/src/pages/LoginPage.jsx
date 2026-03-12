@@ -9,7 +9,7 @@ import {
     ArrowRight,
     AlertCircle,
     Loader2,
-    UserIcon,
+    User,
     ArrowLeftRight,
     Fingerprint
 } from 'lucide-react';
@@ -128,7 +128,7 @@ const LoginPage = () => {
                         {/* Identifier Node */}
                         <motion.div variants={itemVariants} className="space-y-2.5">
                             <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1 flex items-center gap-2">
-                                <UserIcon size={12} className="text-sky-500" /> Identifier
+                                <User size={12} className="text-sky-500" /> Identifier
                             </label>
                             <div className="relative group">
                                 <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-sky-400 transition-colors duration-300">
@@ -237,6 +237,5 @@ const LoginPage = () => {
         </div >
     );
 };
-
-
+export default LoginPage;
 
