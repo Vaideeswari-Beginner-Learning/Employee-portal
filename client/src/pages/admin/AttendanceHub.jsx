@@ -1,4 +1,4 @@
-﻿import { motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
     CalendarCheck,
@@ -46,18 +46,18 @@ const AttendanceHub = () => {
     return (
         <div className="space-y-12 animate-in fade-in slide-in-from-bottom-5 duration-700">
             {/* Header Section */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                <div>
-                    <h1 className="text-4xl font-display font-black text-slate-800 tracking-tight leading-none uppercase">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 text-center md:text-left">
+                <div className="flex flex-col items-center md:items-start">
+                    <h1 className="text-xl sm:text-4xl font-display font-black text-slate-800 tracking-tight leading-none uppercase">
                         Absence<span className="text-sky-500 italic">.Registry</span>
                     </h1>
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mt-4 flex items-center gap-2">
+                    <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] sm:tracking-[0.4em] mt-3 sm:mt-4 flex items-center justify-center md:justify-start gap-2">
                         <Shield size={12} className="text-sky-500" />
                         Personnel Operational Management Hub
                     </p>
                 </div>
                 <div className="hidden lg:flex items-center gap-6 px-6 py-3 bg-sky-50 backdrop-blur-sm rounded-2xl border border-sky-100 shadow-sm">
-                    <div className="flex flex-col">
+                    <div className="flex flex-col text-left">
                         <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none">System Status</span>
                         <span className="text-xs font-bold text-emerald-500 flex items-center gap-1.5 mt-1">
                             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />

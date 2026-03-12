@@ -94,52 +94,60 @@ const MainLayout = () => {
                     initial={{ y: -20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ duration: 0.5, ease: 'easeOut' }}
-                    className="h-20 bg-white/80 backdrop-blur-xl border-b border-sky-100 fixed top-0 right-0 left-0 lg:left-[240px] z-40 px-4 md:px-8 flex items-center justify-between shadow-sm shadow-sky-100/50"
+                    className="h-20 bg-white/80 backdrop-blur-xl border-b border-sky-100 fixed top-0 right-0 left-0 lg:left-[240px] z-40 px-4 md:px-8 flex items-center shadow-sm shadow-sky-100/50"
                 >
-                    <div className="flex-1 flex items-center px-0 md:px-4">
-                        <button
-                            onClick={() => setIsSidebarOpen(true)}
-                            className="lg:hidden p-2 hover:bg-sky-50 rounded-xl transition-colors text-sky-600 mr-2 md:mr-4"
-                        >
-                            <Menu size={20} />
-                        </button>
-                        <div className="relative max-w-xl w-full">
-                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-sky-400 pointer-events-none" size={18} />
-                            <input
-                                type="text"
-                                placeholder="Search everything..."
-                                className="w-full pl-12 pr-4 py-2.5 bg-sky-50 border border-sky-200 rounded-2xl text-sm text-slate-700 focus:bg-white focus:border-sky-400 focus:ring-4 focus:ring-sky-100 transition-all placeholder-slate-400 outline-none shadow-inner"
-                            />
+                    <div className="flex-1 flex items-center justify-between w-full">
+                        {/* Hamburger Menu - Left */}
+                        <div className="flex-shrink-0 lg:hidden">
+                            <button
+                                onClick={() => setIsSidebarOpen(true)}
+                                className="p-2 hover:bg-sky-50 rounded-xl transition-colors text-sky-600"
+                            >
+                                <Menu size={20} />
+                            </button>
                         </div>
-                    </div>
 
-                    <div className="flex items-center gap-4">
-                        <motion.div
-                            whileHover={{ scale: 1.1, rotate: 10 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="relative cursor-pointer text-sky-500 hover:text-sky-600 transition-colors bg-sky-50 p-2.5 rounded-xl border border-sky-100"
-                        >
-                            <Bell size={22} />
-                            {announcementsCount > 0 && (
-                                <motion.span
-                                    initial={{ scale: 0 }}
-                                    animate={{ scale: 1 }}
-                                    className="absolute -top-1 -right-1 w-5 h-5 bg-sky-500 text-white text-[10px] font-black flex items-center justify-center rounded-full border-2 border-white shadow-sm"
-                                >
-                                    {announcementsCount}
-                                </motion.span>
-                            )}
-                        </motion.div>
+                        {/* Search - Centered on Mobile, Left-aligned on Desktop */}
+                        <div className="flex-1 flex justify-center lg:justify-start px-2 sm:px-4">
+                            <div className="relative max-w-xl w-full">
+                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-sky-400 pointer-events-none" size={18} />
+                                <input
+                                    type="text"
+                                    placeholder="Search nodes..."
+                                    className="w-full pl-10 sm:pl-12 pr-4 py-2 sm:py-2.5 bg-sky-50 border border-sky-200 rounded-xl sm:rounded-2xl text-xs sm:text-sm text-slate-700 focus:bg-white focus:border-sky-400 focus:ring-4 focus:ring-sky-100 transition-all placeholder-slate-400 outline-none shadow-inner"
+                                />
+                            </div>
+                        </div>
 
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={logout}
-                            className="p-2.5 text-slate-400 hover:text-red-400 hover:bg-red-50 rounded-xl transition-all border border-sky-100 bg-white"
-                            title="Logout"
-                        >
-                            <LogOut size={20} />
-                        </motion.button>
+                        {/* Actions - Right */}
+                        <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+                            <motion.div
+                                whileHover={{ scale: 1.1, rotate: 10 }}
+                                whileTap={{ scale: 0.95 }}
+                                className="relative cursor-pointer text-sky-500 hover:text-sky-600 transition-colors bg-sky-50 p-2 sm:p-2.5 rounded-xl border border-sky-100"
+                            >
+                                <Bell size={20} className="sm:w-[22px] sm:h-[22px]" />
+                                {announcementsCount > 0 && (
+                                    <motion.span
+                                        initial={{ scale: 0 }}
+                                        animate={{ scale: 1 }}
+                                        className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-sky-500 text-white text-[8px] sm:text-[10px] font-black flex items-center justify-center rounded-full border-2 border-white shadow-sm"
+                                    >
+                                        {announcementsCount}
+                                    </motion.span>
+                                )}
+                            </motion.div>
+
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={logout}
+                                className="hidden lg:flex p-2.5 text-slate-400 hover:text-red-400 hover:bg-red-50 rounded-xl transition-all border border-sky-100 bg-white"
+                                title="Logout"
+                            >
+                                <LogOut size={20} />
+                            </motion.button>
+                        </div>
                     </div>
                 </motion.header>
 

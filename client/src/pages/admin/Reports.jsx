@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../../utils/api';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -121,30 +121,32 @@ const AdminReports = () => {
                 )}
             </AnimatePresence>
 
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                <div>
-                    <h1 className="text-3xl font-display font-black text-slate-800 tracking-tight leading-none uppercase">Field<span className="text-sky-500 italic">.Documents</span></h1>
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mt-3">Advanced Deployment Telemetry & Archive</p>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 text-center md:text-left">
+                <div className="flex flex-col items-center md:items-start">
+                    <h1 className="text-xl sm:text-3xl font-display font-black text-slate-800 tracking-tight leading-none uppercase">Field<span className="text-sky-500 italic">.Documents</span></h1>
+                    <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] sm:tracking-[0.4em] mt-2 sm:mt-3">Advanced Deployment Telemetry & Archive</p>
                 </div>
                 <button
                     onClick={downloadCSV}
-                    className="btn-premium bg-sky-500 text-slate-800 px-8 py-3.5 flex items-center gap-3 active:scale-95 transition-all shadow-lg shadow-sky-600/20"
+                    className="w-full md:w-auto bg-sky-500 hover:bg-sky-700 text-slate-800 px-8 py-3.5 flex items-center justify-center gap-3 rounded-2xl shadow-lg shadow-sky-600/20 transition-all font-bold active:scale-95"
                 >
                     <Download size={20} />
                     <span className="text-xs font-black uppercase tracking-widest">Batch Matrix Export</span>
                 </button>
             </div>
 
-            <div className="card-premium flex flex-col shadow-2xl">
-                <div className="p-8 border-b border-sky-100 flex items-center gap-6 bg-sky-50">
-                    <div className="relative flex-1 w-full">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                        <input
-                            placeholder="Search by client, location, or personnel node..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full bg-sky-50/50 border border-sky-100 rounded-2xl py-3.5 pl-12 pr-6 text-sm focus:outline-none focus:border-sky-500 focus:ring-4 focus:ring-sky-500/5 transition-all text-slate-800 placeholder:text-slate-400 font-medium"
-                        />
+            <div className="card-premium flex flex-col shadow-2xl overflow-hidden">
+                <div className="p-4 sm:p-8 border-b border-sky-100 flex items-center gap-6 bg-sky-50">
+                    <div className="relative flex-1 w-full flex justify-center">
+                        <div className="relative w-full">
+                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                            <input
+                                placeholder="Search by client, location, or personnel node..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="w-full bg-sky-50/50 border border-sky-100 rounded-xl sm:rounded-2xl py-3 sm:py-3.5 pl-10 sm:pl-12 pr-6 text-xs sm:text-sm focus:outline-none focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 transition-all text-slate-700 placeholder:text-slate-400 shadow-inner font-medium"
+                            />
+                        </div>
                     </div>
                 </div>
 

@@ -160,12 +160,12 @@ const AdminDashboard = () => {
 
     return (
         <div ref={containerRef} className="space-y-10 pb-20 min-h-screen px-2">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 stagger-item opacity-0 pt-10">
-                <div>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 stagger-item opacity-0 pt-10 text-center md:text-left">
+                <div className="flex flex-col items-center md:items-start">
                     <h1 className="text-2xl sm:text-4xl font-display font-black text-slate-800 tracking-tight leading-none uppercase">Global<span className="text-sky-500 italic">.Control</span></h1>
                     <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] sm:tracking-[0.4em] mt-2 sm:mt-3">Enterprise Infrastructure Oversight</p>
                 </div>
-                <div className="flex items-center gap-4 sm:gap-6">
+                <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
                     <div className="flex -space-x-2 sm:-space-x-3">
                         {employees.slice(0, 3).map((emp, i) => (
                             <div
@@ -192,7 +192,7 @@ const AdminDashboard = () => {
                         <button
                             onClick={handleSystemAudit}
                             disabled={isExporting}
-                            className={`px-6 sm:px-8 py-3.5 sm:py-4 bg-gradient-to-r from-sky-500 to-blue-600 text-slate-800 rounded-xl sm:rounded-2xl font-black text-[9px] sm:text-[10px] uppercase tracking-[0.1em] sm:tracking-[0.2em] shadow-xl shadow-sky-300/40 hover:from-sky-600 hover:to-blue-700 transition-all flex items-center gap-2 sm:gap-3 ${isExporting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            className={`w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 bg-gradient-to-r from-sky-500 to-blue-600 text-slate-800 rounded-xl sm:rounded-2xl font-black text-[9px] sm:text-[10px] uppercase tracking-[0.1em] sm:tracking-[0.2em] shadow-xl shadow-sky-300/40 hover:from-sky-600 hover:to-blue-700 transition-all flex items-center justify-center gap-2 sm:gap-3 ${isExporting ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
                             {isExporting ? (
                                 <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full border-2 border-sky-200 border-t-white animate-spin" />

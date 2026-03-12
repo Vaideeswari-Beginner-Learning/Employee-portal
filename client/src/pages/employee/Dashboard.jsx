@@ -99,14 +99,14 @@ const EmployeeDashboard = () => {
             </AnimatePresence>
 
             {/* Header / Company Title */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                <div>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 text-center md:text-left">
+                <div className="flex flex-col items-center md:items-start">
                     <h2 className="text-xl sm:text-4xl font-display font-black text-slate-800 tracking-tight uppercase leading-none">
                         Command<span className="text-sky-500 italic">.Center</span>
                     </h2>
                     <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] sm:tracking-[0.4em] mt-2 sm:mt-3">Operational Identity Node: {user?.employeeId || '002'}</p>
                 </div>
-                <div className="flex items-center gap-4 bg-sky-50 px-5 py-2.5 rounded-2xl border border-sky-100 backdrop-blur-xl shadow-inner">
+                <div className="flex items-center justify-center md:justify-start gap-4 bg-sky-50 px-5 py-2.5 rounded-2xl border border-sky-100 backdrop-blur-xl shadow-inner w-fit mx-auto md:mx-0">
                     <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
                     <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Network Secure</span>
                 </div>

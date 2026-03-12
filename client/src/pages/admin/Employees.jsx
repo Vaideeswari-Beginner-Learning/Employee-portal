@@ -79,8 +79,8 @@ const EmployeeMgmt = () => {
 
     return (
         <div className="space-y-6 sm:space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700 p-4 sm:p-0">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                <div>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 text-center md:text-left">
+                <div className="flex flex-col items-center md:items-start">
                     <h1 className="text-xl sm:text-3xl font-display font-black text-slate-800 tracking-tight leading-none uppercase">Personnel<span className="text-sky-500 italic">.Registry</span></h1>
                     <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] sm:tracking-[0.4em] mt-2 sm:mt-3">High-Resolution Human Capital Database</p>
                 </div>
@@ -95,17 +95,19 @@ const EmployeeMgmt = () => {
 
             <div className="card-premium flex flex-col overflow-hidden">
                 <div className="p-4 sm:p-8 border-b border-sky-100 flex flex-col md:flex-row items-center gap-4 sm:gap-6 bg-sky-50">
-                    <div className="relative flex-1 w-full">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                        <input
-                            placeholder="Search by name, ID or vector..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full bg-sky-50/50 border border-sky-100 rounded-xl sm:rounded-2xl py-3 sm:py-3.5 pl-10 sm:pl-12 pr-6 text-xs sm:text-sm focus:outline-none focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 transition-all text-slate-700 placeholder:text-slate-400 shadow-inner font-medium"
-                        />
+                    <div className="relative flex-1 w-full flex justify-center">
+                        <div className="relative w-full">
+                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                            <input
+                                placeholder="Search by name, ID or vector..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="w-full bg-sky-50/50 border border-sky-100 rounded-xl sm:rounded-2xl py-3 sm:py-3.5 pl-10 sm:pl-12 pr-6 text-xs sm:text-sm focus:outline-none focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 transition-all text-slate-700 placeholder:text-slate-400 shadow-inner font-medium"
+                            />
+                        </div>
                     </div>
-                    <div className="flex items-center gap-2 sm:gap-3 w-full md:w-auto">
-                        <button className="flex-1 md:flex-none p-3 sm:p-3.5 bg-sky-50 border border-sky-100 rounded-xl sm:rounded-2xl text-slate-400 hover:text-sky-500 hover:border-sky-500/50 transition-all shadow-sm">
+                    <div className="flex items-center justify-center gap-2 sm:gap-3 w-full md:w-auto">
+                        <button className="flex-1 md:flex-none p-3 sm:p-3.5 bg-sky-50 border border-sky-100 rounded-xl sm:rounded-2xl text-slate-400 hover:text-sky-500 hover:border-sky-500/50 transition-all shadow-sm flex items-center justify-center">
                             <Filter size={18} />
                         </button>
                         <button className="flex-1 md:flex-none px-4 sm:px-6 py-3 sm:py-3.5 bg-sky-50 border border-sky-100 rounded-xl sm:rounded-2xl text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-700 transition-all">

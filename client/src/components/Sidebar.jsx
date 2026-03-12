@@ -114,8 +114,8 @@ const Sidebar = ({ isOpen, onClose }) => {
                 {/* Background gradient accent */}
                 <div className="absolute inset-0 bg-gradient-to-b from-sky-50/50 to-white pointer-events-none" />
 
-                {/* Logo Section */}
-                <div className="p-6 lg:p-8 flex items-center justify-between relative z-10">
+                {/* Logo Section - Sticky Header */}
+                <div className="p-6 lg:p-8 flex items-center justify-between relative z-10 bg-white/50 backdrop-blur-md border-b border-sky-50">
                     <div className="flex items-center gap-3">
                         <motion.div
                             whileHover={{ scale: 1.1, rotate: 5 }}
@@ -135,8 +135,8 @@ const Sidebar = ({ isOpen, onClose }) => {
                     )}
                 </div>
 
-                {/* Navigation */}
-                <nav className="flex-1 px-3 space-y-1 overflow-y-auto pb-10 relative z-10">
+                {/* Navigation - Scrollable Area */}
+                <nav className="flex-1 px-3 space-y-1 overflow-y-auto pt-4 pb-4 relative z-10 scrollbar-hide">
                     {menuGroups.map((group, groupIdx) => (
                         <div key={groupIdx} className="space-y-1">
                             {group.title && (
@@ -186,8 +186,8 @@ const Sidebar = ({ isOpen, onClose }) => {
                     ))}
                 </nav>
 
-                {/* Combined Profile & Logout Section */}
-                <div className="p-4 border-t border-sky-100 relative z-10 bg-white">
+                {/* Combined Profile & Logout Section - Sticky Footer */}
+                <div className="p-4 border-t border-sky-100 relative z-10 bg-white/80 backdrop-blur-md">
                     <motion.div
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
