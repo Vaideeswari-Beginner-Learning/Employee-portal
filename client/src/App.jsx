@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
+import ProtectedRoute from './components/ProtectedRoute';
 import LoginPage from './pages/LoginPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
@@ -41,7 +42,7 @@ function App() {
       <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
 
       <Route element={<MainLayout />}>
-        {/* Employee Routes */}
+        {/* Employee Routes - Accessible by all authenticated users */}
         <Route path="/dashboard" element={<EmployeeDashboard />} />
         <Route path="/attendance" element={<AttendancePage />} />
         <Route path="/reports" element={<ReportsPage />} />
@@ -51,21 +52,27 @@ function App() {
         <Route path="/support" element={<SupportChat />} />
         <Route path="/settings" element={<SettingsPage />} />
 
-        {/* Admin Routes */}
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
-        <Route path="/manager-dashboard" element={<ManagerDashboard />} />
-        <Route path="/admin/employees" element={<EmployeeMgmt />} />
-        <Route path="/admin/attendance" element={<AdminAttendance />} />
-        <Route path="/admin/reports" element={<AdminReports />} />
-        <Route path="/admin/leaves" element={<AdminLeaves />} />
-        <Route path="/admin/attendance-hub" element={<AttendanceHub />} />
-        <Route path="/admin/live-tracker" element={<LiveTracker />} />
-        <Route path="/admin/announcements" element={<Announcements />} />
-        <Route path="/admin/tasks" element={<AdminTaskPanel />} />
-        <Route path="/admin/merit" element={<PerformanceHub />} />
-        <Route path="/admin/comms" element={<AdminComms />} />
-        <Route path="/manager/comms" element={<ManagerComms />} />
-        <Route path="/admin/holidays" element={<HolidayManager />} />
+        {/* Admin Only Routes */}
+        <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/employees" element={<EmployeeMgmt />} />
+          <Route path="/admin/attendance" element={<AdminAttendance />} />
+          <Route path="/admin/reports" element={<AdminReports />} />
+          <Route path="/admin/leaves" element={<AdminLeaves />} />
+          <Route path="/admin/attendance-hub" element={<AttendanceHub />} />
+          <Route path="/admin/live-tracker" element={<LiveTracker />} />
+          <Route path="/admin/announcements" element={<Announcements />} />
+          <Route path="/admin/tasks" element={<AdminTaskPanel />} />
+          <Route path="/admin/merit" element={<PerformanceHub />} />
+          <Route path="/admin/comms" element={<AdminComms />} />
+          <Route path="/admin/holidays" element={<HolidayManager />} />
+        </Route>
+
+        {/* Manager & Admin Routes */}
+        <Route element={<ProtectedRoute allowedRoles={['admin', 'manager']} />}>
+          <Route path="/manager-dashboard" element={<ManagerDashboard />} />
+          <Route path="/manager/comms" element={<ManagerComms />} />
+        </Route>
       </Route>
 
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
