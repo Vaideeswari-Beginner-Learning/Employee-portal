@@ -144,7 +144,7 @@ const MainLayout = () => {
                 </motion.header>
 
                 {/* Main Content Area */}
-                <main className="p-4 sm:p-6 lg:p-10 max-w-[1600px] mx-auto w-full flex-grow mt-20">
+                <main className="p-3 sm:p-6 lg:p-10 max-w-[1600px] mx-auto w-full flex-grow mt-20">
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={typeof window !== 'undefined' ? window.location.pathname : ''}

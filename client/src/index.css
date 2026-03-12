@@ -41,11 +41,17 @@ body {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(14, 165, 233, 0.15);
-  border-radius: 2rem;
+  border-radius: 1.5rem; /* Default mobile-friendly */
   box-shadow:
     0 4px 6px -1px rgba(14, 165, 233, 0.08),
     0 10px 15px -3px rgba(14, 165, 233, 0.06);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+}
+
+@media (min-width: 640px) {
+  .card-premium {
+    border-radius: 2rem;
+  }
 }
 
 .card-premium:hover {

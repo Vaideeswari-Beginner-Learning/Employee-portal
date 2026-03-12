@@ -162,48 +162,42 @@ const AdminDashboard = () => {
         <div ref={containerRef} className="space-y-10 pb-20 min-h-screen px-2">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 stagger-item opacity-0 pt-10">
                 <div>
-                    <h1 className="text-4xl font-display font-black text-slate-800 tracking-tight leading-none uppercase">Global<span className="text-sky-500 italic">.Control</span></h1>
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mt-3">Enterprise Infrastructure Oversight</p>
+                    <h1 className="text-2xl sm:text-4xl font-display font-black text-slate-800 tracking-tight leading-none uppercase">Global<span className="text-sky-500 italic">.Control</span></h1>
+                    <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] sm:tracking-[0.4em] mt-2 sm:mt-3">Enterprise Infrastructure Oversight</p>
                 </div>
-                <div className="flex items-center gap-6">
-                    <div className="flex -space-x-3">
-                        {employees.slice(0, 4).map((emp, i) => (
+                <div className="flex items-center gap-4 sm:gap-6">
+                    <div className="flex -space-x-2 sm:-space-x-3">
+                        {employees.slice(0, 3).map((emp, i) => (
                             <div
                                 key={emp._id}
                                 onClick={() => navigate('/admin/employees')}
-                                className="w-12 h-12 rounded-2xl border-4 border-white bg-sky-50 overflow-hidden shadow-md flex items-center justify-center cursor-pointer hover:scale-110 hover:z-20 transition-all active:scale-95 group"
+                                className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl border-2 sm:border-4 border-white bg-sky-50 overflow-hidden shadow-md flex items-center justify-center cursor-pointer hover:scale-110 hover:z-20 transition-all active:scale-95 group"
                                 title={`Personnel: ${emp.name}`}
                             >
-                                <div className="text-[10px] font-black text-sky-400 uppercase leading-none group-hover:text-sky-600 transition-colors">
+                                <div className="text-[9px] sm:text-[10px] font-black text-sky-400 uppercase leading-none group-hover:text-sky-600 transition-colors">
                                     {(emp.name || 'U').charAt(0)}{i + 1}
                                 </div>
                             </div>
                         ))}
-                        {employees.length > 4 && (
+                        {employees.length > 3 && (
                             <div
                                 onClick={() => navigate('/admin/employees')}
-                                className="w-12 h-12 rounded-2xl border-4 border-white bg-sky-500 overflow-hidden shadow-md flex items-center justify-center cursor-pointer hover:scale-110 hover:z-20 transition-all active:scale-95 group"
-                                title={`View all ${employees.length} employees`}
+                                className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl border-2 sm:border-4 border-white bg-sky-500 overflow-hidden shadow-md flex items-center justify-center cursor-pointer hover:scale-110 hover:z-20 transition-all active:scale-95 group"
                             >
-                                <div className="text-[10px] font-black text-white uppercase leading-none">+{employees.length - 4}</div>
+                                <div className="text-[9px] sm:text-[10px] font-black text-white uppercase leading-none">+{employees.length - 3}</div>
                             </div>
                         )}
-                        {employees.length === 0 && [1, 2, 3, 4].map(i => (
-                            <div key={i} className="w-12 h-12 rounded-2xl border-4 border-white bg-sky-50 overflow-hidden shadow-md flex items-center justify-center opacity-40">
-                                <div className="text-[10px] font-black text-sky-400 uppercase leading-none">U{i}</div>
-                            </div>
-                        ))}
                     </div>
                     {user?.role === 'admin' && (
                         <button
                             onClick={handleSystemAudit}
                             disabled={isExporting}
-                            className={`px-8 py-4 bg-gradient-to-r from-sky-500 to-blue-600 text-slate-800 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-sky-300/40 hover:from-sky-600 hover:to-blue-700 transition-all flex items-center gap-3 ${isExporting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            className={`px-6 sm:px-8 py-3.5 sm:py-4 bg-gradient-to-r from-sky-500 to-blue-600 text-slate-800 rounded-xl sm:rounded-2xl font-black text-[9px] sm:text-[10px] uppercase tracking-[0.1em] sm:tracking-[0.2em] shadow-xl shadow-sky-300/40 hover:from-sky-600 hover:to-blue-700 transition-all flex items-center gap-2 sm:gap-3 ${isExporting ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
                             {isExporting ? (
-                                <div className="w-4 h-4 rounded-full border-2 border-sky-200 border-t-white animate-spin" />
+                                <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full border-2 border-sky-200 border-t-white animate-spin" />
                             ) : (
-                                <Download size={18} />
+                                <Download size={16} />
                             )}
                             <span>{isExporting ? 'Compiling...' : 'System Audit'}</span>
                         </button>
@@ -223,18 +217,18 @@ const AdminDashboard = () => {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
                 {/* Visual Analytics Hub */}
                 <div className="lg:col-span-8 space-y-10">
-                    <div className="card-premium p-10 overflow-hidden relative shadow-lg">
-                        <div className="flex items-center justify-between mb-10 relative z-10">
+                    <div className="card-premium p-6 sm:p-10 overflow-hidden relative shadow-lg">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 sm:mb-10 relative z-10 gap-4">
                             <div>
-                                <h3 className="text-2xl font-display font-black text-slate-800 tracking-tight">Personnel Performance Matrix</h3>
-                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mt-2">Historical Verification Cycles</p>
+                                <h3 className="text-xl sm:text-2xl font-display font-black text-slate-800 tracking-tight">Personnel Performance Matrix</h3>
+                                <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mt-2">Historical Verification Cycles</p>
                             </div>
                             <div className="flex items-center gap-3 px-5 py-2.5 bg-sky-50 rounded-2xl border border-sky-200">
                                 <Activity className="text-sky-500" size={16} />
                                 <span className="text-[10px] font-black text-sky-600 uppercase tracking-widest leading-none">Live Telemetry</span>
                             </div>
                         </div>
-                        <div className="h-[400px] w-full relative z-10">
+                        <div className="h-[300px] sm:h-[400px] w-full relative z-10">
                             <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                                 <AreaChart data={[
                                     { name: '00:00', v: 30 },

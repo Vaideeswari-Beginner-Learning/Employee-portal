@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { motion } from 'framer-motion';
 import {
@@ -101,10 +101,10 @@ const EmployeeDashboard = () => {
             {/* Header / Company Title */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                    <h2 className="text-2xl sm:text-4xl font-display font-black text-slate-800 tracking-tight uppercase leading-none">
+                    <h2 className="text-xl sm:text-4xl font-display font-black text-slate-800 tracking-tight uppercase leading-none">
                         Command<span className="text-sky-500 italic">.Center</span>
                     </h2>
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mt-3">Operational Identity Node: {user?.employeeId || '002'}</p>
+                    <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] sm:tracking-[0.4em] mt-2 sm:mt-3">Operational Identity Node: {user?.employeeId || '002'}</p>
                 </div>
                 <div className="flex items-center gap-4 bg-sky-50 px-5 py-2.5 rounded-2xl border border-sky-100 backdrop-blur-xl shadow-inner">
                     <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
@@ -136,8 +136,8 @@ const EmployeeDashboard = () => {
                 <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 w-full">
                     <div className="space-y-6">
                         <div>
-                            <h1 className="text-3xl font-display font-black text-slate-800 tracking-tight mb-1 uppercase">{user?.name}</h1>
-                            <p className="text-[10px] font-black text-sky-500 uppercase tracking-[0.3em]">{user?.role || 'Executive Protocol'}</p>
+                            <h1 className="text-2xl sm:text-3xl font-display font-black text-slate-800 tracking-tight mb-1 uppercase">{user?.name}</h1>
+                            <p className="text-[9px] sm:text-[10px] font-black text-sky-500 uppercase tracking-[0.3em]">{user?.role || 'Executive Protocol'}</p>
                         </div>
                         <div className="space-y-3">
                             <InfoLine label="Internal ID" value={user?.employeeId || 'EMP-2026-002'} />
@@ -146,8 +146,8 @@ const EmployeeDashboard = () => {
                         </div>
                     </div>
 
-                    <div className="space-y-6 pt-2">
-                        <div className="space-y-3 pt-10">
+                    <div className="space-y-6 pt-0 lg:pt-2">
+                        <div className="space-y-3 pt-4 sm:pt-10">
                             <InfoLine label="Tenure Status" value="PERMANENT CYCLE" />
                             <InfoLine label="Sync Period" value="Aug 2023 - Present" />
                             <InfoLine label="Efficiency" value="98.4%" />
@@ -168,10 +168,10 @@ const EmployeeDashboard = () => {
             </div>
 
             {/* Content Grid */}
-            <div className="grid grid-cols-1 xl:grid-cols-3 gap-10">
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 sm:gap-10">
                 {/* Left Column */}
-                <div className="xl:col-span-2 space-y-10">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div className="xl:col-span-2 space-y-6 sm:space-y-10">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10">
                         {/* Contact Information */}
                         <div className="bg-white/50 backdrop-blur-xl border border-sky-100 rounded-[2.5rem] h-full flex flex-col shadow-2xl overflow-hidden">
                             <div className="p-6 border-b border-sky-100 bg-sky-50 flex items-center justify-between">
