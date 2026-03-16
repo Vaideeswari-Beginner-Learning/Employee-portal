@@ -31,7 +31,15 @@ const adminAuth = async (req, res, next) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findOne({ _id: decoded._id });
 
-        if (!user || user.role.toLowerCase() !== 'admin') {
+        if (!user) {
+            console.error(`[AdminAuth] User not found for ID: ${decoded._id}`);
+            return res.status(401).send({ error: 'User not found' });
+        }
+
+        console.log(`[AdminAuth] Checking access for ${user.email} (Role: ${user.role})`);
+
+        if (user.role.toLowerCase() !== 'admin') {
+            console.warn(`[AdminAuth] Access denied for ${user.email}: Role is ${user.role}, not Admin`);
             return res.status(403).send({ error: 'Administrative clearance required.' });
         }
 
