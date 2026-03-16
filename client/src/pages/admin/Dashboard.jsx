@@ -4,7 +4,8 @@ import {
     AlertCircle, TrendingUp, Clock,
     Search, Download, ChevronRight,
     Activity, Megaphone, Building2, UserCircle2, Briefcase, UserCheck, CheckCircle,
-    ShieldCheck, Zap, ArrowUpRight, ArrowDownRight, ArrowDown
+    ShieldCheck, Zap, ArrowUpRight, ArrowDownRight, ArrowDown,
+    Layers, ShoppingCart
 } from 'lucide-react';
 import { AreaChart, Area, ResponsiveContainer, PieChart, Pie, Cell, XAxis, YAxis, Tooltip } from 'recharts';
 import { motion } from 'framer-motion';
@@ -207,10 +208,11 @@ const AdminDashboard = () => {
 
             {/* Stats Overview */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <WavyStatCard title="Active Personnel" value={stats.totalEmployees || 0} icon={Users} percentage={12} trend="up" color="sky" linkTo="/admin/employees" />
-                <WavyStatCard title="Today's Check-ins" value={stats.todayAttendance || 0} icon={ShieldCheck} percentage={4} trend="up" color="emerald" linkTo="/admin/attendance" />
-                <WavyStatCard title="Active Field Tasks" value={stats.todayReports || 0} icon={Zap} percentage={28} trend="up" color="purple" linkTo="/admin/tasks" />
-                <WavyStatCard title="Pending Verifications" value={stats.pendingLeaves || 0} icon={Briefcase} percentage={2} trend="down" color="sky" linkTo="/admin/leaves" />
+                <WavyStatCard title="Total Products" value={stats.totalProducts || 0} icon={Layers} percentage={0} trend="up" color="sky" linkTo="/admin/products" />
+                <WavyStatCard title="Total Orders" value={stats.totalOrders || 0} icon={ShoppingCart} percentage={0} trend="up" color="emerald" linkTo="/admin/orders" />
+                <WavyStatCard title="Service Requests" value={stats.activeServiceRequests || 0} icon={Zap} percentage={0} trend="up" color="purple" linkTo="/admin/cx" />
+                <WavyStatCard title="Active Personnel" value={stats.totalEmployees || 0} icon={Users} percentage={0} trend="up" color="sky" linkTo="/admin/employees" />
+                <WavyStatCard title="Pending Tasks" value={stats.pendingTasks || 0} icon={Briefcase} percentage={0} trend="up" color="sky" linkTo="/admin/tasks" />
             </div>
 
             {/* Main Content Grid */}

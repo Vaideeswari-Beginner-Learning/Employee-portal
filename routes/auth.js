@@ -35,6 +35,36 @@ router.post('/login', async (req, res) => {
     }
 });
 
+// Register Route (Customers Only)
+router.post('/register', async (req, res) => {
+    try {
+        const { name, email, password, phone } = req.body;
+        const normalizedEmail = email?.trim();
+        
+        // Prevent duplicate emails
+        const existingUser = await User.findOne({ email: { $regex: new RegExp(`^${normalizedEmail}$`, 'i') } });
+        if (existingUser) {
+            return res.status(400).send({ error: 'Email is already registered' });
+        }
+
+        const user = new User({
+            name,
+            email: normalizedEmail,
+            password,
+            phone,
+            role: 'customer' // Force customer role
+        });
+
+        await user.save();
+        
+        const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET);
+        res.status(201).send({ user, token });
+    } catch (e) {
+        console.error("Register route error:", e);
+        res.status(400).send({ error: e.message || 'Registration failed', stack: e.stack });
+    }
+});
+
 // @route   GET /api/auth/me
 // @desc    Get current user profile
 // @access  Private

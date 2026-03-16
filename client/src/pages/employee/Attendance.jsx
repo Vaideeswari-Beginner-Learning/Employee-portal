@@ -1,5 +1,6 @@
-﻿import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import api from '../../utils/api';
+import { getISTDate } from '../../utils/dateUtils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Clock, Calendar, CheckCircle, AlertCircle, Loader2, ChevronRight, Activity, MapPin, Fingerprint, LogOut } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
@@ -28,9 +29,15 @@ const AttendancePage = () => {
         try {
             const res = await api.get('employee/attendance');
             setHistory(res.data);
+            
+            // Check if latest record is from TODAY in IST and if it's still active (no checkOut)
+            const today = getISTDate();
             const latest = res.data[0];
-            if (latest && !latest.checkOut) setStatus('checked-in');
-            else setStatus('checked-out');
+            if (latest && latest.date === today && !latest.checkOut) {
+                setStatus('checked-in');
+            } else {
+                setStatus('checked-out');
+            }
         } catch (err) {
             console.error('Attendance fetch error:', err.response?.data || err.message);
         }
@@ -236,10 +243,10 @@ const AttendancePage = () => {
                                                     <div className="absolute inset-0 bg-sky-100 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
                                                     {loading ? <Loader2 className="animate-spin" size={40} /> : (
                                                         <>
-                                                            <div className="p-4 bg-white/20 rounded-2xl shadow-inner border border-sky-100">
+                                                                <div className="p-4 bg-white/20 rounded-2xl shadow-inner border border-sky-100">
                                                                 <MapPin size={32} />
                                                             </div>
-                                                            <span className="text-xs font-black uppercase tracking-[0.3em]">Verify GPS</span>
+                                                            <span className="text-xs font-black uppercase tracking-[0.3em]">Start Shift</span>
                                                         </>
                                                     )}
                                                 </button>
@@ -300,7 +307,7 @@ const AttendancePage = () => {
                                                     <div className="p-4 bg-red-500/20 rounded-2xl shadow-inner">
                                                         <LogOut size={32} className="text-red-400" />
                                                     </div>
-                                                    <span className="text-xs font-black uppercase tracking-[0.3em]">Terminate</span>
+                                                    <span className="text-xs font-black uppercase tracking-[0.3em]">End Shift</span>
                                                 </>
                                             )}
                                         </motion.button>

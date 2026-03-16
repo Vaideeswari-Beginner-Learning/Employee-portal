@@ -5,9 +5,12 @@ const reportSchema = new mongoose.Schema({
     clientName: { type: String, required: true },
     location: { type: String, required: true },
     isInstalled: { type: String, default: 'Yes' },
-    cameraCount: { type: String, required: true },
+    workType: { type: String },
+    cameraCount: { type: String },
     issues: { type: String },
     image: { type: String },
+    reportTime: { type: String },
+    adminStatus: { type: String, enum: ['Pending', 'Approved', 'Rejected'], default: 'Pending' },
     date: { type: Date, default: Date.now }
 }, { timestamps: true });
 

@@ -18,7 +18,10 @@ import {
     Star,
     Layers,
     CalendarDays,
-    X
+    X,
+    ShoppingCart,
+    BarChart3,
+    ChevronDown
 } from 'lucide-react';
 
 const Sidebar = ({ isOpen, onClose }) => {
@@ -27,6 +30,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     const location = useLocation();
     const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
     const [showProfileModal, setShowProfileModal] = useState(false);
+    const [employeeDropdownOpen, setEmployeeDropdownOpen] = useState(true);
 
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < 1024);
@@ -39,36 +43,37 @@ const Sidebar = ({ isOpen, onClose }) => {
 
     const getMenuGroups = () => {
         if (isAdmin || isManager) {
-            const items = [
-                { name: 'Command Center', icon: <LayoutDashboard size={20} />, path: isAdmin ? '/admin-dashboard' : '/manager-dashboard' },
+            const employeeItems = [
+                { name: 'Personal Registration', icon: <Users size={20} />, path: '/admin/employees' },
+                { name: 'Field Tracking', icon: <MapPin size={20} />, path: '/admin/live-tracker' },
+                { name: 'Attendance Hub', icon: <CalendarCheck size={20} />, path: '/admin/attendance-hub' },
+                { name: 'Leave Terminal', icon: <FileText size={20} />, path: '/admin/leaves' },
+                { name: 'Field Reports', icon: <ClipboardList size={20} />, path: '/admin/reports' },
+                { name: 'Task Control', icon: <Layers size={20} />, path: '/admin/tasks' },
+                { name: 'Operation Tickets', icon: <MessageSquare size={20} />, path: '/admin/cx' },
+                { name: 'Comms Hub', icon: <MessageSquare size={20} />, path: isAdmin ? '/admin/comms' : '/manager/comms' }
             ];
 
-            if (isAdmin) {
-                items.push({ name: 'Personnel Registry', icon: <Users size={20} />, path: '/admin/employees' });
-            }
-
-            items.push(
-                { name: 'Field Documents', icon: <ClipboardList size={20} />, path: '/admin/reports' },
-                { name: 'Absence & Attendance', icon: <CalendarCheck size={20} />, path: '/admin/attendance-hub' },
-                { name: 'Live Field Tracker', icon: <Navigation size={20} />, path: '/admin/live-tracker' },
-                { name: 'Broadcast System', icon: <Megaphone size={20} />, path: '/admin/announcements' },
-                { name: 'Task Assignments', icon: <Layers size={20} />, path: '/admin/tasks' },
-                { name: 'Holiday Registry', icon: <CalendarDays size={20} />, path: '/admin/holidays' }
-            );
-
-            items.push({ name: 'Personnel Merit', icon: <Star size={20} />, path: '/admin/merit' });
-
-            if (isAdmin) {
-                items.push({ name: 'Employee Comms', icon: <MessageSquare size={20} />, path: '/admin/comms' });
-            } else {
-                items.push({ name: 'Team Comms', icon: <MessageSquare size={20} />, path: '/manager/comms' });
-            }
-
-            items.push(
-                { name: 'System Settings', icon: <Settings size={20} />, path: '/settings' }
-            );
-
-            return [{ title: 'Navigation', items }];
+            return [
+                { title: 'OperationsHub', items: [
+                    { name: 'Dashboard', icon: <LayoutDashboard size={20} />, path: isAdmin ? '/admin-dashboard' : '/manager-dashboard' },
+                    { name: 'Products', icon: <Layers size={20} />, path: '/admin/products' },
+                    { name: 'Orders', icon: <ShoppingCart size={20} />, path: '/admin/orders' },
+                    { name: 'Service Requests', icon: <ClipboardList size={20} />, path: '/admin/cx' },
+                ]},
+                { 
+                    title: 'Employee Management', 
+                    isDropdown: true, 
+                    isOpen: employeeDropdownOpen, 
+                    onToggle: () => setEmployeeDropdownOpen(!employeeDropdownOpen),
+                    items: employeeItems 
+                },
+                { title: 'Analysis & Config', items: [
+                    { name: 'Customers', icon: <Users size={20} />, path: '/admin/customers' },
+                    { name: 'Reports', icon: <BarChart3 size={20} />, path: '/admin/reports' },
+                    { name: 'Settings', icon: <Settings size={20} />, path: '/settings' }
+                ]}
+            ];
         }
 
         return [
@@ -140,48 +145,68 @@ const Sidebar = ({ isOpen, onClose }) => {
                     {menuGroups.map((group, groupIdx) => (
                         <div key={groupIdx} className="space-y-1">
                             {group.title && (
-                                <div className="px-5 py-3">
-                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">{group.title}</p>
+                                <div 
+                                    className={`px-5 py-3 flex items-center justify-between cursor-pointer group/title`}
+                                    onClick={group.isDropdown ? group.onToggle : undefined}
+                                >
+                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em] group-hover/title:text-sky-500 transition-colors">{group.title}</p>
+                                    {group.isDropdown && (
+                                        <motion.div
+                                            animate={{ rotate: group.isOpen ? 0 : -90 }}
+                                            className="text-slate-400"
+                                        >
+                                            <ChevronDown size={14} />
+                                        </motion.div>
+                                    )}
                                 </div>
                             )}
-                            <div className="space-y-0.5">
-                                {group.items.map((item, idx) => {
-                                    const isActive = location.pathname === item.path;
-                                    return (
-                                        <motion.button
-                                            key={item.path}
-                                            initial={{ opacity: 0, x: -20 }}
-                                            animate={{ opacity: 1, x: 0 }}
-                                            transition={{ delay: idx * 0.05, duration: 0.3 }}
-                                            whileHover={{ x: 4 }}
-                                            onClick={() => {
-                                                navigate(item.path);
-                                                onClose();
-                                            }}
-                                            className={`w-full group px-4 py-3 rounded-xl flex items-center gap-4 text-[12px] font-bold transition-all duration-200 relative
-                                            ${isActive ? 'bg-gradient-to-r from-sky-500 to-blue-500 text-white shadow-lg shadow-sky-300/40' : 'text-slate-500 hover:text-sky-600 hover:bg-sky-50'}`}
-                                        >
-                                            {isActive && (
-                                                <motion.div
-                                                    layoutId="activeTab"
-                                                    className="absolute inset-0 bg-gradient-to-r from-sky-500 to-blue-500 rounded-xl -z-10"
-                                                />
-                                            )}
-                                            <span className={`${isActive ? 'text-white' : 'text-slate-400 group-hover:text-sky-500'} transition-colors`}>
-                                                {item.icon}
-                                            </span>
-                                            <span className="tracking-tight">{item.name}</span>
-                                            {isActive && (
-                                                <motion.div
-                                                    initial={{ scale: 0 }}
-                                                    animate={{ scale: 1 }}
-                                                    className="ml-auto w-1.5 h-1.5 bg-white rounded-full"
-                                                />
-                                            )}
-                                        </motion.button>
-                                    );
-                                })}
-                            </div>
+                            <AnimatePresence>
+                                {(!group.isDropdown || group.isOpen) && (
+                                    <motion.div 
+                                        initial={group.isDropdown ? { height: 0, opacity: 0 } : false}
+                                        animate={{ height: 'auto', opacity: 1 }}
+                                        exit={{ height: 0, opacity: 0 }}
+                                        className="space-y-0.5 overflow-hidden"
+                                    >
+                                        {group.items.map((item, idx) => {
+                                            const isActive = location.pathname === item.path;
+                                            return (
+                                                <motion.button
+                                                    key={item.path}
+                                                    initial={{ opacity: 0, x: -20 }}
+                                                    animate={{ opacity: 1, x: 0 }}
+                                                    transition={{ delay: idx * 0.05, duration: 0.3 }}
+                                                    whileHover={{ x: 4 }}
+                                                    onClick={() => {
+                                                        navigate(item.path);
+                                                        onClose();
+                                                    }}
+                                                    className={`w-full group px-4 py-3 rounded-xl flex items-center gap-4 text-[12px] font-bold transition-all duration-200 relative
+                                                    ${isActive ? 'bg-gradient-to-r from-sky-500 to-blue-500 text-white shadow-lg shadow-sky-300/40' : 'text-slate-500 hover:text-sky-600 hover:bg-sky-50'}`}
+                                                >
+                                                    {isActive && (
+                                                        <motion.div
+                                                            layoutId="activeTab"
+                                                            className="absolute inset-0 bg-gradient-to-r from-sky-500 to-blue-500 rounded-xl -z-10"
+                                                        />
+                                                    )}
+                                                    <span className={`${isActive ? 'text-white' : 'text-slate-400 group-hover:text-sky-500'} transition-colors`}>
+                                                        {item.icon}
+                                                    </span>
+                                                    <span className="tracking-tight">{item.name}</span>
+                                                    {isActive && (
+                                                        <motion.div
+                                                            initial={{ scale: 0 }}
+                                                            animate={{ scale: 1 }}
+                                                            className="ml-auto w-1.5 h-1.5 bg-white rounded-full"
+                                                        />
+                                                    )}
+                                                </motion.button>
+                                            );
+                                        })}
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </div>
                     ))}
                 </nav>

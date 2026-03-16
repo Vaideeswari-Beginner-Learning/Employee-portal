@@ -41,8 +41,21 @@ const AdminReports = () => {
         fetchReports();
     }, []);
 
+    const handleStatusUpdate = async (id, status, e) => {
+        if (e) e.stopPropagation();
+        try {
+            await api.patch(`admin/reports/${id}/status`, { adminStatus: status });
+            setReports(prev => prev.map(r => r._id === id ? { ...r, adminStatus: status } : r));
+            showNotification('success', `Report ${status.toLowerCase()} successfully.`);
+            if (selectedReport?._id === id) setSelectedReport({ ...selectedReport, adminStatus: status });
+        } catch (err) {
+            console.error('Status update error:', err);
+            showNotification('error', 'Failed to update report status.');
+        }
+    };
+
     const handleDeleteReport = async (id, e) => {
-        e.stopPropagation();
+        if (e) e.stopPropagation();
         if (!window.confirm('Are you sure you want to permanently delete this field document?')) return;
 
         try {
@@ -154,12 +167,13 @@ const AdminReports = () => {
                     <table className="w-full text-left border-collapse min-w-[1200px]">
                         <thead>
                             <tr className="bg-sky-50">
-                                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-sky-100">Descriptor Node</th>
-                                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-sky-100">Personnel</th>
-                                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-sky-100">Location Space</th>
-                                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-sky-100">HW Metrics</th>
-                                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-sky-100">Registry</th>
-                                <th className="px-8 py-5 text-right text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-sky-100">Deep Analysis</th>
+                                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-sky-100">Protocol Node</th>
+                                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-sky-100">Employee ID</th>
+                                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-sky-100">Deployment Location</th>
+                                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-sky-100">Service Type</th>
+                                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-sky-100">Telemetry & Date</th>
+                                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-sky-100">Status</th>
+                                <th className="px-8 py-5 text-right text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-sky-100">Analysis</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-sky-100">
@@ -188,21 +202,53 @@ const AdminReports = () => {
                                         </div>
                                     </td>
                                     <td className="px-8 py-6">
-                                        <span className="text-[10px] font-black text-slate-400 bg-sky-50 px-3 py-1.5 rounded-lg border border-sky-100 tabular-nums">
-                                            {report.cameraCount} Optical Units
-                                        </span>
+                                        <div className="flex items-center gap-2 text-[11px] font-bold text-sky-500 uppercase tracking-tight">
+                                            {report.workType || 'Standard Deployment'}
+                                        </div>
                                     </td>
-                                    <td className="px-8 py-6 text-[11px] text-slate-400 font-black uppercase tracking-tighter">
-                                        {new Date(report.createdAt).toLocaleDateString(undefined, { day: '2-digit', month: 'short', year: 'numeric' })}
+                                    <td className="px-8 py-6">
+                                        <div className="flex flex-col gap-1">
+                                            <span className="text-[10px] font-black text-slate-400 bg-sky-50 px-3 py-1.5 rounded-lg border border-sky-100 tabular-nums w-fit">
+                                                {new Date(report.createdAt).toLocaleDateString()}
+                                            </span>
+                                            <span className="text-[8px] text-slate-400 font-bold uppercase tracking-widest">{report.cameraCount} Units • {report.reportTime}</span>
+                                        </div>
+                                    </td>
+                                    <td className="px-8 py-6">
+                                        <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest
+                                            ${report.adminStatus === 'Approved' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 
+                                              report.adminStatus === 'Rejected' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' : 
+                                              'bg-amber-500/10 text-amber-400 border border-amber-500/20'}`}>
+                                            <div className={`w-1.5 h-1.5 rounded-full ${report.adminStatus === 'Approved' ? 'bg-emerald-400' : report.adminStatus === 'Rejected' ? 'bg-rose-400' : 'bg-amber-400 animate-pulse'}`} />
+                                            {report.adminStatus || 'Pending Review'}
+                                        </div>
                                     </td>
                                     <td className="px-8 py-6 text-right">
                                         <div className="flex items-center justify-end gap-3">
                                             <button
                                                 onClick={() => setSelectedReport(report)}
-                                                className="px-4 py-2 bg-sky-500/10 border border-sky-500/20 rounded-xl text-[10px] font-black text-sky-500 uppercase tracking-widest hover:bg-sky-500 hover:text-slate-800 hover:border-sky-600 hover:shadow-lg hover:shadow-sky-600/20 transition-all flex items-center gap-2"
+                                                className="px-4 py-2 bg-sky-50 shadow-sm border border-sky-100 rounded-xl text-[10px] font-black text-sky-500 uppercase tracking-widest hover:bg-sky-500 hover:text-slate-800 hover:border-sky-600 transition-all flex items-center gap-2"
                                             >
                                                 Inspect <ExternalLink size={14} />
                                             </button>
+                                            {report.adminStatus === 'Pending' && (
+                                                <>
+                                                    <button
+                                                        onClick={(e) => handleStatusUpdate(report._id, 'Approved', e)}
+                                                        className="p-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-500 hover:bg-emerald-500 hover:text-white transition-all"
+                                                        title="Approve Report"
+                                                    >
+                                                        <CheckCircle size={16} />
+                                                    </button>
+                                                    <button
+                                                        onClick={(e) => handleStatusUpdate(report._id, 'Rejected', e)}
+                                                        className="p-2.5 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-500 hover:bg-rose-500 hover:text-white transition-all"
+                                                        title="Reject Report"
+                                                    >
+                                                        <X size={16} />
+                                                    </button>
+                                                </>
+                                            )}
                                             <button
                                                 onClick={(e) => handleDeleteReport(report._id, e)}
                                                 className="p-2.5 bg-sky-50 border border-sky-100 rounded-xl text-slate-400 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20 transition-all"
@@ -281,35 +327,58 @@ const AdminReports = () => {
                                         <p className="text-[13px] font-black text-slate-800 uppercase tracking-tight tabular-nums">{selectedReport.cameraCount} Active Units</p>
                                     </div>
                                     <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block">Time Capture</label>
+                                        <p className="text-[13px] font-black text-slate-800 uppercase tracking-tight tabular-nums">{selectedReport.reportTime || '--:--'}</p>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block">Work Classification</label>
+                                        <p className="text-[13px] font-black text-sky-500 uppercase tracking-tight">{selectedReport.workType || 'Deployment'}</p>
+                                    </div>
+                                    <div className="space-y-2">
                                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block">Protocol Identity</label>
                                         <p className="text-xs font-black text-sky-500 tabular-nums bg-sky-500/10 px-3 py-1 rounded-lg border border-sky-500/20 inline-block tracking-tighter">#{selectedReport._id?.slice(-12).toUpperCase()}</p>
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block">Logic Status</label>
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block">Verification Status</label>
                                         <span className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.15em] shadow-sm
-                                            ${selectedReport.isInstalled === 'Yes' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-orange-500/10 text-orange-400 border border-orange-500/20'}`}>
-                                            <div className={`w-1.5 h-1.5 rounded-full ${selectedReport.isInstalled === 'Yes' ? 'bg-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-orange-400'}`} />
-                                            {selectedReport.isInstalled === 'Yes' ? 'Implemented' : 'Inbound'}
+                                            ${selectedReport.adminStatus === 'Approved' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 
+                                              selectedReport.adminStatus === 'Rejected' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' : 
+                                              'bg-amber-500/10 text-amber-400 border border-amber-500/20'}`}>
+                                            <div className={`w-1.5 h-1.5 rounded-full ${selectedReport.adminStatus === 'Approved' ? 'bg-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.5)]' : selectedReport.adminStatus === 'Rejected' ? 'bg-rose-400' : 'bg-amber-400'}`} />
+                                            {selectedReport.adminStatus || 'Pulse Pending'}
                                         </span>
                                     </div>
                                 </div>
 
                                 <div className="space-y-5">
-                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block">Field Anomalies & Verification Log</label>
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block">Report Description & Field Anomalies</label>
                                     <div className="bg-sky-50 p-8 rounded-[1.5rem] border border-sky-100 text-[13px] font-medium text-slate-400 leading-relaxed italic relative overflow-hidden group">
                                         <div className="absolute top-0 left-0 w-1.5 h-full bg-sky-500/30" />
-                                        "{selectedReport.issues || 'No anomalies detected during the physical deployment cycle and biometric verification.'}"
+                                        "{selectedReport.description || selectedReport.issues || 'No anomalies detected during the physical deployment cycle and biometric verification.'}"
                                     </div>
                                 </div>
 
                                 <div className="pt-10 flex gap-6">
-                                    <button className="flex-1 py-4 text-[10px] font-black uppercase tracking-[0.25em] text-slate-800 bg-sky-500 shadow-xl shadow-sky-600/20 rounded-xl hover:bg-sky-700 transition-all active:scale-[0.98]">Verify Artifact</button>
-                                    <button
-                                        onClick={(e) => handleDeleteReport(selectedReport._id, e)}
-                                        className="flex-1 py-4 text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 bg-sky-50 border border-sky-100 rounded-xl hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20 transition-all active:scale-[0.98]"
-                                    >
-                                        Delete Record
-                                    </button>
+                                    {selectedReport.adminStatus === 'Pending' ? (
+                                        <>
+                                            <button 
+                                                onClick={() => handleStatusUpdate(selectedReport._id, 'Approved')}
+                                                className="flex-1 py-4 text-[10px] font-black uppercase tracking-[0.25em] text-white bg-emerald-500 shadow-xl shadow-emerald-500/20 rounded-xl hover:bg-emerald-600 transition-all active:scale-[0.98]"
+                                            >
+                                                Approve Report
+                                            </button>
+                                            <button 
+                                                onClick={() => handleStatusUpdate(selectedReport._id, 'Rejected')}
+                                                className="flex-1 py-4 text-[10px] font-black uppercase tracking-[0.25em] text-white bg-rose-500 shadow-xl shadow-rose-500/20 rounded-xl hover:bg-rose-600 transition-all active:scale-[0.98]"
+                                            >
+                                                Reject Report
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <div className="flex-1 p-4 bg-sky-50 border border-sky-100 rounded-xl text-center">
+                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Decision Lock Active: {selectedReport.adminStatus}</p>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </motion.div>

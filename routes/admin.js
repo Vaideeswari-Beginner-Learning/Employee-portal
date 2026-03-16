@@ -5,6 +5,10 @@ const Attendance = require('../models/Attendance');
 const Leave = require('../models/Leave');
 const Report = require('../models/Report');
 const { auth, adminAuth, managerAuth } = require('../middleware/auth');
+const Product = require('../models/Product');
+const ServiceRequest = require('../models/ServiceRequest');
+const Order = require('../models/Order');
+const Task = require('../models/Task');
 
 // Top-level: Allow both Admins and Managers to access the Command Center APIs
 router.use(managerAuth);
@@ -89,9 +93,15 @@ router.put('/employees/:id', managerAuth, async (req, res) => {
 router.get('/dashboard-stats', async (req, res) => {
     try {
         const totalEmployees = await User.countDocuments({ role: 'employee' });
+        const totalProducts = await Product.countDocuments();
+        const totalOrders = await Order.countDocuments();
+        const activeServiceRequests = await ServiceRequest.countDocuments({ status: { $ne: 'Completed' } });
+        const totalCustomers = await User.countDocuments({ role: 'customer' });
+        
         const today = new Date().toISOString().split('T')[0];
         const todayAttendance = await Attendance.countDocuments({ date: today, status: 'Present' });
         const pendingLeaves = await Leave.countDocuments({ status: 'Pending' });
+        const pendingTasks = await Task.countDocuments({ status: { $ne: 'Completed' } });
         const todayReports = await Report.countDocuments({
             createdAt: { $gte: new Date(new Date().setHours(0, 0, 0, 0)) }
         });
@@ -100,10 +110,15 @@ router.get('/dashboard-stats', async (req, res) => {
             totalEmployees,
             todayAttendance,
             pendingLeaves,
-            todayReports
+            todayReports,
+            totalProducts,
+            totalOrders,
+            activeServiceRequests,
+            totalCustomers,
+            pendingTasks
         });
     } catch (e) {
-        res.status(500).send(e);
+        res.status(500).send({ error: e.message });
     }
 });
 
@@ -156,6 +171,32 @@ router.get('/attendance', async (req, res) => {
         if (req.query.date) query.date = req.query.date;
         const attendance = await Attendance.find(query).populate('employee', 'name employeeId');
         res.send(attendance);
+    } catch (e) {
+        res.status(500).send(e);
+    }
+});
+
+// Update Attendance Status (Admin)
+router.patch('/attendance/:id', async (req, res) => {
+    try {
+        const { status } = req.body;
+        if (!['Approved', 'Rejected', 'Flagged'].includes(status)) {
+            return res.status(400).send({ error: 'Invalid status update.' });
+        }
+        const attendance = await Attendance.findByIdAndUpdate(req.params.id, { status }, { new: true });
+        if (!attendance) return res.status(404).send({ error: 'Attendance record not found' });
+        res.send(attendance);
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
+
+// Delete Attendance Record (Admin)
+router.delete('/attendance/:id', async (req, res) => {
+    try {
+        const attendance = await Attendance.findByIdAndDelete(req.params.id);
+        if (!attendance) return res.status(404).send({ error: 'Attendance record not found' });
+        res.send({ message: 'Attendance record purged successfully', attendance });
     } catch (e) {
         res.status(500).send(e);
     }
@@ -216,6 +257,21 @@ router.get('/reports', async (req, res) => {
         res.send(reports);
     } catch (e) {
         res.status(500).send(e);
+    }
+});
+
+// Update Report Status (Approve/Reject)
+router.patch('/reports/:id/status', async (req, res) => {
+    try {
+        const { adminStatus } = req.body;
+        if (!['Approved', 'Rejected'].includes(adminStatus)) {
+            return res.status(400).send({ error: 'Invalid status update.' });
+        }
+        const report = await Report.findByIdAndUpdate(req.params.id, { adminStatus }, { new: true });
+        if (!report) return res.status(404).send({ error: 'Report not found' });
+        res.send(report);
+    } catch (e) {
+        res.status(400).send(e);
     }
 });
 

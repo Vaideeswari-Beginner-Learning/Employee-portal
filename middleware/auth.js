@@ -56,7 +56,9 @@ const managerAuth = async (req, res, next) => {
         }
 
         const role = user.role.toLowerCase();
+        console.log(`[AuthDebug] User: ${user.email}, Role: ${role}`);
         if (role !== 'admin' && role !== 'manager') {
+            console.log(`[AuthDebug] 403: Role ${role} is not admin or manager`);
             return res.status(403).send({ error: 'Managerial or Administrative clearance required.' });
         }
 

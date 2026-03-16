@@ -31,6 +31,25 @@ import AdminComms from './pages/admin/AdminComms';
 import ManagerComms from './pages/admin/ManagerComms';
 import PerformanceHub from './pages/admin/PerformanceHub';
 import HolidayManager from './pages/admin/HolidayManager';
+import AdminCXDashboard from './pages/admin/AdminCXDashboard';
+import AdminProducts from './pages/admin/AdminProducts';
+import AdminOrders from './pages/admin/AdminOrders';
+import AdminCustomers from './pages/admin/AdminCustomers';
+
+// Customer Facing (CX) Pages
+import CXHome from './pages/cx/CXHome';
+import Catalog from './pages/cx/Catalog';
+import ProductDetail from './pages/cx/ProductDetail';
+import Comparison from './pages/cx/Comparison';
+import Booking from './pages/cx/Booking';
+import CustomerTracking from './pages/cx/CustomerTracking';
+import Cart from './pages/cx/Cart';
+import Checkout from './pages/cx/Checkout';
+import CustomerOrders from './pages/cx/CustomerOrders';
+import LiveDemo from './pages/cx/LiveDemo';
+
+// Context Providers
+import { CartProvider } from './context/CartContext';
 
 function App() {
   return (
@@ -40,6 +59,24 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+
+      {/* Public CX Routes (Wrapped in Cart Provider) */}
+      <Route path="/*" element={
+        <CartProvider>
+          <Routes>
+            <Route path="/home" element={<CXHome />} />
+            <Route path="/catalog" element={<Catalog />} />
+            <Route path="/product/:id" element={<ProductDetail />} />
+            <Route path="/comparison" element={<Comparison />} />
+            <Route path="/booking" element={<Booking />} />
+            <Route path="/tracking" element={<CustomerTracking />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/orders" element={<CustomerOrders />} />
+            <Route path="/live-demo" element={<LiveDemo />} />
+          </Routes>
+        </CartProvider>
+      } />
 
       <Route element={<MainLayout />}>
         {/* Employee Routes - Accessible by all authenticated users */}
@@ -66,6 +103,10 @@ function App() {
           <Route path="/admin/merit" element={<PerformanceHub />} />
           <Route path="/admin/comms" element={<AdminComms />} />
           <Route path="/admin/holidays" element={<HolidayManager />} />
+          <Route path="/admin/cx" element={<AdminCXDashboard />} />
+          <Route path="/admin/products" element={<AdminProducts />} />
+          <Route path="/admin/orders" element={<AdminOrders />} />
+          <Route path="/admin/customers" element={<AdminCustomers />} />
         </Route>
 
         {/* Manager & Admin Routes */}

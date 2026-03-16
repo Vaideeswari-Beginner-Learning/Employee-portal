@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../utils/api';
+import { getISTDate, formatToISTDate } from '../../utils/dateUtils';
 import TaskStatusChart from '../../components/TaskStatusChart';
 import { AnimatePresence } from 'framer-motion';
 
@@ -31,18 +32,29 @@ const EmployeeDashboard = () => {
     const [tasks, setTasks] = useState([]);
     const [holidays, setHolidays] = useState([]);
     const [selectedHoliday, setSelectedHoliday] = useState(null);
+    const [attendance, setAttendance] = useState(null);
+    const [reports, setReports] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [annRes, tasksRes, holidayRes] = await Promise.all([
+                const [annRes, tasksRes, holidayRes, attRes, reportsRes] = await Promise.all([
                     api.get('announcements'),
                     api.get('tasks'),
-                    api.get('employee/holidays')
+                    api.get('employee/holidays'),
+                    api.get('employee/attendance'),
+                    api.get('employee/reports')
                 ]);
-                setAnnouncements(annRes.data);
-                setTasks(tasksRes.data);
-                setHolidays(holidayRes.data);
+                setAnnouncements(Array.isArray(annRes.data) ? annRes.data : []);
+                setTasks(Array.isArray(tasksRes.data) ? tasksRes.data : []);
+                setHolidays(Array.isArray(holidayRes.data) ? holidayRes.data : []);
+                
+                // Set today's attendance using standardized IST date
+                const today = getISTDate();
+                const todayAtt = Array.isArray(attRes.data) ? attRes.data.find(a => a.date === today) : null;
+                setAttendance(todayAtt);
+                
+                setReports(Array.isArray(reportsRes.data) ? reportsRes.data : []);
             } catch (err) {
                 console.error('Fetch error:', err);
             }
@@ -112,7 +124,43 @@ const EmployeeDashboard = () => {
                 </div>
             </div>
 
-            {/* Profile Information Card */}
+            {/* Daily Operational Status */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <StatusCard 
+                    title="Today's Tasks" 
+                    value={tasks.filter(t => formatToISTDate(t.dueDate) === getISTDate()).length}
+                    subtitle="Assigned Operations"
+                    icon={<LayoutDashboard size={20} />}
+                    color="sky"
+                    onClick={() => navigate('/tasks')}
+                />
+                <StatusCard 
+                    title="Today Shift" 
+                    value={attendance ? (attendance.checkOut ? 'Completed' : 'Active') : 'Not Started'}
+                    subtitle={attendance ? `In: ${attendance.checkIn}` : 'Pending Check-in'}
+                    icon={<Clock size={20} />}
+                    color={attendance ? (attendance.checkOut ? 'slate' : 'emerald') : 'amber'}
+                    onClick={() => navigate('/attendance')}
+                />
+                <StatusCard 
+                    title="Attendance Status" 
+                    value={attendance ? 'Present' : 'Absent'}
+                    subtitle={attendance ? 'Registry Verified' : 'Awaiting Pulse'}
+                    icon={<Shield size={20} />}
+                    color={attendance ? 'sky' : 'rose'}
+                    onClick={() => navigate('/attendance')}
+                />
+                <StatusCard 
+                    title="Pending Reports" 
+                    value={reports.filter(r => r.status === 'Pending' || !r.status).length}
+                    subtitle="Awaiting Analysis"
+                    icon={<FileText size={20} />}
+                    color="indigo"
+                    onClick={() => navigate('/reports')}
+                />
+            </div>
+
+            {/* Profile Information Card (Keep but more compact if needed, or just let users see it below) */}
             <div className="bg-white/50 backdrop-blur-xl border border-sky-100 rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 flex flex-col lg:flex-row gap-8 lg:gap-12 items-center lg:items-start relative overflow-hidden group shadow-2xl">
                 <div className="absolute top-0 right-0 p-20 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity duration-700">
                     <Shield size={200} className="text-slate-800" />
@@ -228,7 +276,7 @@ const EmployeeDashboard = () => {
                                 { type: 'government', label: 'Government', icon: Flag, color: 'text-red-500', bg: 'bg-red-50', border: 'border-red-100' },
                                 { type: 'company', label: 'Company', icon: Building2, color: 'text-sky-500', bg: 'bg-sky-50', border: 'border-sky-100' },
                             ].map(t => {
-                                const latest = holidays.filter(h => h.type === t.type).sort((a, b) => new Date(a.date) - new Date(b.date))[0];
+                                const latest = (Array.isArray(holidays) ? holidays : []).filter(h => h.type === t.type).sort((a, b) => new Date(a.date) - new Date(b.date))[0];
                                 return (
                                     <div
                                         key={t.type}
@@ -353,6 +401,40 @@ const ActivityCard = ({ type, color, icon, title, subtitle, time, author }) => (
         </div>
     </div>
 );
+
+const StatusCard = ({ title, value, subtitle, icon, color, onClick }) => {
+    const colors = {
+        sky: 'bg-sky-500 text-sky-500 border-sky-100',
+        emerald: 'bg-emerald-500 text-emerald-500 border-emerald-100',
+        amber: 'bg-amber-500 text-amber-500 border-amber-100',
+        rose: 'bg-rose-500 text-rose-500 border-rose-100',
+        indigo: 'bg-indigo-500 text-indigo-500 border-indigo-100',
+        slate: 'bg-slate-500 text-slate-500 border-slate-100'
+    };
+
+    return (
+        <motion.div
+            whileHover={{ y: -5, scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={onClick}
+            className="bg-white/80 backdrop-blur-md border border-sky-100 rounded-[2rem] p-6 shadow-xl cursor-pointer group"
+        >
+            <div className="flex items-center gap-4">
+                <div className={`w-12 h-12 rounded-2xl bg-sky-50 flex items-center justify-center ${colors[color].split(' ')[1]} shadow-inner`}>
+                    {icon}
+                </div>
+                <div>
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">{title}</p>
+                    <p className="text-xl font-black text-slate-800 leading-none">{value}</p>
+                </div>
+            </div>
+            <div className="mt-4 pt-4 border-t border-sky-50 flex items-center justify-between">
+                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">{subtitle}</span>
+                <div className={`w-2 h-2 rounded-full ${colors[color].split(' ')[0]} animate-pulse`} />
+            </div>
+        </motion.div>
+    );
+};
 
 export default EmployeeDashboard;
 

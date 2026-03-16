@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import GlobalChat from '../../components/GlobalChat';
 import { MessageSquare, Users, Shield, Briefcase } from 'lucide-react';
@@ -58,24 +58,24 @@ const SupportChat = () => {
                 </div>
 
                 {/* Tab Toggle */}
-                <div className="flex bg-slate-100 p-1.5 rounded-2xl border border-slate-200 shadow-inner gap-1">
+                <div className="flex bg-slate-100 p-1 rounded-2xl border border-slate-200 shadow-inner gap-1">
                     {TABS.map(tab => {
                         const isActive = activeTab === tab.id;
                         const activeClasses = {
-                            blue: 'bg-blue-600 text-slate-800 shadow-lg shadow-blue-500/20',
-                            violet: 'bg-violet-600 text-slate-800 shadow-lg shadow-violet-500/20',
-                            indigo: 'bg-sky-500 text-slate-800 shadow-lg shadow-sky-500/20',
+                            blue: 'bg-white text-blue-600 shadow-sm border-blue-100',
+                            violet: 'bg-white text-violet-600 shadow-sm border-violet-100',
+                            indigo: 'bg-white text-sky-500 shadow-sm border-sky-100',
                         };
                         return (
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
-                                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${isActive
+                                className={`flex items-center gap-2 px-5 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all border border-transparent ${isActive
                                     ? activeClasses[tab.color]
-                                    : 'text-slate-400 hover:text-slate-500 hover:bg-slate-200/50'
+                                    : 'text-slate-400 hover:text-slate-600 hover:bg-white/50'
                                     }`}
                             >
-                                {tab.icon}
+                                <span className={isActive ? 'text-current' : 'text-slate-300'}>{tab.icon}</span>
                                 {tab.label}
                             </button>
                         );

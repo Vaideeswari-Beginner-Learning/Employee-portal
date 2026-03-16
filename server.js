@@ -69,7 +69,8 @@ app.use('/api/tracking', require('./routes/tracking'));
 app.use('/api/announcements', require('./routes/announcement'));
 app.use('/api/tasks', require('./routes/tasks'));
 app.use('/api/chat', require('./routes/chat'));
-
+app.use('/api/cx', require('./routes/cx'));
+app.use('/api/shop', require('./routes/shop'));
 // Health check endpoint for Render
 app.get('/health', (req, res) => {
     res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });

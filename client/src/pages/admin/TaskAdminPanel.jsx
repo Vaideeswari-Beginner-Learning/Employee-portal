@@ -1,4 +1,4 @@
-﻿import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Users, Activity, CheckCircle, TrendingUp, Search, Plus, Filter, MoreVertical, ShieldCheck, MapPin, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import api from '../../utils/api';
@@ -215,6 +215,8 @@ const AdminTaskPanel = () => {
                                                         <span className="px-2.5 py-1 bg-sky-500/5 text-sky-600 text-[10px] font-black rounded-lg border border-sky-500/10 uppercase tracking-wider">{task.taskType}</span>
                                                         <span className="text-slate-300">•</span>
                                                         <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none drop-shadow-sm">{task.location}</span>
+                                                        <span className="text-slate-300">•</span>
+                                                        <span className="text-[10px] font-black text-rose-400 uppercase tracking-widest leading-none drop-shadow-sm">Due: {new Date(task.dueDate).toLocaleDateString()}</span>
                                                     </div>
                                                     {task.startLocation && (
                                                         <span className="text-[10px] font-bold text-emerald-400 flex items-center gap-1 mt-2 bg-emerald-500/10 w-max px-2 py-1 rounded-md border border-emerald-500/20">
@@ -256,11 +258,11 @@ const AdminTaskPanel = () => {
                             <table className="w-full text-left border-collapse">
                                 <thead>
                                     <tr className="border-b border-sky-100 text-[10px] uppercase tracking-widest text-slate-400 font-black">
-                                        <th className="py-4 pl-4">Employee details</th>
-                                        <th className="py-4">Expertise</th>
+                                        <th className="py-4 pl-4">Personnel details</th>
+                                        <th className="py-4">Expertise Core</th>
                                         <th className="py-4">Status</th>
-                                        <th className="py-4">Active Tasks</th>
-                                        <th className="py-4 text-right pr-4">Actions</th>
+                                        <th className="py-4">Active Tasks Count</th>
+                                        <th className="py-4 text-right pr-4">Operations</th>
                                     </tr>
                                 </thead>
                                 <tbody>

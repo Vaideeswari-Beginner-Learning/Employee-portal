@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Send, Paperclip, Mic, Square, X, Image as ImageIcon, FileText, Camera, Activity } from 'lucide-react';
+import { Send, Paperclip, Mic, Square, X, Image as ImageIcon, FileText, Camera, Activity, MessageSquare } from 'lucide-react';
 import api from '../utils/api';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
@@ -166,137 +166,182 @@ const GlobalChat = ({ employeeId, roomLabel, recipient }) => {
     }
 
     return (
-        <div className="flex flex-col h-full bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+        <div className="flex flex-col h-full bg-[#efeae2] border border-slate-200 rounded-[2rem] overflow-hidden shadow-2xl relative">
+            {/* WhatsApp Pattern Background Overlay */}
+            <div 
+                className="absolute inset-0 opacity-[0.06] pointer-events-none z-0"
+                style={{
+                    backgroundImage: `url("https://www.transparenttextures.com/patterns/cubes.png")`,
+                    backgroundColor: '#efeae2'
+                }}
+            />
+
             {/* Header */}
-            <div className="bg-white border-b border-slate-200 p-4 shrink-0 shadow-sm z-10 flex items-center justify-between">
-                <div>
-                    <h3 className="text-sm font-black text-slate-800 uppercase tracking-wider">Internal Comms Channel</h3>
-                    <p className="text-xs text-slate-500 font-medium mt-0.5 whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px]">Channel: <span className="text-primary-600 font-bold">{roomLabel || user?.name}</span></p>
+            <div className="bg-white/90 backdrop-blur-md border-b border-slate-200 p-5 shrink-0 shadow-sm z-10 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-sky-400 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-sky-200">
+                        <MessageSquare size={24} />
+                    </div>
+                    <div>
+                        <h3 className="text-base font-black text-slate-800 uppercase tracking-tight leading-tight">Comms Channel</h3>
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                            <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.2em]">{roomLabel || 'Secure Node'}</p>
+                        </div>
+                    </div>
                 </div>
                 <button
                     type="button"
                     onClick={() => { fetchMessages(); toast.success('Syncing Node...'); }}
-                    className="p-2 hover:bg-slate-100 rounded-xl text-slate-400 hover:text-primary-500 transition-all shrink-0"
+                    className="p-3 hover:bg-sky-50 rounded-2xl text-slate-400 hover:text-sky-500 transition-all shrink-0 active:scale-90"
                     title="Force Sync"
                 >
-                    <Activity size={18} />
+                    <Activity size={20} />
                 </button>
             </div>
 
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4">
+            <div className="flex-1 overflow-y-auto p-6 space-y-4 relative z-10 custom-scrollbar scroll-smooth">
                 {messages.length === 0 ? (
                     <div className="h-full flex flex-col items-center justify-center text-slate-400">
-                        <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-3">
-                            <Send size={24} className="text-slate-300" />
+                        <div className="w-20 h-20 bg-white/50 backdrop-blur-sm rounded-[2rem] flex items-center justify-center mb-4 shadow-sm border border-white">
+                            <Send size={32} className="text-sky-300" />
                         </div>
-                        <p className="text-sm font-medium">No messages yet.</p>
+                        <p className="text-xs font-black uppercase tracking-[0.2em]">Initiate Encrypted Transmission</p>
                     </div>
                 ) : (
-                    messages.map((msg) => {
+                    messages.reduce((acc, msg, idx) => {
                         const senderIdStr = String(msg.sender?._id || msg.sender).toLowerCase();
                         const userIdStr = String(user?._id || user?.id).toLowerCase();
                         const isMe = senderIdStr === userIdStr;
-                        return (
-                            <div key={msg._id} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
-                                <div className="flex items-end gap-2 max-w-[85%]">
-                                    {!isMe && (
-                                        msg.sender?.profilePhoto ? (
-                                            <img src={getFullUrl(msg.sender.profilePhoto)} alt="User photo" className="w-6 h-6 rounded-full object-cover shrink-0 mb-1 border border-slate-200" />
-                                        ) : (
-                                            <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center shrink-0 mb-1">
-                                                <span className="text-[10px] font-bold text-blue-700">
-                                                    {msg.senderName?.charAt(0) || '?'}
-                                                </span>
-                                            </div>
-                                        )
-                                    )}
-                                    <div className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
-                                        {!isMe && <span className="text-[10px] font-bold text-slate-500 mb-1 ml-1">{msg.senderName}</span>}
+                        
+                        // Grouping logic (simplified)
+                        const prevMsg = idx > 0 ? messages[idx-1] : null;
+                        const prevSender = prevMsg ? String(prevMsg.sender?._id || prevMsg.sender).toLowerCase() : null;
+                        const isGrouped = prevSender === senderIdStr;
 
-                                        <div className={`p-3 rounded-2xl ${isMe
-                                            ? 'bg-blue-600 text-white rounded-br-sm shadow-md shadow-blue-500/20'
-                                            : 'bg-white text-slate-800 rounded-bl-sm border border-slate-200 shadow-sm'
+                        acc.push(
+                            <div key={msg._id} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'} ${isGrouped ? 'mt-1' : 'mt-4 animate-in fade-in slide-in-from-bottom-2'}`}>
+                                <div className={`flex items-end gap-2 max-w-[85%] sm:max-w-[75%]`}>
+                                    {!isMe && !isGrouped && (
+                                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-fuchsia-500 to-indigo-600 flex items-center justify-center shrink-0 mb-1 shadow-md border-2 border-white">
+                                            <span className="text-[10px] font-black text-white">
+                                                {msg.senderName?.charAt(0) || '?'}
+                                            </span>
+                                        </div>
+                                    )}
+                                    <div className={`flex flex-col ${isMe ? 'items-end' : 'items-start'} ${!isMe && isGrouped ? 'ml-10' : ''}`}>
+                                        {!isMe && !isGrouped && (
+                                            <span className="text-[9px] font-black text-sky-600 uppercase tracking-widest mb-1 ml-2">{msg.senderName}</span>
+                                        )}
+
+                                        <div className={`relative px-4 py-2.5 shadow-sm ${isMe
+                                            ? 'bg-[#dcf8c6] text-slate-800 rounded-2xl rounded-tr-none border border-[#c6e9a7]'
+                                            : 'bg-white text-slate-800 rounded-2xl rounded-tl-none border border-slate-100'
                                             }`}>
-                                            {msg.content && <p className="text-sm whitespace-pre-wrap break-words">{msg.content}</p>}
+                                            {/* Tale for bubbles */}
+                                            {!isGrouped && (
+                                                <div className={`absolute top-0 w-3 h-3 ${isMe 
+                                                    ? 'right-[-6px] bg-[#dcf8c6] rotate-45 border-r border-t border-[#c6e9a7]' 
+                                                    : 'left-[-6px] bg-white rotate-45 border-l border-t border-slate-100'}`} 
+                                                />
+                                            )}
+
+                                            {msg.content && <p className="text-[13px] font-medium leading-relaxed whitespace-pre-wrap break-words">{msg.content}</p>}
 
                                             {/* Attachments */}
                                             {msg.attachmentUrl && (
-                                                <div className={`mt-2 ${msg.content ? 'pt-2 border-t border-white/20' : ''}`}>
+                                                <div className={`mt-2 ${msg.content ? 'pt-2 border-t border-black/5' : ''}`}>
                                                     {msg.attachmentType === 'image' && (
-                                                        <a href={getFullUrl(msg.attachmentUrl)} target="_blank" rel="noreferrer">
-                                                            <img src={getFullUrl(msg.attachmentUrl)} alt="Attachment" className="max-w-[200px] max-h-[200px] rounded-xl object-cover" />
+                                                        <a href={getFullUrl(msg.attachmentUrl)} target="_blank" rel="noreferrer" className="block relative group overflow-hidden rounded-xl border border-black/5">
+                                                            <img src={getFullUrl(msg.attachmentUrl)} alt="Attachment" className="max-w-full max-h-[300px] object-cover transition-transform group-hover:scale-105" />
+                                                            <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                                <ImageIcon size={24} className="text-white drop-shadow-md" />
+                                                            </div>
                                                         </a>
                                                     )}
                                                     {msg.attachmentType === 'voice' && (
-                                                        <audio controls src={getFullUrl(msg.attachmentUrl)} className="max-w-[250px] h-10 mt-1" />
+                                                        <div className="bg-black/5 p-2 rounded-xl flex items-center gap-3">
+                                                            <Mic size={16} className="text-sky-500" />
+                                                            <audio controls src={getFullUrl(msg.attachmentUrl)} className="max-w-[180px] h-8" />
+                                                        </div>
                                                     )}
                                                     {msg.attachmentType === 'document' && (
-                                                        <a href={getFullUrl(msg.attachmentUrl)} target="_blank" rel="noreferrer" className="flex items-center gap-2 p-2 bg-black/10 rounded-xl hover:bg-black/20 transition-colors">
-                                                            <FileText size={16} />
-                                                            <span className="text-xs font-medium underline underline-offset-2">View Document</span>
+                                                        <a href={getFullUrl(msg.attachmentUrl)} target="_blank" rel="noreferrer" className="flex items-center gap-3 p-3 bg-black/5 rounded-xl hover:bg-black/10 transition-all border border-black/10">
+                                                            <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                                                                <FileText size={20} className="text-sky-500" />
+                                                            </div>
+                                                            <div className="flex-1 min-w-0">
+                                                                <p className="text-[11px] font-black text-slate-700 truncate">DOCUMENT.NODE</p>
+                                                                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">Secure Download</p>
+                                                            </div>
                                                         </a>
                                                     )}
                                                 </div>
                                             )}
+                                            
+                                            <div className={`flex items-center justify-end gap-1 mt-1 ${isMe ? 'text-emerald-600' : 'text-slate-400'}`}>
+                                                <span className="text-[8px] font-black tabular-nums">
+                                                    {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                </span>
+                                                {isMe && <Activity size={8} className="animate-pulse" />}
+                                            </div>
                                         </div>
-                                        <span className={`text-[9px] font-bold text-slate-400 mt-1 ${isMe ? 'mr-1' : 'ml-1'}`}>
-                                            {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                        </span>
                                     </div>
                                 </div>
                             </div>
                         );
-                    })
+                        return acc;
+                    }, [])
                 )}
                 <div ref={messagesEndRef} />
             </div>
 
             {/* Input Area */}
-            <div className="bg-white border-t border-slate-200 p-3 shrink-0 z-10">
+            <div className="bg-[#f0f2f5] p-3 shrink-0 z-10 border-t border-slate-200">
                 {(selectedFile || audioBlob) && (
-                    <div className="flex items-center justify-between p-2 mb-2 bg-blue-50/50 border border-blue-100 rounded-xl animate-in fade-in slide-in-from-bottom-2">
-                        <div className="flex items-center gap-2 overflow-hidden">
-                            {selectedFile ? (
-                                <>
-                                    {selectedFile.type.startsWith('image/') ? <ImageIcon size={16} className="text-blue-500" /> : <FileText size={16} className="text-blue-500" />}
-                                    <span className="text-xs font-medium text-blue-800 truncate">{selectedFile.name}</span>
-                                </>
-                            ) : (
-                                <>
-                                    <Mic size={16} className="text-red-500" />
-                                    <span className="text-xs font-bold text-red-600">Voice Note Recorded ({Math.round(audioBlob.size / 1024)} KB)</span>
-                                    <audio src={URL.createObjectURL(audioBlob)} controls className="h-6 w-32 ml-2" />
-                                </>
-                            )}
+                    <div className="flex items-center justify-between p-3 mb-3 bg-white border border-slate-200 rounded-2xl shadow-sm animate-in fade-in slide-in-from-bottom-2">
+                        <div className="flex items-center gap-3 overflow-hidden">
+                            <div className="w-10 h-10 bg-sky-50 rounded-xl flex items-center justify-center text-sky-500">
+                                {selectedFile ? (
+                                    selectedFile.type.startsWith('image/') ? <ImageIcon size={20} /> : <FileText size={20} />
+                                ) : (
+                                    <Mic size={20} className="text-rose-500" />
+                                )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <p className="text-[11px] font-black text-slate-800 truncate">{selectedFile ? selectedFile.name : 'VOICE_TRANSCRIPT.node'}</p>
+                                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{selectedFile ? `${Math.round(selectedFile.size / 1024)} KB` : 'Ready for Transmission'}</p>
+                            </div>
                         </div>
-                        <button onClick={clearAttachment} className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-full transition-colors">
-                            <X size={14} />
+                        <button onClick={clearAttachment} className="p-2 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all active:scale-90">
+                            <X size={18} />
                         </button>
                     </div>
                 )}
 
-                <form onSubmit={handleSendMessage} className="flex items-end gap-2">
-                    <div className="flex-1 bg-slate-100 rounded-2xl flex items-center p-1 border border-slate-200 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100 transition-all">
-                        <label className="p-2.5 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-xl cursor-pointer transition-colors shrink-0">
+                <form onSubmit={handleSendMessage} className="flex items-center gap-2 max-w-6xl mx-auto">
+                    <div className="flex gap-1">
+                        <label className="p-3 text-slate-500 hover:text-sky-600 hover:bg-white rounded-full cursor-pointer transition-all active:scale-90">
                             <input type="file" className="hidden" onChange={handleFileChange} accept="image/*,.pdf,.doc,.docx" />
-                            <Paperclip size={18} />
+                            <Paperclip size={22} />
                         </label>
-
-                        <label className="p-2.5 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-xl cursor-pointer transition-colors shrink-0">
+                        <label className="p-3 text-slate-500 hover:text-sky-600 hover:bg-white rounded-full cursor-pointer transition-all active:scale-90">
                             <input type="file" capture="environment" className="hidden" onChange={handleFileChange} accept="image/*" />
-                            <Camera size={18} />
+                            <Camera size={22} />
                         </label>
+                    </div>
 
+                    <div className="flex-1 bg-white rounded-[2rem] flex items-center px-4 py-1.5 shadow-sm border border-slate-200 focus-within:border-sky-500 transition-colors">
                         <input
                             type="text"
                             value={newMessage}
                             onChange={(e) => setNewMessage(e.target.value)}
-                            placeholder={isRecording ? "Recording audio..." : "Type a message..."}
+                            placeholder={isRecording ? "Recording encrypted audio..." : "Type a message..."}
                             disabled={isRecording}
-                            className={`flex-1 bg-transparent border-none p-2 focus:ring-0 text-sm ${isRecording ? 'placeholder:text-red-500 font-medium' : 'text-slate-800'}`}
+                            className={`flex-1 bg-transparent border-none py-2 px-1 focus:ring-0 text-[13px] font-medium ${isRecording ? 'text-rose-500 italic' : 'text-slate-800'}`}
                         />
-
+                        
                         {!newMessage.trim() && !selectedFile && !audioBlob ? (
                             <button
                                 type="button"
@@ -305,10 +350,10 @@ const GlobalChat = ({ employeeId, roomLabel, recipient }) => {
                                 onMouseLeave={stopRecording}
                                 onTouchStart={startRecording}
                                 onTouchEnd={stopRecording}
-                                className={`p-2.5 rounded-xl transition-all shrink-0 ${isRecording ? 'bg-red-100 text-red-600 animate-pulse' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-200'}`}
+                                className={`p-2 rounded-full transition-all ${isRecording ? 'text-rose-500 animate-pulse bg-rose-50' : 'text-slate-400 hover:text-sky-500'}`}
                                 title="Hold to record"
                             >
-                                {isRecording ? <Square size={18} fill="currentColor" /> : <Mic size={18} />}
+                                {isRecording ? <Square size={20} fill="currentColor" /> : <Mic size={20} />}
                             </button>
                         ) : null}
                     </div>
@@ -316,9 +361,13 @@ const GlobalChat = ({ employeeId, roomLabel, recipient }) => {
                     <button
                         type="submit"
                         disabled={sending || (!newMessage.trim() && !selectedFile && !audioBlob)}
-                        className="p-3 bg-blue-600 text-white rounded-2xl hover:bg-blue-700 disabled:opacity-50 disabled:hover:bg-blue-600 transition-all shadow-md shadow-blue-500/20 active:scale-95 shrink-0"
+                        className={`w-12 h-12 flex items-center justify-center rounded-full transition-all shadow-lg active:scale-90 ${
+                            sending || (!newMessage.trim() && !selectedFile && !audioBlob)
+                            ? 'bg-slate-300 text-slate-100 cursor-not-allowed'
+                            : 'bg-[#128c7e] text-white hover:bg-[#075e54] shadow-[#128c7e]/20'
+                        }`}
                     >
-                        <Send size={20} className={sending ? 'animate-pulse' : ''} />
+                        <Send size={22} className={sending ? 'animate-pulse' : ''} />
                     </button>
                 </form>
             </div>

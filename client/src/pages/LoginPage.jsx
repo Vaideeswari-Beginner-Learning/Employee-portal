@@ -30,6 +30,8 @@ const LoginPage = () => {
             const user = await login(email, password);
             if (user?.role === 'admin' || user?.role === 'manager') {
                 navigate('/admin-dashboard');
+            } else if (user?.role === 'customer') {
+                navigate('/home');
             } else {
                 navigate('/dashboard');
             }
@@ -43,12 +45,15 @@ const LoginPage = () => {
     };
 
     const containerVariants = {
-        hidden: { opacity: 0 },
+        hidden: { opacity: 0, scale: 0.95 },
         visible: {
             opacity: 1,
+            scale: 1,
             transition: {
                 staggerChildren: 0.1,
-                delayChildren: 0.3
+                delayChildren: 0.2,
+                type: 'spring',
+                stiffness: 100
             }
         }
     };
@@ -63,75 +68,70 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="min-h-screen w-full flex items-center justify-center bg-slate-950 relative overflow-hidden font-sans p-6 md:p-12">
-            {/* Background Architecture */}
-            <div className="absolute inset-0 z-0">
+        <div className="min-h-screen w-full flex items-center justify-center bg-sky-50 relative overflow-hidden font-sans p-6">
+            {/* Animated Background Elements */}
+            <div className="absolute inset-0 z-0 overflow-hidden">
                 <motion.div
                     animate={{
                         scale: [1, 1.2, 1],
                         rotate: [0, 90, 0],
-                        opacity: [0.3, 0.5, 0.3]
+                        opacity: [0.1, 0.2, 0.1]
                     }}
-                    transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                    className="absolute -top-[20%] -left-[10%] w-[60rem] h-[60rem] bg-sky-500/10 rounded-full blur-[120px] pointer-events-none"
+                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                    className="absolute -top-[10%] -left-[5%] w-[40rem] h-[40rem] bg-sky-300 rounded-full blur-[100px] pointer-events-none"
                 />
                 <motion.div
                     animate={{
                         scale: [1, 1.1, 1],
                         rotate: [0, -45, 0],
-                        opacity: [0.2, 0.4, 0.2]
+                        opacity: [0.1, 0.15, 0.1]
                     }}
-                    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                    className="absolute -bottom-[20%] -right-[10%] w-[70rem] h-[70rem] bg-indigo-500/10 rounded-full blur-[150px] pointer-events-none"
+                    transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                    className="absolute -bottom-[10%] -right-[5%] w-[50rem] h-[50rem] bg-blue-400 rounded-full blur-[120px] pointer-events-none"
                 />
-                {/* Grid Overlay */}
-                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03] pointer-events-none" />
-                <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-transparent to-slate-950 pointer-events-none" />
+                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.05] pointer-events-none" />
             </div>
 
             <motion.div
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
-                className="w-full max-w-[460px] z-10"
+                className="w-full max-w-[440px] z-10"
             >
-                <div className="bg-white/[0.03] backdrop-blur-2xl rounded-[2.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)] border border-white/10 p-8 md:p-14 relative overflow-hidden group">
-                    {/* Scanline Effect */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-sky-500/[0.02] to-transparent h-24 w-full -translate-y-full group-hover:animate-scanline pointer-events-none" />
+                <div className="bg-white/80 backdrop-blur-3xl rounded-[3rem] shadow-[0_40px_100px_-20px_rgba(14,165,233,0.15)] border border-white p-8 md:p-12 relative overflow-hidden group">
+                    {/* Glowing Accent */}
+                    <div className="absolute -top-24 -right-24 w-48 h-48 bg-sky-400/20 rounded-full blur-3xl transition-all group-hover:bg-sky-400/30" />
                     
                     {/* Header Section */}
                     <motion.div variants={itemVariants} className="text-center mb-10">
                         <div className="inline-flex relative mb-8">
                             <motion.div
-                                whileHover={{ scale: 1.05, rotate: 5 }}
-                                className="w-20 h-20 rounded-3xl bg-slate-900 border border-sky-500/30 flex items-center justify-center relative shadow-2xl shadow-sky-500/20"
+                                whileHover={{ scale: 1.1, rotate: 10 }}
+                                className="w-20 h-20 rounded-3xl bg-sky-500 flex items-center justify-center relative shadow-2xl shadow-sky-300"
                             >
-                                <Shield size={36} className="text-sky-400" />
+                                <Shield size={36} className="text-white" />
                                 <motion.div
-                                    animate={{ opacity: [0.2, 0.5, 0.2] }}
+                                    animate={{ scale: [1, 1.2, 1], opacity: [0, 0.5, 0] }}
                                     transition={{ duration: 2, repeat: Infinity }}
-                                    className="absolute inset-0 bg-sky-400 rounded-3xl blur-xl"
+                                    className="absolute inset-0 bg-white rounded-3xl blur-md"
                                 />
-                                <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-slate-900 rounded-xl border-2 border-slate-800 flex items-center justify-center shadow-lg">
-                                    <Fingerprint size={12} className="text-amber-500" />
-                                </div>
                             </motion.div>
                         </div>
 
-                        <h1 className="text-3xl sm:text-4xl font-display font-black text-white tracking-tight uppercase mb-2">
-                            Secure<span className="text-sky-500 italic">.Access</span>
+                        <h1 className="text-3xl font-black text-slate-900 tracking-tighter uppercase mb-2">
+                            Portal<span className="text-sky-500">.Login</span>
                         </h1>
-                        <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.5em] mt-3">Node Communication Terminal</p>
+                        <p className="text-[10px] font-black text-sky-400 uppercase tracking-[0.3em]">SK Technology Grid</p>
                     </motion.div>
 
                     <form onSubmit={handleSubmit} className="space-y-6">
-                        {/* Identifier Node */}
-                        <motion.div variants={itemVariants} className="space-y-2.5">
-                            <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1 flex items-center gap-2">
-                                <User size={12} className="text-sky-500" /> Identifier
+                        {/* Identifier */}
+                        <motion.div variants={itemVariants} className="space-y-2">
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 flex items-center gap-2">
+                                <User size={12} className="text-sky-500" /> Identity Node
                             </label>
-                            <div className="relative group">
-                                <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-sky-400 transition-colors duration-300">
+                            <div className="relative">
+                                <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400">
                                     <Mail size={16} />
                                 </div>
                                 <input
@@ -139,21 +139,19 @@ const LoginPage = () => {
                                     required
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="Enter system identifier"
-                                    className="w-full bg-slate-900/50 border border-slate-800 rounded-2xl py-4 pl-14 pr-6 text-sm font-bold text-slate-200 focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500/40 transition-all placeholder:text-slate-600 placeholder:font-medium"
+                                    placeholder="Enter system email"
+                                    className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4.5 pl-14 pr-6 text-sm font-bold text-slate-700 focus:bg-white focus:border-sky-500 focus:ring-4 focus:ring-sky-100 transition-all outline-none"
                                 />
                             </div>
                         </motion.div>
 
-                        {/* Authorization Key */}
-                        <motion.div variants={itemVariants} className="space-y-2.5">
-                            <div className="flex justify-between items-center px-1">
-                                <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                                    <Lock size={12} className="text-sky-500" /> Auth-Key
-                                </label>
-                            </div>
-                            <div className="relative group">
-                                <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-sky-400 transition-colors duration-300">
+                        {/* Password */}
+                        <motion.div variants={itemVariants} className="space-y-2">
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 flex items-center gap-2">
+                                <Lock size={12} className="text-sky-500" /> Access Key
+                            </label>
+                            <div className="relative">
+                                <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400">
                                     <ArrowLeftRight size={16} />
                                 </div>
                                 <input
@@ -161,81 +159,62 @@ const LoginPage = () => {
                                     required
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    placeholder="••••••••••••••••"
-                                    className="w-full bg-slate-900/50 border border-slate-800 rounded-2xl py-4 pl-14 pr-6 text-sm font-bold text-slate-200 focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-500/40 transition-all placeholder:text-slate-600"
+                                    placeholder="••••••••••••"
+                                    className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4.5 pl-14 pr-6 text-sm font-bold text-slate-700 focus:bg-white focus:border-sky-500 focus:ring-4 focus:ring-sky-100 transition-all outline-none"
                                 />
                             </div>
-                            <div className="flex justify-end pr-1 pt-1">
-                                <button type="button" onClick={() => navigate('/forgot-password')} className="text-[9px] font-black text-sky-500 hover:text-sky-400 transition-colors uppercase tracking-[0.1em]">Recovery Assist</button>
+                            <div className="flex justify-end pt-1">
+                                <button type="button" onClick={() => navigate('/forgot-password')} className="text-[10px] font-black text-sky-500 hover:text-sky-600 transition-colors uppercase tracking-[0.1em]">Forgot Key?</button>
                             </div>
                         </motion.div>
 
                         {/* Error Handling */}
-                        <AnimatePresence mode="wait">
+                        <AnimatePresence>
                             {error && (
                                 <motion.div
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: 20 }}
-                                    className="bg-red-500/10 border border-red-500/20 rounded-2xl p-4 flex items-start gap-3"
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    className="bg-rose-50 border border-rose-100 rounded-2xl p-4 flex items-start gap-3"
                                 >
-                                    <AlertCircle size={16} className="text-red-400 shrink-0 mt-0.5" />
-                                    <p className="text-red-400 text-xs font-black uppercase tracking-tight leading-relaxed">{error}</p>
+                                    <AlertCircle size={16} className="text-rose-500 mt-0.5" />
+                                    <p className="text-rose-500 text-xs font-bold leading-relaxed">{error}</p>
                                 </motion.div>
                             )}
                         </AnimatePresence>
 
-                        {/* Action Primary */}
+                        {/* Submit Action */}
                         <motion.div variants={itemVariants} className="pt-4">
                             <motion.button
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                                 type="submit"
                                 disabled={isLoading}
-                                className="w-full relative group overflow-hidden rounded-2xl h-[3.8rem] bg-sky-500 transition-all shadow-[0_20px_40px_-10px_rgba(14,165,233,0.5)] active:shadow-none"
+                                className="w-full h-16 bg-sky-500 text-white rounded-2xl font-black uppercase text-xs tracking-[0.2em] flex items-center justify-center gap-3 shadow-xl shadow-sky-200 hover:bg-sky-600 transition-all disabled:opacity-50"
                             >
                                 {isLoading ? (
-                                    <Loader2 className="animate-spin text-slate-900 mx-auto" size={24} />
+                                    <Loader2 className="animate-spin" size={20} />
                                 ) : (
-                                    <div className="flex items-center justify-center gap-3">
-                                        <span className="text-[11px] font-black text-slate-950 uppercase tracking-[0.4em]">Initialize Pulse</span>
-                                        <ArrowRight size={20} className="text-slate-950 group-hover:translate-x-1.5 transition-transform" />
-                                    </div>
+                                    <>
+                                        Initialize Access <ArrowRight size={18} />
+                                    </>
                                 )}
-                                <div className="absolute inset-0 bg-white/20 transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out skew-x-12" />
                             </motion.button>
                         </motion.div>
                     </form>
-
-                    {/* Footer Metrics */}
-                    <motion.div variants={itemVariants} className="mt-12 pt-10 border-t border-white/5 flex flex-col items-center gap-6">
-                        <div className="flex gap-2">
-                            {[...Array(3)].map((_, i) => (
-                                <motion.div
-                                    key={i}
-                                    animate={{ opacity: [0.2, 0.6, 0.2] }}
-                                    transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.3 }}
-                                    className="w-1.5 h-1.5 rounded-full bg-sky-500"
-                                />
-                            ))}
-                        </div>
-                        <p className="text-[9px] font-black text-slate-600 uppercase tracking-[0.5em] text-center">
-                            Encrypted Gateway Alpha
-                        </p>
-                    </motion.div>
                 </div>
 
-                {/* System Status Indicators */}
-                <motion.div variants={itemVariants} className="flex justify-between items-center mt-8 px-6">
+                {/* Status Footer */}
+                <motion.div variants={itemVariants} className="flex justify-between items-center mt-10 px-8">
                     <div className="flex items-center gap-3">
-                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)] animate-pulse" />
-                        <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Sys.Operational</span>
+                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Grid Operational</span>
                     </div>
-                    <span className="text-[9px] font-black text-slate-700 uppercase tracking-widest">v4.2.0 Final Build</span>
+                    <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">v4.5 Secure</span>
                 </motion.div>
-            </motion.div >
-        </div >
+            </motion.div>
+        </div>
     );
 };
-export default LoginPage;
 
+export default LoginPage;

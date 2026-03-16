@@ -21,7 +21,8 @@ const upload = multer({ storage });
 
 const canAccessChat = (employeeId, user) => {
     // Standardized admin check
-    const isAdmin = user.email === 'admin@cctv.com' || user.role === 'admin' || user.role === 'Admin';
+    const userRole = (user.role || '').toLowerCase();
+    const isAdmin = user.email === 'admin@cctv.com' || userRole === 'admin';
     if (isAdmin) return true;
 
     // Employee can only access their own room
@@ -53,11 +54,12 @@ router.get('/:employeeId', auth, async (req, res) => {
         console.log(`[ChatFetch] Node ${req.user.name} accessing room ${targetId === TEAM_ID ? 'TEAM' : targetId}`);
 
         // Filter by visibleTo if the field exists (for new messages) or allow all for legacy messages
+        const userRole = (req.user.role || '').toLowerCase();
         const query = {
             employeeId: targetId,
             $or: [
                 { visibleTo: { $exists: false } },
-                { visibleTo: req.user.role }
+                { visibleTo: userRole }
             ]
         };
 
@@ -108,17 +110,18 @@ router.post('/:employeeId', auth, upload.single('attachment'), async (req, res) 
             }
         }
 
-        const senderNameStr = req.user.name || (req.user.role === 'admin' ? 'Admin Support' : 'Employee');
+        const senderNameStr = req.user.name || (req.user.role?.toLowerCase() === 'admin' ? 'Admin Support' : 'Employee');
 
         // Determine visibility based on recipient and sender role
         let visibleTo = ['admin', 'employee']; // Always visible to Admin and the Employee room owner
-        const recipient = req.body.recipient;
+        const recipient = (req.body.recipient || '').toLowerCase();
+        const userRole = (req.user.role || '').toLowerCase();
 
         if (targetId === TEAM_ID) {
             visibleTo = ['admin', 'manager', 'employee'];
-        } else if (req.user.role === 'manager' || recipient === 'manager') {
+        } else if (userRole === 'manager' || recipient === 'manager') {
             visibleTo = ['admin', 'manager', 'employee'];
-        } else if (req.user.role === 'admin' || recipient === 'admin') {
+        } else if (userRole === 'admin' || recipient === 'admin') {
             visibleTo = ['admin', 'employee'];
         }
 
@@ -129,7 +132,7 @@ router.post('/:employeeId', auth, upload.single('attachment'), async (req, res) 
             content: content || '',
             attachmentUrl,
             attachmentType: finalAttachmentType,
-            visibleTo
+            visibleTo: visibleTo.map(r => r.toLowerCase())
         });
 
         console.log(`[ChatPost] Creating message from ${req.user.name} (${req.user._id}) for room ${targetId}`);

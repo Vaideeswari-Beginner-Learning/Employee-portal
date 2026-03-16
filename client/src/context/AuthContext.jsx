@@ -21,9 +21,10 @@ const AuthProvider = ({ children }) => {
                     const res = await api.get('/auth/me', {
                         headers: { Authorization: `Bearer ${token}` }
                     });
-                    console.log('[AuthDebug] Session verified for:', res.data.email);
-                    setUser(res.data);
-                    localStorage.setItem('user', JSON.stringify(res.data));
+                    const userData = res.data.user || res.data;
+                    console.log('[AuthDebug] Session verified for:', userData?.email, userData);
+                    setUser(userData);
+                    localStorage.setItem('user', JSON.stringify(userData));
                 } catch (err) {
                     console.error('[AuthDebug] Session verification failed. Redirecting to login.', err);
                     localStorage.removeItem('token');

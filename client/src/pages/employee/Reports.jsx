@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     FilePlus,
@@ -16,7 +16,8 @@ import {
     Eye,
     Camera,
     Calendar,
-    ExternalLink
+    ExternalLink,
+    Clock
 } from 'lucide-react';
 import api from '../../utils/api';
 
@@ -24,9 +25,11 @@ const ReportsPage = () => {
     const [formData, setFormData] = useState({
         clientName: '',
         location: '',
+        workType: 'CCTV Installation',
         isInstalled: 'Yes',
         cameraCount: '',
         issues: '',
+        reportTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
         image: null
     });
     const [loading, setLoading] = useState(false);
@@ -71,7 +74,16 @@ const ReportsPage = () => {
             showNotification('success', 'Field Telemetry Transmitted Successfully.');
             setTimeout(() => {
                 setSubmitted(false);
-                setFormData({ clientName: '', location: '', isInstalled: 'Yes', cameraCount: '', issues: '', image: null });
+                setFormData({ 
+                    clientName: '', 
+                    location: '', 
+                    workType: 'CCTV Installation',
+                    isInstalled: 'Yes', 
+                    cameraCount: '', 
+                    issues: '', 
+                    reportTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
+                    image: null 
+                });
                 fetchReports();
             }, 3000);
         } catch (err) {
@@ -125,6 +137,25 @@ const ReportsPage = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                         <div className="space-y-3">
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Work Type</label>
+                            <select
+                                value={formData.workType}
+                                onChange={e => setFormData({ ...formData, workType: e.target.value })}
+                                className="w-full bg-sky-50 border border-sky-100 rounded-2xl p-4 text-sm font-black text-slate-800 focus:outline-none focus:border-sky-500/50 transition-all outline-none shadow-inner uppercase tracking-tight"
+                            >
+                                <option>CCTV Installation</option>
+                                <option>Maintenance</option>
+                                <option>Repair</option>
+                                <option>Site Survey</option>
+                                <option>Troubleshooting</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <ReportInput label="Time of Report" value={formData.reportTime} onChange={v => setFormData({ ...formData, reportTime: v })} type="time" icon={<Clock size={14} />} />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                        <div className="space-y-3">
                             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Installation Status</label>
                             <div className="flex gap-4">
                                 {['Yes', 'No'].map(opt => (
@@ -143,13 +174,13 @@ const ReportsPage = () => {
                     </div>
 
                     <div className="space-y-3">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Anomalies / Field Notes</label>
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Work Description / Field Notes</label>
                         <textarea
                             value={formData.issues}
                             onChange={e => setFormData({ ...formData, issues: e.target.value })}
                             rows="4"
                             className="w-full bg-sky-50 border border-sky-100 rounded-2xl p-5 text-sm font-black text-slate-800 focus:outline-none focus:border-sky-500/50 transition-all placeholder:text-slate-800 outline-none shadow-inner uppercase tracking-tight"
-                            placeholder="Identify any hardware conflicts or security gaps detected during deployment..."
+                            placeholder="Describe the work performed, cameras installed, or issues encountered..."
                         />
                     </div>
 
@@ -199,6 +230,7 @@ const ReportsPage = () => {
                             <tr className="border-b border-sky-100 text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] bg-sky-50">
                                 <th className="px-8 py-5">Descriptor / Time-Stamp</th>
                                 <th className="px-8 py-5">Location Space</th>
+                                <th className="px-8 py-5">Work Type</th>
                                 <th className="px-8 py-5">Status Vector</th>
                                 <th className="px-8 py-5 text-right">Analysis</th>
                             </tr>
@@ -223,6 +255,11 @@ const ReportsPage = () => {
                                         <div className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-[0.1em]">
                                             <MapPin size={12} className="text-sky-500" />
                                             {report.location}
+                                        </div>
+                                    </td>
+                                    <td className="px-8 py-6">
+                                        <div className="flex items-center gap-2 text-[10px] font-black text-sky-500 uppercase tracking-[0.1em]">
+                                            {report.workType || 'Standard Ops'}
                                         </div>
                                     </td>
                                     <td className="px-8 py-6">
@@ -312,11 +349,19 @@ const ReportsPage = () => {
                                 <div className="grid grid-cols-2 gap-10 border-y border-sky-100 py-10">
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block">Reporting Date</label>
-                                        <p className="text-sm font-black text-slate-200 uppercase tracking-tight">{new Date(selectedReport.createdAt).toLocaleDateString()}</p>
+                                        <p className="text-sm font-black text-slate-800 uppercase tracking-tight">{new Date(selectedReport.createdAt).toLocaleDateString()}</p>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block">Time Capture</label>
+                                        <p className="text-sm font-black text-slate-800 uppercase tracking-tight tabular-nums">{selectedReport.reportTime || '--:--'}</p>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block">Work Classification</label>
+                                        <p className="text-xs font-black text-sky-500 uppercase tracking-tight">{selectedReport.workType || 'Deployment'}</p>
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block">Hardware Matrix</label>
-                                        <p className="text-sm font-black text-slate-200 uppercase tracking-tight tabular-nums">{selectedReport.cameraCount} Active Units</p>
+                                        <p className="text-sm font-black text-slate-800 uppercase tracking-tight tabular-nums">{selectedReport.cameraCount} Active Units</p>
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block">Protocol Identity</label>
