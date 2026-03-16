@@ -25,7 +25,8 @@ const AdminProducts = () => {
         name: '',
         category: 'Dome Cameras',
         price: '',
-        desc: '',
+        description: '',
+        shortDescription: '',
         availability: true,
         images: { front: '', back: '', side: '' },
         technicalSpecs: []
@@ -34,7 +35,7 @@ const AdminProducts = () => {
     const fetchProducts = async () => {
         setIsLoading(true);
         try {
-            const res = await api.get('shop/products');
+            const res = await api.get('shop/admin/products');
             setProducts(res.data);
         } catch (err) {
             toast.error("Failed to load inventory");
@@ -101,7 +102,7 @@ const AdminProducts = () => {
                     <button 
                         onClick={() => {
                             setEditingProduct(null);
-                            setFormData({ name: '', category: 'Dome Cameras', price: '', desc: '', availability: true, images: { front: '', back: '', side: '' }, technicalSpecs: [] });
+                            setFormData({ name: '', category: 'Dome Cameras', price: '', description: '', shortDescription: '', availability: true, images: { front: '', back: '', side: '' }, technicalSpecs: [] });
                             setShowModal(true);
                         }}
                         className="bg-slate-900 text-white px-6 py-3 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center gap-2 shadow-lg shadow-slate-200 hover:bg-sky-500 transition-all"
@@ -242,12 +243,23 @@ const AdminProducts = () => {
                                 </div>
 
                                 <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-4">Short Description</label>
+                                    <input 
+                                        type="text" 
+                                        required
+                                        className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 px-6 text-sm font-bold focus:bg-white focus:border-sky-500 transition-all outline-none"
+                                        value={formData.shortDescription}
+                                        onChange={(e) => setFormData({...formData, shortDescription: e.target.value})}
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
                                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-4">Operational Description</label>
                                     <textarea 
                                         rows="4"
                                         className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-6 px-6 text-sm font-bold focus:bg-white focus:border-sky-500 transition-all outline-none resize-none"
-                                        value={formData.desc}
-                                        onChange={(e) => setFormData({...formData, desc: e.target.value})}
+                                        value={formData.description}
+                                        onChange={(e) => setFormData({...formData, description: e.target.value})}
                                     />
                                 </div>
 

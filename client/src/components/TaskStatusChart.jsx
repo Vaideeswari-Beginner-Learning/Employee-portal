@@ -57,7 +57,7 @@ const TaskStatusChart = ({ tasks = [] }) => {
 
             {/* Donut Chart */}
             <div className="flex-1 w-full relative min-h-[200px] flex items-center justify-center">
-                <ResponsiveContainer width="99%" height={240} minWidth={0}>
+                <ResponsiveContainer width="99%" height={240} minWidth={0} debounce={50}>
                     <PieChart>
                         <Pie
                             data={displayData}

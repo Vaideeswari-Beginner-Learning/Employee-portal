@@ -120,6 +120,17 @@ router.post('/installation', async (req, res) => {
 
 // --- E-Commerce Administrative Routes ---
 
+// @desc    Get all products (Admin)
+// @route   GET /api/shop/admin/products
+router.get('/admin/products', adminAuth, async (req, res) => {
+    try {
+        const products = await Product.find().sort({ createdAt: -1 });
+        res.json(products);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
 // @desc    Add a new product
 // @route   POST /api/shop/admin/products
 router.post('/admin/products', adminAuth, async (req, res) => {

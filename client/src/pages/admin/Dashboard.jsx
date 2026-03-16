@@ -231,7 +231,7 @@ const AdminDashboard = () => {
                             </div>
                         </div>
                         <div className="h-[300px] sm:h-[400px] w-full relative z-10">
-                            <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+                            <ResponsiveContainer width="100%" height="100%" minWidth={0} debounce={50}>
                                 <AreaChart data={[
                                     { name: '00:00', v: 30 },
                                     { name: '04:00', v: 25 },
@@ -395,7 +395,7 @@ const WavyStatCard = ({ title, value, icon: Icon, percentage, trend, color, link
             </div>
 
             <div className="absolute bottom-0 left-0 right-0 h-24 opacity-40 transition-opacity duration-700 pointer-events-none px-1">
-                <ResponsiveContainer width="100%" height={96} minWidth={0}>
+                <ResponsiveContainer width="100%" height={96} minWidth={0} debounce={50}>
                     <AreaChart data={chartData}>
                         <defs>
                             <linearGradient id={`grad-${title}`} x1="0" y1="0" x2="0" y2="1">
@@ -421,7 +421,7 @@ const GaugeCard = ({ title, value, color }) => {
         <div className="bg-gradient-to-br from-sky-50 to-blue-50 border border-sky-100 p-10 flex flex-col items-center justify-center relative rounded-[2.5rem] group shadow-sm transition-all hover:scale-[1.02]">
             <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-4 text-center">{title}</h3>
             <div className="relative w-full h-48">
-                <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+                <ResponsiveContainer width="100%" height="100%" minWidth={0} debounce={50}>
                     <PieChart>
                         <Pie data={data} cx="50%" cy="50%" innerRadius={65} outerRadius={85} paddingAngle={0} dataKey="v" startAngle={220} endAngle={-40} stroke="none">
                             {data.map((_, index) => (
