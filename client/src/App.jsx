@@ -50,15 +50,17 @@ import LiveDemo from './pages/cx/LiveDemo';
 
 // Context Providers
 import { CartProvider } from './context/CartContext';
+import LoginModal from './components/LoginModal';
 
 function App() {
   return (
-    <Routes>
-      {/* Public Routes */}
-      <Route path="/" element={<Navigate to="/login" replace />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-      <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+    <>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<Navigate to="/home" replace />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
 
       {/* Public CX Routes (Wrapped in Cart Provider) */}
       <Route path="/*" element={
@@ -117,7 +119,10 @@ function App() {
       </Route>
 
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      <Route path="/any" element={<LoginModal />} /> {/* Rendered globally by context logic, but adding a dummy for some routers if needed, actually just render it outside Routes */}
     </Routes>
+      <LoginModal />
+    </>
   );
 }
 

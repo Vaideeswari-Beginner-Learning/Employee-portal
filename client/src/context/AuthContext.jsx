@@ -56,6 +56,22 @@ const AuthProvider = ({ children }) => {
         }
     };
 
+    const register = async (userData) => {
+        try {
+            console.log('Attempting registration to /auth/register');
+            const res = await api.post('/auth/register', userData);
+            console.log('Register response:', res.data);
+            localStorage.setItem('token', res.data.token);
+            localStorage.setItem('user', JSON.stringify(res.data.user));
+            setUser(res.data.user);
+            return res.data.user;
+        } catch (err) {
+            const msg = err.response?.data?.error || err.response?.data?.message || err.message || 'Registration failed';
+            setError(typeof msg === 'object' ? JSON.stringify(msg) : String(msg));
+            throw err;
+        }
+    };
+
     const logout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
@@ -64,8 +80,15 @@ const AuthProvider = ({ children }) => {
     };
 
 
+    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+    const [redirectUrl, setRedirectUrl] = useState(null);
+
     return (
-        <AuthContext.Provider value={{ user, login, logout, loading, error }}>
+        <AuthContext.Provider value={{ 
+            user, login, logout, register, loading, error, 
+            isLoginModalOpen, setIsLoginModalOpen,
+            redirectUrl, setRedirectUrl
+        }}>
             {children}
         </AuthContext.Provider>
     );

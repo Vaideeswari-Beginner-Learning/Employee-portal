@@ -4,6 +4,7 @@ import { ShieldCheck, Calendar, MapPin, Camera, User, Phone, CheckCircle2, Arrow
 import CXNavbar from './Navbar';
 import CXFooter from './Footer';
 import api, { getImageUrl } from '../../utils/api';
+import { useAuth } from '../../context/AuthContext';
 
 const Booking = () => {
     const [formData, setFormData] = useState({
@@ -16,6 +17,7 @@ const Booking = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [requestId, setRequestId] = useState('');
+    const { user, setIsLoginModalOpen, setRedirectUrl } = useAuth();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -24,6 +26,13 @@ const Booking = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        if (!user) {
+            setRedirectUrl('/booking');
+            setIsLoginModalOpen(true);
+            return;
+        }
+
         setIsSubmitting(true);
         try {
             const res = await api.post('shop/installation', formData);
@@ -34,7 +43,8 @@ const Booking = () => {
         } catch (err) {
             console.error("Booking error:", err);
             if (err.response?.status === 401) {
-                alert("Please log in to submit an installation request.");
+                setRedirectUrl('/booking');
+                setIsLoginModalOpen(true);
             } else {
                 alert(err.response?.data?.message || "Something went wrong. Please try again.");
             }

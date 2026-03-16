@@ -2,13 +2,15 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ShieldCheck, Truck, Lock, CreditCard } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
 import api from '../../utils/api';
 
 const Checkout = () => {
     const { cart, cartTotal, clearCart } = useCart();
+    const { setIsLoginModalOpen, setRedirectUrl } = useAuth();
     const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
-    
+
     // Simple state for checkout form
     const [formData, setFormData] = useState({
         fullName: '',
@@ -26,7 +28,7 @@ const Checkout = () => {
 
     const handlePlaceOrder = async (e) => {
         e.preventDefault();
-        
+
         if (cart.length === 0) {
             alert("Your cart is empty!");
             return;
@@ -52,7 +54,7 @@ const Checkout = () => {
             };
 
             const res = await api.post('shop/order', orderData);
-            
+
             if (res.data) {
                 clearCart();
                 alert(`Order placed successfully! Order ID: ${res.data.orderId}`);
@@ -62,8 +64,9 @@ const Checkout = () => {
         } catch (error) {
             console.error("Checkout error:", error);
             if (error.response?.status === 401) {
-                alert("Please log in to place an order.");
-                navigate('/login');
+                // Trigger Login Modal instead of navigating
+                setRedirectUrl('/checkout');
+                setIsLoginModalOpen(true);
             } else {
                 alert(error.response?.data?.message || "Failed to place order. Please try again.");
             }
@@ -104,7 +107,7 @@ const Checkout = () => {
 
             <main className="max-w-5xl mx-auto px-4 mt-8">
                 <div className="flex flex-col lg:flex-row gap-8">
-                    
+
                     {/* Left: Shipping Form */}
                     <div className="flex-1">
                         <div className="bg-white border border-slate-200 rounded-lg p-6 md:p-8 mb-6">
@@ -165,8 +168,8 @@ const Checkout = () => {
                     <div className="w-full lg:w-[350px] shrink-0">
                         <div className="bg-white border border-slate-200 rounded-lg shadow-sm sticky top-24 overflow-hidden">
                             <div className="p-6 bg-slate-50 border-b border-slate-200">
-                                <button 
-                                    type="submit" 
+                                <button
+                                    type="submit"
                                     form="checkout-form"
                                     disabled={isSubmitting}
                                     className="w-full bg-[#facc15] hover:bg-[#eab308] disabled:bg-slate-300 disabled:cursor-not-allowed text-slate-900 py-3 rounded-md font-bold transition-colors shadow-sm"
@@ -180,7 +183,7 @@ const Checkout = () => {
 
                             <div className="p-6">
                                 <h3 className="font-bold text-lg mb-4">Order Summary</h3>
-                                
+
                                 <div className="space-y-2 text-sm text-slate-600 mb-4 pb-4 border-b border-slate-100">
                                     <div className="flex justify-between">
                                         <span>Items:</span>
@@ -201,7 +204,7 @@ const Checkout = () => {
                                     <span className="font-bold text-[#b12704] text-2xl">₹{cartTotal.toLocaleString('en-IN')}</span>
                                 </div>
                             </div>
-                            
+
                             <div className="bg-slate-50 p-4 border-t border-slate-200 text-xs text-slate-600 space-y-3">
                                 <div className="flex gap-3">
                                     <Truck size={20} className="text-slate-400 shrink-0" />

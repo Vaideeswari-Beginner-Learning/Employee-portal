@@ -6,6 +6,7 @@ import CXNavbar from './Navbar';
 import CXFooter from './Footer';
 import api, { getImageUrl } from '../../utils/api';
 import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-hot-toast';
 
 const PLACEHOLDER_IMGS = {
@@ -25,6 +26,7 @@ const Catalog = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { addToCart } = useCart();
+    const { user, setIsLoginModalOpen, setRedirectUrl } = useAuth();
     
     const searchParams = new URLSearchParams(location.search);
 
@@ -253,7 +255,15 @@ const Catalog = () => {
                                                     <span className="text-2xl font-black text-slate-900">₹{product.price?.toLocaleString()}</span>
                                                     <div className="flex gap-2">
                                                         <button
-                                                            onClick={() => { addToCart(product, 1); toast.success("Added to cart!"); }}
+                                                            onClick={() => { 
+                                                                if (!user) {
+                                                                    setRedirectUrl('/catalog');
+                                                                    setIsLoginModalOpen(true);
+                                                                } else {
+                                                                    addToCart(product, 1); 
+                                                                    toast.success("Added to cart!"); 
+                                                                }
+                                                            }}
                                                             className="p-3 bg-slate-900 hover:bg-[#0EA5E9] text-white rounded-2xl transition-all active:scale-95"
                                                         >
                                                             <ShoppingCart size={16} />

@@ -9,6 +9,7 @@ import CXNavbar from './Navbar';
 import CXFooter from './Footer';
 import api, { getImageUrl } from '../../utils/api';
 import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-hot-toast';
 
 const PLACEHOLDER_IMGS = {
@@ -29,6 +30,7 @@ const ProductDetail = () => {
     const [qty, setQty] = useState(1);
     const [activeTab, setActiveTab] = useState('description');
     const { addToCart } = useCart();
+    const { user, setIsLoginModalOpen, setRedirectUrl } = useAuth();
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -45,11 +47,21 @@ const ProductDetail = () => {
     }, [id]);
 
     const handleAddToCart = () => {
+        if (!user) {
+            setRedirectUrl(`/product/${id}`);
+            setIsLoginModalOpen(true);
+            return;
+        }
         addToCart(product, qty);
         toast.success(withInstall ? `Added ${qty}x with installation!` : `Added ${qty}x to cart!`);
     };
 
     const handleBuyNow = () => {
+        if (!user) {
+            setRedirectUrl(`/product/${id}`);
+            setIsLoginModalOpen(true);
+            return;
+        }
         addToCart(product, 1);
         navigate('/cart');
     };

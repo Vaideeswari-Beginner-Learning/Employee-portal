@@ -4,11 +4,20 @@ import { Package, Search, ChevronRight, XCircle, ChevronDown } from 'lucide-reac
 import { motion } from 'framer-motion';
 import CXNavbar from './Navbar';
 import CXFooter from './Footer';
+import { useAuth } from '../../context/AuthContext';
 import api, { getImageUrl } from '../../utils/api';
 
 const CustomerOrders = () => {
     const [orders, setOrders] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const { user, setIsLoginModalOpen, setRedirectUrl } = useAuth();
+
+    useEffect(() => {
+        if (!user && !isLoading) {
+            setRedirectUrl('/orders');
+            setIsLoginModalOpen(true);
+        }
+    }, [user, isLoading, setIsLoginModalOpen, setRedirectUrl]);
 
     useEffect(() => {
         const fetchOrders = async () => {

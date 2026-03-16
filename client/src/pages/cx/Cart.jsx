@@ -5,10 +5,12 @@ import { ShoppingCart, Check, Trash2, ShieldCheck, ChevronRight } from 'lucide-r
 import CXNavbar from './Navbar';
 import CXFooter from './Footer';
 import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
 import { getImageUrl } from '../../utils/api';
 
 const Cart = () => {
     const { cart, removeFromCart, updateQuantity, cartTotal, cartCount } = useCart();
+    const { user, setIsLoginModalOpen, setRedirectUrl } = useAuth();
     const navigate = useNavigate();
 
     return (
@@ -141,7 +143,14 @@ const Cart = () => {
 
                                 <button 
                                     className="w-full bg-[#facc15] hover:bg-[#eab308] text-slate-900 py-3.5 rounded-full font-bold transition-colors shadow-sm flex items-center justify-center mb-6"
-                                    onClick={() => navigate('/checkout')}
+                                    onClick={() => {
+                                        if (!user) {
+                                            setRedirectUrl('/checkout');
+                                            setIsLoginModalOpen(true);
+                                        } else {
+                                            navigate('/checkout');
+                                        }
+                                    }}
                                 >
                                     Proceed to Buy
                                 </button>

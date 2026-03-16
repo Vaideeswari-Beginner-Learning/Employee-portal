@@ -3,6 +3,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Search, ShoppingCart, User, Menu, X, ShieldCheck, Phone, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
+import LoginModal from '../../components/LoginModal';
 import gsap from 'gsap';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
@@ -16,6 +18,7 @@ const CXNavbar = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { cartCount } = useCart();
+    const { user, setIsLoginModalOpen } = useAuth();
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -182,10 +185,20 @@ const CXNavbar = () => {
                             </Link>
 
                             {/* Login */}
-                            <Link to="/login" className={`hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-black transition-all ${scrolled ? 'bg-slate-900 text-white hover:bg-[#0EA5E9]' : 'bg-white text-slate-900 hover:bg-[#0EA5E9] hover:text-white'} shadow-lg`}>
-                                <User size={16} />
-                                <span className="hidden md:inline">Login</span>
-                            </Link>
+                            {!user ? (
+                                <button 
+                                    onClick={() => setIsLoginModalOpen(true)}
+                                    className={`hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-black transition-all ${scrolled ? 'bg-slate-900 text-white hover:bg-[#0EA5E9]' : 'bg-white text-slate-900 hover:bg-[#0EA5E9] hover:text-white'} shadow-lg`}
+                                >
+                                    <User size={16} />
+                                    <span className="hidden md:inline">Login</span>
+                                </button>
+                            ) : (
+                                <Link to="/dashboard" className={`hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-black transition-all ${scrolled ? 'bg-slate-900 text-white hover:bg-[#0EA5E9]' : 'bg-white text-slate-900 hover:bg-[#0EA5E9] hover:text-white'} shadow-lg`}>
+                                    <User size={16} />
+                                    <span className="hidden md:inline">Dashboard</span>
+                                </Link>
+                            )}
 
                             {/* Mobile Menu */}
                             <button onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -220,10 +233,12 @@ const CXNavbar = () => {
                                     )
                                 ))}
                                 <div className="pt-4 flex gap-3">
-                                    <Link to="/login" onClick={() => setIsMenuOpen(false)}
-                                        className="flex-1 py-4 bg-slate-900 text-white rounded-2xl font-black text-center text-sm hover:bg-[#0EA5E9] transition-all">
+                                    <button 
+                                        onClick={() => { setIsLoginModalOpen(true); setIsMenuOpen(false); }}
+                                        className="flex-1 py-4 bg-slate-900 text-white rounded-2xl font-black text-center text-sm hover:bg-[#0EA5E9] transition-all"
+                                    >
                                         Login / Register
-                                    </Link>
+                                    </button>
                                     <Link to="/cart" onClick={() => setIsMenuOpen(false)}
                                         className="px-6 py-4 bg-sky-50 text-[#0EA5E9] rounded-2xl font-black hover:bg-[#0EA5E9] hover:text-white transition-all flex items-center gap-2">
                                         <ShoppingCart size={18} />

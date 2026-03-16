@@ -3,13 +3,13 @@ import { useAuth } from '../context/AuthContext';
 import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Bell, User, LogOut, Menu } from 'lucide-react';
+import { Search, Bell, User, LogOut, Menu, Lock } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
 
 const MainLayout = () => {
-    const { user, loading, logout } = useAuth();
+    const { user, loading, logout, setIsLoginModalOpen } = useAuth();
     const [announcementsCount, setAnnouncementsCount] = useState(0);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -74,7 +74,32 @@ const MainLayout = () => {
         </div>
     );
 
-    if (!user) return <Navigate to="/login" />;
+    if (!user) {
+        setIsLoginModalOpen(true);
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center p-6">
+                <motion.div 
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="bg-white/80 backdrop-blur-2xl p-10 rounded-[2.5rem] shadow-2xl border border-white text-center max-w-sm"
+                >
+                    <div className="w-20 h-20 bg-slate-900 rounded-[1.5rem] flex items-center justify-center mx-auto mb-8 shadow-xl shadow-slate-200">
+                        <Lock size={32} className="text-white" />
+                    </div>
+                    <h2 className="text-2xl font-black text-slate-900 mb-4 tracking-tight">Access Restricted</h2>
+                    <p className="text-slate-500 text-sm mb-8 font-bold uppercase tracking-widest leading-relaxed">
+                        Secure session required. Please authenticate via the popup to access your dashboard.
+                    </p>
+                    <button 
+                        onClick={() => setIsLoginModalOpen(true)}
+                        className="w-full py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-[#0EA5E9] hover:shadow-lg hover:shadow-sky-200 transition-all duration-500"
+                    >
+                        Reveal Identity Popup
+                    </button>
+                </motion.div>
+            </div>
+        );
+    }
 
     return (
         <div className="flex min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50 font-sans text-slate-800">

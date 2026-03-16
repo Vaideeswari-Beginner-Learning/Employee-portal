@@ -17,6 +17,7 @@ import CXNavbar from './Navbar';
 import CXFooter from './Footer';
 import api, { getImageUrl } from '../../utils/api';
 import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-hot-toast';
 
 gsap.registerPlugin(useGSAP, ScrollToPlugin, ScrollTrigger);
@@ -94,6 +95,7 @@ const Counter = ({ target, suffix = '' }) => {
 // ─── MAIN COMPONENT ───────────────────────────────────────────
 const CXHome = () => {
     const navigate = useNavigate();
+    const { user, setIsLoginModalOpen, setRedirectUrl } = useAuth();
     const { addToCart } = useCart();
     const [products, setProducts] = useState([]);
     const [activeReview, setActiveReview] = useState(0);
@@ -147,9 +149,6 @@ const CXHome = () => {
                     <div className="absolute inset-0" style={{background: 'radial-gradient(ellipse 60% 50% at 30% 80%, rgba(34,197,94,0.06) 0%, transparent 70%)'}} />
                     {/* Grid lines */}
                     <div className="absolute inset-0 opacity-[0.06]" style={{backgroundImage: 'linear-gradient(rgba(14,165,233,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(14,165,233,0.3) 1px, transparent 1px)', backgroundSize: '60px 60px'}} />
-                    {/* Scanning line across entire hero */}
-                    <div className="absolute left-0 right-0 h-[2px] pointer-events-none transition-none"
-                        style={{top: `${scanPos}%`, background: 'linear-gradient(90deg, transparent, rgba(14,165,233,0.4), rgba(34,197,94,0.5), rgba(14,165,233,0.4), transparent)', filter: 'blur(1px)'}} />
                 </div>
 
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full py-16 relative z-10">
@@ -174,7 +173,14 @@ const CXHome = () => {
                             <div className="flex flex-wrap gap-4 pt-2">
                                 <motion.button
                                     whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
-                                    onClick={() => navigate('/catalog')}
+                                    onClick={() => {
+                                        if (!user) {
+                                            setRedirectUrl('/catalog');
+                                            setIsLoginModalOpen(true);
+                                        } else {
+                                            navigate('/catalog');
+                                        }
+                                    }}
                                     className="flex items-center gap-3 px-8 py-4 rounded-2xl font-black text-white text-sm shadow-2xl"
                                     style={{background: `linear-gradient(135deg, ${THEME.primary}, #0284C7)`, boxShadow: `0 20px 40px ${THEME.primary}40`}}
                                 >
@@ -182,7 +188,14 @@ const CXHome = () => {
                                 </motion.button>
                                 <motion.button
                                     whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
-                                    onClick={() => navigate('/booking')}
+                                    onClick={() => {
+                                        if (!user) {
+                                            setRedirectUrl('/booking');
+                                            setIsLoginModalOpen(true);
+                                        } else {
+                                            navigate('/booking');
+                                        }
+                                    }}
                                     className="flex items-center gap-3 px-8 py-4 rounded-2xl font-black text-sm border"
                                     style={{borderColor: `${THEME.accent}50`, color: THEME.accent, background: `${THEME.accent}10`}}
                                 >
@@ -452,7 +465,16 @@ const CXHome = () => {
                                     <div className="flex items-center justify-between">
                                         <span className="text-xl font-black" style={{color: '#0F172A'}}>₹{p.price?.toLocaleString('en-IN')}</span>
                                         <button
-                                            onClick={e => { e.stopPropagation(); addToCart(p, 1); toast.success('Added to cart!'); }}
+                                            onClick={e => { 
+                                                e.stopPropagation(); 
+                                                if (!user) {
+                                                    setRedirectUrl(`/product/${p._id}`);
+                                                    setIsLoginModalOpen(true);
+                                                } else {
+                                                    addToCart(p, 1); 
+                                                    toast.success('Added to cart!'); 
+                                                }
+                                            }}
                                             className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black transition-all text-white"
                                             style={{background: THEME.primary}}
                                         >
@@ -613,7 +635,14 @@ const CXHome = () => {
                     <div className="text-center mt-24">
                         <motion.button 
                             whileHover={{ scale: 1.05, y: -5 }} whileTap={{ scale: 0.95 }}
-                            onClick={() => navigate('/booking')}
+                            onClick={() => {
+                                if (!user) {
+                                    setRedirectUrl('/booking');
+                                    setIsLoginModalOpen(true);
+                                } else {
+                                    navigate('/booking');
+                                }
+                            }}
                             className="inline-flex items-center gap-4 px-12 py-5 rounded-[2rem] font-black text-white text-base shadow-2xl relative overflow-hidden group"
                             style={{ background: THEME.primary }}
                         >
@@ -741,12 +770,28 @@ const CXHome = () => {
                             Get a free consultation and site survey from our security experts. No obligation — just expert advice for your security needs.
                         </p>
                         <div className="flex flex-wrap justify-center gap-5">
-                            <motion.button whileHover={{scale:1.05}} whileTap={{scale:0.97}} onClick={() => navigate('/booking')}
+                            <motion.button whileHover={{scale:1.05}} whileTap={{scale:0.97}} 
+                                onClick={() => {
+                                    if (!user) {
+                                        setRedirectUrl('/booking');
+                                        setIsLoginModalOpen(true);
+                                    } else {
+                                        navigate('/booking');
+                                    }
+                                }}
                                 className="px-10 py-5 rounded-2xl font-black text-base shadow-2xl"
                                 style={{background:'#FFFFFF', color: THEME.primary, boxShadow:'0 20px 40px rgba(0,0,0,0.15)'}}>
                                 Book Free Consultation
                             </motion.button>
-                            <motion.button whileHover={{scale:1.05}} whileTap={{scale:0.97}} onClick={() => navigate('/catalog')}
+                            <motion.button whileHover={{scale:1.05}} whileTap={{scale:0.97}} 
+                                onClick={() => {
+                                    if (!user) {
+                                        setRedirectUrl('/catalog');
+                                        setIsLoginModalOpen(true);
+                                    } else {
+                                        navigate('/catalog');
+                                    }
+                                }}
                                 className="px-10 py-5 rounded-2xl font-black text-base border"
                                 style={{color:'white', borderColor:'rgba(255,255,255,0.4)', background:'rgba(255,255,255,0.1)'}}>
                                 Explore Products
